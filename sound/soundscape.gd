@@ -57,7 +57,14 @@ func _ready() -> void:
 	_distant_in = _rng.randf_range(13.0, 21.0)
 
 
-func bind_player(body: CharacterBody3D, route: Callable) -> void:
+func pursuer_surface() -> Node3D:
+	if _witness.phase!=Witness.Phase.QUIET and is_instance_valid(_witness._surface):
+		return _witness._surface
+	return null
+
+func bind_player(body: CharacterBody3D, route: Callable, stair_link: Callable, distance: Callable) -> void:
+	_witness.stair_at_link = stair_link
+	_witness.walking_distance = distance
 	_witness.route_between_surfaces = route
 	_body = body
 	_last_position = body.global_position

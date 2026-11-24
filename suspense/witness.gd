@@ -16,6 +16,8 @@ const GAZE_COS := .95
 const STOP_DISTANCE := 1.45
 
 var route_between_surfaces: Callable
+var stair_at_link: Callable
+var walking_distance: Callable
 var tension := 0.0
 var phase := Phase.QUIET
 var _elapsed := 0.0
@@ -76,7 +78,7 @@ func advance(delta: float, body: CharacterBody3D, walking: bool, made_step: bool
 			_try_spawn(body, camera)
 		return
 
-	var distance := player.distance_to(_actor.global_position)
+	var distance: float = walking_distance.call(_actor.global_position,player,_surface,_player_surface)
 	var focus := _actor.global_position + _actor.global_basis.y * _presence.height * .61
 	var observed := _in_gaze(camera)
 	if phase == Phase.ADVANCE:
@@ -223,7 +225,18 @@ func _follow(budget: float) -> bool:
 	while budget > 0. and _waypoint < _route.size():
 		var target := _route[_waypoint]
 		var offset := target-p
-		# The blind landing in the folded stair identifies points a storey apart.
+		# Cross mapped landings before spending walking distance on the next tread.
+		if _waypoint>0 and offset.length_squared()>16.:
+			var arrival: Node3D = stair_at_link.call(_route[_waypoint-1],target,_surface)
+			if arrival:
+				var departure: Node3D = _surface.get_meta("stairs")[int(arrival.side<0)]
+				var passage: Transform3D = departure.passage_to(arrival)
+				_actor.global_basis = (passage.basis*_actor.global_basis).orthonormalized()
+				_surface = arrival.get_parent()
+				up = arrival.global_basis.y
+				p = target
+				_waypoint += 1
+				continue
 		if _waypoint>0 and absf(offset.dot(up))>5.:
 			var folded := offset.slide(up).length()<.4
 			if not folded and is_instance_valid(_surface) and _surface.has_method("is_fold_link"):

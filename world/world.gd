@@ -1,5 +1,6 @@
 extends Node3D
 
+const LevelStair := preload("res://world/level_stair.gd")
 const Gallery := preload("res://world/gallery.gd")
 const SightGeometry := preload("res://suspense/sight_geometry.gd")
 const CellNavigation := preload("res://world/cell_navigation.gd")
@@ -62,7 +63,7 @@ func _ready() -> void:
 	walker.camera.rotation.x = .055
 	walker.exit_requested.connect(_quit_game)
 	add_child(soundscape)
-	soundscape.bind_player(walker,surface_route)
+	soundscape.bind_player(walker,surface_route,stair_at_link,walking_distance)
 	var layer := CanvasLayer.new()
 	layer.layer = 2
 	add_child(layer)
@@ -115,11 +116,33 @@ func cell_of(point: Vector3) -> Vector2i:
 func kind_at(cell: Vector2i) -> int:
 	return Atlas.climate(atlas.scene_at(cell))
 
+# A right-hand ascent is paired with a left-hand descent on the next
+# course. The same permutation in reverse makes every stair returnable.
+func _stair_target(cell: Vector2i, hand: int) -> Vector2i:
+	var row := cell.y if hand>0 else cell.y-1
+	var twist := 1 if posmod(row,2)==0 else -1
+	for offset: int in [1,-1,2,-2,3,-3,4]:
+		var same_setting := false
+		for x in range(-4,4):
+			if atlas.scene_at(Vector2i(x,row))==atlas.scene_at(_wrap(Vector2i(x+offset*twist,row+1))):
+				same_setting = true
+				break
+		if not same_setting:
+			return _wrap(cell+Vector2i(offset*twist,1)*hand)
+	return _wrap(cell+Vector2i(twist,1)*hand)
+
 func _build_cell(cell: Vector2i) -> void:
 	var scene_id := atlas.scene_at(cell)
 	var tile := _make_scene(scene_id,0 if cell==Vector2i.ZERO else posmod(hash(cell),100003))
 	tile.transform = _room_frame(cell)
 	tile.set_meta("cell",cell)
+	var stairs: Array[LevelStair] = []
+	for hand in [-1,1]:
+		var flight := LevelStair.new()
+		flight.assemble(scene_id,hand,_stair_target(cell,hand))
+		tile.add_child(flight)
+		stairs.append(flight)
+	tile.set_meta("stairs",stairs)
 	for part: GeometryInstance3D in tile.find_children("*","GeometryInstance3D",true,false):
 		var mat := part.material_override as ShaderMaterial
 		if mat and mat.shader in PROJECTED_SURFACES:
@@ -202,8 +225,20 @@ func _range_to(cell: Vector2i) -> float:
 func _queue_surroundings() -> void:
 	var here := cell_of(walker.position)
 	last_stream_point = walker.position
+	var keep := {}
+	var resident: Node3D = walker.surface if is_instance_valid(walker.surface) else null
+	if resident and resident.has_meta("stairs"):
+		for stair: LevelStair in resident.get_meta("stairs"):
+			if stair.threshold().distance_squared_to(walker.position)<12.*12.:
+				keep[stair.destination] = true
+	var follower: Node3D = soundscape.pursuer_surface()
+	if follower is Gallery:
+		for end: Vector2i in follower.cells:
+			keep[end] = true
+	elif is_instance_valid(follower) and follower.has_meta("cell"):
+		keep[follower.get_meta("cell")] = true
 	for key: Vector2i in cells.keys():
-		if _range_to(key)>RETAIN_DISTANCE:
+		if not keep.has(key) and _range_to(key)>RETAIN_DISTANCE:
 			cells[key].queue_free()
 			cells.erase(key)
 	for key in galleries.keys():
@@ -223,7 +258,37 @@ func _process(_delta: float) -> void:
 	if not pending.is_empty() and not closing:
 		_build_cell(pending.pop_back())
 
+func _paired(stair: LevelStair) -> LevelStair:
+	return cells[stair.destination].get_meta("stairs")[0 if stair.side>0 else 1]
+
+func _walk_stairs() -> void:
+	if not is_instance_valid(walker.surface) or not walker.surface.has_meta("stairs"):
+		return
+	for stair: LevelStair in walker.surface.get_meta("stairs"):
+		if stair.threshold().distance_squared_to(walker.position)>8.*8.:
+			continue
+		if not cells.has(stair.destination):
+			pending.erase(stair.destination)
+			_build_cell(stair.destination)
+		if not stair.has_crossed(walker.position):
+			continue
+		var other := _paired(stair)
+		var passage := stair.passage_to(other)
+		walker.global_transform = passage*walker.global_transform
+		# A point exactly on the cut belongs to the arriving half.
+		walker.position -= other.global_basis.x*.0005
+		walker.velocity = passage.basis*walker.velocity
+		walker.up_direction = other.global_basis.y
+		walker.surface = cells[stair.destination]
+		walker.reset_physics_interpolation()
+		last_safe = walker.position+walker.up_direction*.08
+		safe_surface = walker.surface
+		safe_basis = walker.basis
+		_queue_surroundings()
+		return
+
 func _physics_process(delta: float) -> void:
+	_walk_stairs()
 	for well in get_tree().get_nodes_in_group("fold_wells"):
 		if well.crosses(walker.camera.global_position, walker.velocity.dot(well.global_basis.y)):
 			walker.position += well.global_basis * well.DISPLACEMENT
@@ -300,6 +365,8 @@ func _set_lamp(lamp:Light3D,listener:Vector3,pressure:float) -> void:
 	lamp.light_energy = float(lamp.get_meta("steady_power"))*power*(1.-.30*pressure)
 
 func _link_between(a: Vector2i,b: Vector2i) -> Gallery:
+	if b not in [_wrap(a+Vector2i.RIGHT),_wrap(a+Vector2i.LEFT),a+Vector2i.DOWN,a+Vector2i.UP]:
+		return null
 	var across := a.y==b.y
 	var forward := Vector2i.RIGHT if across else Vector2i.DOWN
 	var first := a if _wrap(a+forward)==b else b
@@ -319,6 +386,10 @@ func _room_chain(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 			if not previous.has(next) and _link_between(cell,next):
 				previous[next] = cell
 				queue.append(next)
+		for stair: LevelStair in cells[cell].get_meta("stairs"):
+			if cells.has(stair.destination) and not previous.has(stair.destination):
+				previous[stair.destination] = cell
+				queue.append(stair.destination)
 	return []
 
 func surface_route(start: Vector3, goal: Vector3, source: Node3D, target: Node3D) -> PackedVector3Array:
@@ -354,12 +425,17 @@ func surface_route(start: Vector3, goal: Vector3, source: Node3D, target: Node3D
 			var reachable := true
 			for i in chain.size():
 				var bridge: Gallery
+				var stair: LevelStair
 				var entry := 0
 				var door := exit
 				if i+1<chain.size():
 					bridge = _link_between(chain[i],chain[i+1])
-					entry = 0 if bridge.cells[0]==chain[i] else bridge.points.size()-1
-					door = bridge.to_global(bridge.points[entry])
+					if bridge:
+						entry = 0 if bridge.cells[0]==chain[i] else bridge.points.size()-1
+						door = bridge.to_global(bridge.points[entry])
+					else:
+						stair = cells[chain[i]].get_meta("stairs")[int(chain[i+1].y>chain[i].y)]
+						door = stair.threshold()
 				var nav: CellNavigation = cells[chain[i]].get_meta("navigation")
 				var section := nav.route(route[-1],door)
 				if section.is_empty() or section[-1].distance_to(door)>1.15:
@@ -369,6 +445,9 @@ func surface_route(start: Vector3, goal: Vector3, source: Node3D, target: Node3D
 				if bridge:
 					route.append(door)
 					route.append_array(bridge.section(entry,bridge.points.size()-1-entry))
+				elif stair:
+					route.append(door)
+					route.append(_paired(stair).threshold())
 			if reachable:
 				route.append_array(suffix)
 				var length := 0.
@@ -378,6 +457,25 @@ func surface_route(start: Vector3, goal: Vector3, source: Node3D, target: Node3D
 					shortest = length
 					best = route
 	return best
+
+# The route contains one exact pair of thresholds for a stair fold. Ordinary
+# navigation points never change the pursuer's frame.
+func stair_at_link(a: Vector3,b: Vector3,source: Node3D) -> Node3D:
+	if is_instance_valid(source) and source.has_meta("stairs"):
+		for stair: LevelStair in source.get_meta("stairs"):
+			if stair.threshold().distance_squared_to(a)<.0001 and cells.has(stair.destination):
+				var other := _paired(stair)
+				if other.threshold().distance_squared_to(b)<.0001:
+					return other
+	return null
+
+func walking_distance(a: Vector3,b: Vector3,source: Node3D,target: Node3D) -> float:
+	var distance := a.distance_to(b)
+	if source!=target and is_instance_valid(source) and is_instance_valid(target) and source.has_meta("stairs") and target.has_meta("cell"):
+		for stair: LevelStair in source.get_meta("stairs"):
+			if stair.destination==target.get_meta("cell"):
+				distance = minf(distance,a.distance_to(stair.threshold())+b.distance_to(_paired(stair).threshold()))
+	return distance
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and is_node_ready():

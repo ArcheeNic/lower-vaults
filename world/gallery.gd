@@ -11,7 +11,7 @@ static var glass: StandardMaterial3D
 
 func build(a: Transform3D, b: Transform3D, across: bool) -> void:
 	var axis := Vector3.RIGHT if across else Vector3.FORWARD
-	var extent := 32. if across else 24.
+	var extent := 32.+preload("res://world/level_stair.gd").SIDE_DECK if across else 24.
 	var t0 := a.basis * axis
 	var t1 := b.basis * axis
 	var start := a.origin + t0*extent

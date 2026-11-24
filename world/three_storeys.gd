@@ -80,11 +80,38 @@ func _connect(a: Vector3,b: Vector3, open_end := false) -> void:
 	var enclosed := a.x==THROAT_X and b.x==THROAT_X
 	if enclosed:
 		_floor = "basalt"
-	_floor_strip(start,end,HALF,HALF)
+	if is_equal_approx(start.y,end.y):
+		_floor_strip(start,end,HALF,HALF)
+	else:
+		_stair_flight(start,end)
 	if not enclosed:
 		var across := Vector3.UP.cross(direction)*(HALF-.05)
 		for edge: float in [-1.,1.]:
 			_guard(start+across*edge,end+across*edge)
+
+func _stair_flight(a: Vector3, b: Vector3) -> void:
+	var lower := a if a.y < b.y else b
+	var upper := b if a.y < b.y else a
+	var run := (upper-lower).slide(Vector3.UP)
+	var forward := run.normalized()
+	var frame := Basis(Vector3.UP.cross(forward),Vector3.UP,forward)
+	var side := frame.x*HALF
+	# The stringers and guards follow the same continuous incline as the
+	# navigation and capsule. The horizontal treads meet both landing edges.
+	_walk.append_array(PackedVector3Array([lower-side,lower+side,upper+side,
+		lower-side,upper+side,upper-side]))
+	var count := ceili((upper.y-lower.y)/.18)
+	var rise := (upper.y-lower.y)/count
+	var going := run.length()/count
+	for i in count:
+		var foot := lower+run*((i+.5)/count)+Vector3.UP*(rise*(i+.5))
+		_part("box",_floor,foot-Vector3.UP*.095,Vector3(2.*HALF,.19,going),frame)
+		var lip := foot-forward*(going*.5-.027)
+		_part("box",_handrail,lip+Vector3.UP*.002,Vector3(2.*HALF,.012,.054),frame)
+		_part("box",_handrail,lip-Vector3.UP*(rise*.55),Vector3(2.*HALF-.06,rise*.83,.045),frame)
+	for hand: float in [-1.,1.]:
+		var edge := side*hand*.93-Vector3.UP*.24
+		beam(lower+edge,upper+edge,.16,.36,_handrail)
 
 func _landing(p: Vector3) -> void:
 	_palette(p.y)
