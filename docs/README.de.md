@@ -47,6 +47,16 @@ Die Sprachauswahl befindet sich oben rechts im Startbildschirm und im Pausenmen�
 
 *Gebeine des Leviathans*
 
+## Tokenverbrauch für v0.1.0
+
+| Werkzeug | Sitzungen | Token |
+|---|---|---:|
+| Codex | 4 Hauptsitzungen und 6 Subagenten-Sitzungen | 75.875.836 |
+| Claude Code | 1 Sitzung zur Veröffentlichung | 1.645.162 |
+| **Gesamt** | **11** | **77.520.998** |
+
+Die lokalen Protokolle erfassen die Entwicklung und die Release-Vorbereitung am 24. und 25. November 2026. 98,45 % aller Token wurden aus dem Cache gelesen. Von den übrigen 1.199.332 Token entfielen 364.313 auf die Modellausgaben.
+
 ## Aus dem Quellcode bauen
 
 Benötigt werden **Godot 4.7.1 stable** und die passenden Exportvorlagen. Sie lassen sich über **Editor → Manage Export Templates** installieren. Zum Spielen im Editor `project.godot` öffnen und F5 drücken.

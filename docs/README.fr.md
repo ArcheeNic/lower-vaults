@@ -47,6 +47,16 @@ Le sélecteur de langue se trouve en haut à droite de l’écran d’accueil et
 
 *Dépouille du léviathan*
 
+## Consommation de tokens pour la version 0.1.0
+
+| Outil | Sessions | Tokens |
+|---|---|---:|
+| Codex | 4 sessions principales et 6 de sous-agents | 75 875 836 |
+| Claude Code | 1 session de préparation de la publication | 1 645 162 |
+| **Total** | **11** | **77 520 998** |
+
+Les journaux locaux couvrent le développement et la préparation de la publication les 24 et 25 novembre 2026. Les lectures en cache représentent 98,45 % des tokens. Sur les 1 199 332 tokens restants, les modèles en ont généré 364 313.
+
 ## Compiler à partir des sources
 
 Utilisez **Godot 4.7.1 stable** et les modèles d’exportation de la même version. Installez-les depuis **Editor → Manage Export Templates**. Pour jouer dans l’éditeur, ouvrez `project.godot` et appuyez sur F5.

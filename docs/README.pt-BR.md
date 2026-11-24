@@ -47,6 +47,16 @@ O seletor de idioma fica no canto superior direito da tela inicial e do menu de 
 
 *Restos do leviatã*
 
+## Consumo de tokens da versão 0.1.0
+
+| Ferramenta | Sessões | Tokens |
+|---|---|---:|
+| Codex | 4 principais e 6 de subagentes | 75.875.836 |
+| Claude Code | 1 de preparação do lançamento | 1.645.162 |
+| **Total** | **11** | **77.520.998** |
+
+Segundo os registros locais de desenvolvimento e preparação do lançamento de 24 e 25 de novembro de 2026, 98,45% dos tokens vieram de leituras do cache. Dos 1.199.332 restantes, os modelos geraram 364.313.
+
 ## Compilar a partir do código-fonte
 
 Use a **Godot 4.7.1 stable** e os modelos de exportação da mesma versão. Instale os modelos pelo menu **Editor → Manage Export Templates**. Para jogar no editor, abra `project.godot` e pressione F5.

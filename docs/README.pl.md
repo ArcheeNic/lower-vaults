@@ -47,6 +47,16 @@ Język można zmienić w prawym górnym rogu ekranu startowego lub menu pauzy. M
 
 *Szczątki lewiatana*
 
+## Zużycie tokenów podczas prac nad wersją 0.1.0
+
+| Narzędzie | Sesje | Tokeny |
+|---|---|---:|
+| Codex | 4 sesje główne i 6 sesji podagentów | 75 875 836 |
+| Claude Code | 1 sesja przygotowania wydania | 1 645 162 |
+| **Łącznie** | **11** | **77 520 998** |
+
+Według lokalnych dzienników z prac nad grą i wydaniem w dniach 24–25 listopada 2026 roku odczyty z pamięci podręcznej stanowiły 98,45% wszystkich tokenów. Spośród pozostałych 1 199 332 tokenów modele wygenerowały 364 313.
+
 ## Budowanie ze źródeł
 
 Użyj silnika **Godot 4.7.1 stable** i szablonów eksportu w tej samej wersji. Można je zainstalować z menu **Editor → Manage Export Templates**. Aby uruchomić grę w edytorze, otwórz `project.godot` i naciśnij F5.

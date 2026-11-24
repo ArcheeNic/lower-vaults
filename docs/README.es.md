@@ -47,6 +47,16 @@ El selector de idioma está en la esquina superior derecha de la pantalla de ini
 
 *Restos del leviatán*
 
+## Consumo de tokens de la versión 0.1.0
+
+| Herramienta | Sesiones | Tokens |
+|---|---|---:|
+| Codex | 4 principales y 6 de subagentes | 75 875 836 |
+| Claude Code | 1 de preparación del lanzamiento | 1 645 162 |
+| **Total** | **11** | **77 520 998** |
+
+Según los registros locales de desarrollo y preparación del lanzamiento del 24 y 25 de noviembre de 2026, el 98,45 % de los tokens se leyó de la caché. De los 1 199 332 restantes, los modelos generaron 364 313.
+
 ## Compilar desde el código fuente
 
 Utiliza **Godot 4.7.1 stable** y las plantillas de exportación de la misma versión. Puedes instalarlas desde **Editor → Manage Export Templates**. Para jugar desde el editor, abre `project.godot` y pulsa F5.

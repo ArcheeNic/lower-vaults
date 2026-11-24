@@ -47,6 +47,16 @@ Use the language selector at the top right of the title screen or pause menu. Me
 
 *Remains of the Leviathan*
 
+## Token usage for v0.1.0
+
+| Tool | Sessions | Tokens |
+|---|---|---:|
+| Codex | 4 main sessions and 6 subagent sessions | 75,875,836 |
+| Claude Code | 1 release session | 1,645,162 |
+| **Total** | **11** | **77,520,998** |
+
+Local session logs cover development and release work on November 24–25, 2026. Cache reads accounted for 98.45% of all tokens. Of the remaining 1,199,332 tokens, 364,313 were model output.
+
 ## Build from source
 
 Use **Godot 4.7.1 stable** with the matching export templates. Install them through **Editor → Manage Export Templates**. To play in the editor, open `project.godot` and press F5.
