@@ -4,9 +4,15 @@ const Stone := preload("res://tableaux/stone_atlas.gd")
 const Wild := preload("res://tableaux/wild_atlas.gd")
 const ORIGINALS := ["Нижние своды","Приливная цистерна","Обратная обсерватория","Машинный зал"]
 const COUNT := 32
+const ATRIUM := COUNT
+const ATRIUM_CELL := Vector2i.ZERO
 var blocks := {}
 
 func scene_at(cell:Vector2i) -> int:
+	# The next shaft is seven courses away and three faces around the tower.
+	# Its rooms stack along a different gravity axis on each recurrence.
+	if posmod(cell.y,7)==0 and posmod(cell.x-ATRIUM_CELL.x-3*floori(cell.y/7.),8)==0:
+		return ATRIUM
 	var offset := cell+Vector2i(4,2)
 	var local := Vector2i(posmod(offset.x,8),posmod(offset.y,4))
 	var block := Vector2i(floori(offset.x/8.),floori(offset.y/4.))
@@ -31,9 +37,9 @@ func _plan(block:Vector2i) -> Array[int]:
 	# even a straight walk crosses only one mill per 32 cells in either direction.
 	_place(ids,8*posmod(block.x,4)+posmod(3*block.y+7,8),3)
 	if block==Vector2i.ZERO:
-		_place(ids,20,0)
+		_place(ids,19,0)
 		_place(ids,28,5)
-		_place(ids,19,18)
+		_place(ids,20,18)
 		_place(ids,21,29)
 		_place(ids,12,6)
 	return ids
@@ -44,9 +50,11 @@ func _place(ids:Array[int],at:int,id:int) -> void:
 	ids[at]=id
 
 static func climate(id:int) -> int:
+	if id==ATRIUM: return 0
 	if id<4: return id
 	return Stone.CLIMATES[id-4] if id<18 else Wild.CLIMATES[id-18]
 
 static func title(id:int) -> String:
+	if id==ATRIUM: return "Архив мер и весов"
 	if id<4: return ORIGINALS[id]
 	return Stone.TITLES[id-4] if id<18 else Wild.TITLES[id-18]

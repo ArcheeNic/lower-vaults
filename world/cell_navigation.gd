@@ -18,6 +18,8 @@ func build(tile: Node3D) -> void:
 	mesh.edge_max_error = .6
 	var source := NavigationMeshSourceGeometryData3D.new()
 	NavigationServer3D.parse_source_geometry_data(mesh, source, tile)
+	if tile.has_method("prepare_navigation"):
+		tile.prepare_navigation(source)
 	NavigationServer3D.bake_from_source_geometry_data(mesh, source)
 	navigation_mesh = mesh
 	room_map = NavigationServer3D.map_create()

@@ -131,7 +131,13 @@ func _physics_process(delta: float) -> void:
 	var grounded := is_on_floor()
 	normal_speed = minf(normal_speed,-_gravity*delta) if grounded else normal_speed-_gravity*delta
 	velocity = tangent + up_direction*normal_speed
+	var before := global_position
 	move_and_slide()
+	if is_instance_valid(surface) and surface.has_method("fold_between"):
+		var shift: float = surface.fold_between(surface.to_local(before),surface.to_local(global_position))
+		if shift != 0.:
+			global_position += surface.global_basis.y*shift
+			reset_physics_interpolation()
 	if grounded and not is_on_floor():
 		apply_floor_snap()
 	if is_on_floor():

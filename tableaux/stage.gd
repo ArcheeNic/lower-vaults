@@ -32,6 +32,9 @@ func build(atlas: Script, index: int, climate: int) -> void:
 	add_child(_body)
 	has_well = atlas == preload("res://tableaux/stone_atlas.gd") and index == 1
 	atlas.build(self,index)
+	_finish_geometry()
+
+func _finish_geometry() -> void:
 	var collision := ConcavePolygonShape3D.new()
 	collision.backface_collision = true
 	collision.set_faces(_walk)

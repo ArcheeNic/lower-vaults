@@ -4,6 +4,7 @@ const Gallery := preload("res://world/gallery.gd")
 const SightGeometry := preload("res://suspense/sight_geometry.gd")
 const CellNavigation := preload("res://world/cell_navigation.gd")
 const Atlas := preload("res://world/atlas.gd")
+const ThreeStoreys := preload("res://world/three_storeys.gd")
 const Stage := preload("res://tableaux/stage.gd")
 const Aperture := preload("res://world/aperture.gd")
 const Hall := preload("res://architecture/hall.gd")
@@ -31,7 +32,7 @@ var galleries := {}
 var pending: Array[Vector2i] = []
 var origin_row := 0
 var last_stream_point := Vector3.INF
-var last_safe := Vector3(0,.1,-12)
+var last_safe: Vector3
 var safe_surface: Node3D
 var safe_basis := Basis.IDENTITY
 var atmosphere := Atmosphere.new()
@@ -46,13 +47,16 @@ func _ready() -> void:
 	NavigationServer3D.map_set_cell_size(get_world_3d().navigation_map, .2)
 	NavigationServer3D.map_set_cell_height(get_world_3d().navigation_map, .1)
 	add_child(atmosphere)
+	var entrance := _room_frame(Atlas.ATRIUM_CELL)
+	last_safe = entrance * Vector3(0,.08,14)
+	safe_basis = entrance.basis
 	for z in range(-1,2):
 		for x in range(-1,2):
 			_build_cell(Vector2i(x,z))
 	walker.name = "Walker"
-	walker.surface = cells[Vector2i.ZERO]
+	walker.surface = cells[Atlas.ATRIUM_CELL]
 	safe_surface = walker.surface
-	walker.position = last_safe
+	walker.transform = Transform3D(safe_basis,last_safe)
 	add_child(walker)
 	walker.camera.far = 87.0
 	walker.camera.rotation.x = .055
@@ -151,6 +155,10 @@ func _build_cell(cell: Vector2i) -> void:
 func _make_scene(scene_id:int, seed_value:int) -> Node3D:
 	var tile: Node3D
 	match scene_id:
+		Atlas.ATRIUM:
+			var atrium := ThreeStoreys.new()
+			atrium.assemble()
+			tile = atrium
 		0:
 			var hall := Hall.new()
 			hall.build(seed_value)
@@ -261,15 +269,20 @@ func _physics_process(delta: float) -> void:
 
 func _update_mix() -> void:
 	var here := cell_of(walker.position)
-	walker.interface.set_place(Atlas.title(atlas.scene_at(here)))
+	var place := Atlas.title(atlas.scene_at(here))
 	var weights := PackedFloat32Array([0.,0.,0.,0.])
 	var bridge := walker.surface as Gallery
 	if bridge:
 		var blend := smoothstep(0.,1.,bridge.coordinate(walker.position)/(bridge.points.size()-1))
 		weights[kind_at(bridge.cells[0])] += 1.-blend
 		weights[kind_at(bridge.cells[1])] += blend
+	elif walker.surface is ThreeStoreys:
+		var at := walker.surface.to_local(walker.global_position)
+		weights = walker.surface.climate_at(at)
+		place = walker.surface.title_at(at)
 	else:
 		weights[kind_at(here)] = 1.
+	walker.interface.set_place(place)
 	atmosphere.set_realms(weights)
 	soundscape.set_realms(weights)
 	var pressure := soundscape.get_tension()

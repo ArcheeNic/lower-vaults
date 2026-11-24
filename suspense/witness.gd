@@ -224,10 +224,14 @@ func _follow(budget: float) -> bool:
 		var target := _route[_waypoint]
 		var offset := target-p
 		# The blind landing in the folded stair identifies points a storey apart.
-		if _waypoint>0 and absf(offset.dot(up))>5. and offset.slide(up).length()<.4:
-			p = target
-			_waypoint += 1
-			continue
+		if _waypoint>0 and absf(offset.dot(up))>5.:
+			var folded := offset.slide(up).length()<.4
+			if not folded and is_instance_valid(_surface) and _surface.has_method("is_fold_link"):
+				folded = _surface.is_fold_link(_route[_waypoint-1],target)
+			if folded:
+				p = target
+				_waypoint += 1
+				continue
 		var length := offset.length()
 		if budget < length:
 			p = p.move_toward(target,budget)
