@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: pl\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "Dolne sklepienia"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "DOLNE\nSKLEPIENIA"
+
+msgid "Войти    ⏎"
+msgstr "Wejdź    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD — ruch   ·   Mysz — rozglądanie się   ·   Shift — bieg   ·   Esc — pauza"
+
+msgid "Пауза"
+msgstr "Pauza"
+
+msgid "Продолжить"
+msgstr "Wznów"
+
+msgid "Чувствительность мыши"
+msgstr "Czułość myszy"
+
+msgid "Громкость"
+msgstr "Głośność ogólna"
+
+msgid "Свои шаги"
+msgstr "Własne kroki"
+
+msgid "Выйти из игры"
+msgstr "Zakończ grę"
+
+msgid "Язык"
+msgstr "Język"
+
+msgid "Приливная цистерна"
+msgstr "Cysterna pływów"
+
+msgid "Обратная обсерватория"
+msgstr "Odwrócone obserwatorium"
+
+msgid "Машинный зал"
+msgstr "Hala maszyn"
+
+msgid "Колодец отливов"
+msgstr "Studnia odpływów"
+
+msgid "Архив мер и весов"
+msgstr "Archiwum miar i wag"
+
+msgid "Звёздная камера"
+msgstr "Komnata gwiazd"
+
+msgid "Ярусы колумбария"
+msgstr "Piętra kolumbarium"
+
+msgid "Собор над провалом"
+msgstr "Katedra nad przepaścią"
+
+msgid "Архив прибоя"
+msgstr "Archiwum przyboju"
+
+msgid "Сцена после звонка"
+msgstr "Scena po dzwonku"
+
+msgid "Двор карантина"
+msgstr "Dziedziniec kwarantanny"
+
+msgid "Канатная кладовая"
+msgstr "Magazyn lin"
+
+msgid "Каменные слушатели"
+msgstr "Kamienni słuchacze"
+
+msgid "Шлюзовая палата"
+msgstr "Komora śluzy"
+
+msgid "Мансарды переписчиков"
+msgstr "Poddasza kopistów"
+
+msgid "Дом ткацких станков"
+msgstr "Dom krosien"
+
+msgid "Пересыльная станция"
+msgstr "Stacja przeładunkowa"
+
+msgid "Зал литейных форм"
+msgstr "Hala form odlewniczych"
+
+msgid "Палата немых часов"
+msgstr "Komnata niemych zegarów"
+
+msgid "Обратный вокзал"
+msgstr "Odwrócony dworzec"
+
+msgid "Лес камертонов"
+msgstr "Las kamertonów"
+
+msgid "Кладка великанов"
+msgstr "Lęg olbrzymów"
+
+msgid "Море меридианов"
+msgstr "Morze południków"
+
+msgid "Останки левиафана"
+msgstr "Szczątki lewiatana"
+
+msgid "Раковина глубин"
+msgstr "Muszla głębin"
+
+msgid "Стеклянный фьорд"
+msgstr "Szklany fiord"
+
+msgid "Чёрное солнце"
+msgstr "Czarne słońce"
+
+msgid "Жерло"
+msgstr "Gardziel wulkanu"
+
+msgid "Сад медуз"
+msgstr "Ogród meduz"
+
+msgid "Архипелаг спор"
+msgstr "Archipel zarodników"
+
+msgid "Дождь из спутников"
+msgstr "Deszcz satelitów"
+
+msgid "Долина гейзеров"
+msgstr "Dolina gejzerów"
+
+msgid "Бумажная гроза"
+msgstr "Papierowa burza"
+
+msgid "Лунная пасека"
+msgstr "Księżycowa pasieka"

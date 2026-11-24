@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: de\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "Die unteren Gewölbe"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "DIE UNTEREN\nGEWÖLBE"
+
+msgid "Войти    ⏎"
+msgstr "Eintreten    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD – Gehen   ·   Maus – Umsehen   ·   Umschalt – Rennen   ·   Esc – Pause"
+
+msgid "Пауза"
+msgstr "Pause"
+
+msgid "Продолжить"
+msgstr "Fortsetzen"
+
+msgid "Чувствительность мыши"
+msgstr "Mausempfindlichkeit"
+
+msgid "Громкость"
+msgstr "Gesamtlautstärke"
+
+msgid "Свои шаги"
+msgstr "Eigene Schritte"
+
+msgid "Выйти из игры"
+msgstr "Spiel beenden"
+
+msgid "Язык"
+msgstr "Sprache"
+
+msgid "Приливная цистерна"
+msgstr "Gezeitenzisterne"
+
+msgid "Обратная обсерватория"
+msgstr "Umgekehrte Sternwarte"
+
+msgid "Машинный зал"
+msgstr "Maschinenhalle"
+
+msgid "Колодец отливов"
+msgstr "Brunnen der Ebbe"
+
+msgid "Архив мер и весов"
+msgstr "Archiv der Maße und Gewichte"
+
+msgid "Звёздная камера"
+msgstr "Sternenkammer"
+
+msgid "Ярусы колумбария"
+msgstr "Ränge des Kolumbariums"
+
+msgid "Собор над провалом"
+msgstr "Kathedrale über dem Abgrund"
+
+msgid "Архив прибоя"
+msgstr "Archiv der Brandung"
+
+msgid "Сцена после звонка"
+msgstr "Bühne nach dem Läuten"
+
+msgid "Двор карантина"
+msgstr "Quarantänehof"
+
+msgid "Канатная кладовая"
+msgstr "Seilkammer"
+
+msgid "Каменные слушатели"
+msgstr "Steinerne Zuhörer"
+
+msgid "Шлюзовая палата"
+msgstr "Schleusenkammer"
+
+msgid "Мансарды переписчиков"
+msgstr "Mansarden der Schreiber"
+
+msgid "Дом ткацких станков"
+msgstr "Haus der Webstühle"
+
+msgid "Пересыльная станция"
+msgstr "Durchgangsstation"
+
+msgid "Зал литейных форм"
+msgstr "Halle der Gussformen"
+
+msgid "Палата немых часов"
+msgstr "Kammer der stummen Uhren"
+
+msgid "Обратный вокзал"
+msgstr "Umgekehrter Bahnhof"
+
+msgid "Лес камертонов"
+msgstr "Wald der Stimmgabeln"
+
+msgid "Кладка великанов"
+msgstr "Gelege der Riesen"
+
+msgid "Море меридианов"
+msgstr "Meer der Meridiane"
+
+msgid "Останки левиафана"
+msgstr "Gebeine des Leviathans"
+
+msgid "Раковина глубин"
+msgstr "Muschel der Tiefe"
+
+msgid "Стеклянный фьорд"
+msgstr "Glasfjord"
+
+msgid "Чёрное солнце"
+msgstr "Schwarze Sonne"
+
+msgid "Жерло"
+msgstr "Der Vulkanschlund"
+
+msgid "Сад медуз"
+msgstr "Quallengarten"
+
+msgid "Архипелаг спор"
+msgstr "Archipel der Sporen"
+
+msgid "Дождь из спутников"
+msgstr "Regen aus Satelliten"
+
+msgid "Долина гейзеров"
+msgstr "Tal der Geysire"
+
+msgid "Бумажная гроза"
+msgstr "Papiergewitter"
+
+msgid "Лунная пасека"
+msgstr "Imkerei auf dem Mond"

@@ -5,11 +5,18 @@ signal enter_requested
 signal sensitivity_changed(value: float)
 signal steps_changed(value: float)
 signal volume_changed(value: float)
+signal language_changed(locale: String)
 
 const PAPER := Color("#f0e3c9")
 const SECONDARY := Color("#dcceb9")
 const ACCENT := Color("#dba674")
 const FOCUS := Color("#f2b981")
+const LANGUAGES := {
+	"en": "English", "zh_Hans": "简体中文", "ru": "Русский", "es": "Español (España)",
+	"pt_BR": "Português (Brasil)", "de": "Deutsch", "ja": "日本語", "fr": "Français",
+	"pl": "Polski", "ko": "한국어",
+}
+const GLYPH_FALLBACK := preload("res://i18n/fonts/vaults-fallback.otf")
 var _serif := SystemFont.new()
 var _sans := SystemFont.new()
 var _root := Control.new()
@@ -26,6 +33,8 @@ var _hint_tween: Tween
 var _sensitivity_slider: HSlider
 var _volume_slider: HSlider
 var _steps_slider: HSlider
+var _language_row := HBoxContainer.new()
+var _language := OptionButton.new()
 
 
 func _ready() -> void:
@@ -33,6 +42,8 @@ func _ready() -> void:
 	layer = 15
 	_serif.font_names = PackedStringArray(["Nimbus Roman", "Liberation Serif", "Georgia", "DejaVu Serif"])
 	_sans.font_names = PackedStringArray(["Ubuntu", "Segoe UI", "DejaVu Sans"])
+	_serif.fallbacks = [GLYPH_FALLBACK]
+	_sans.fallbacks = [GLYPH_FALLBACK]
 	add_child(_root)
 	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -61,7 +72,7 @@ func _ready() -> void:
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_title = _label(_entrance, "НИЖНИЕ\nСВОДЫ", _serif, 70, PAPER)
 	_title.add_theme_constant_override("line_spacing", -19)
-	_enter = _button(_entrance, "Войти    ↵", 24)
+	_enter = _button(_entrance, "Войти    ⏎", 24)
 	_enter.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_enter.pressed.connect(func(): enter_requested.emit())
 	_controls = _label(_page, "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза", _sans, 15, PAPER)
@@ -71,6 +82,7 @@ func _ready() -> void:
 	_controls.add_theme_constant_override("shadow_offset_y", 2)
 	_controls.hide()
 	_build_pause()
+	_build_language_picker()
 	_pause_menu.hide()
 	_root.resized.connect(_layout)
 	_layout()
@@ -85,6 +97,40 @@ func configure(sensitivity: float, volume: float, steps: float) -> void:
 func set_place(title: String) -> void:
 	if _place.text != title:
 		_place.text = title
+
+
+func _build_language_picker() -> void:
+	_page.add_child(_language_row)
+	_language_row.add_theme_constant_override("separation", 12)
+	var caption := _label(_language_row, "Язык", _sans, 16, PAPER)
+	caption.add_theme_constant_override("outline_size", 4)
+	caption.add_theme_color_override("font_outline_color", Color("#282621"))
+	_language_row.add_child(_language)
+	_language.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_language.add_theme_font_override("font", _sans)
+	_language.add_theme_font_size_override("font_size", 18)
+	var popup_theme := Theme.new()
+	popup_theme.set_font("font", "PopupMenu", _sans)
+	_language.get_popup().theme = popup_theme
+	_language.get_popup().force_native = true
+	for locale: String in LANGUAGES:
+		_language.add_item(LANGUAGES[locale])
+		var index := _language.item_count - 1
+		_language.set_item_metadata(index, locale)
+		if locale == TranslationServer.get_locale():
+			_language.select(index)
+	_language.item_selected.connect(func(index: int):
+		language_changed.emit(_language.get_item_metadata(index))
+		_update_accessibility_names()
+		_layout.call_deferred())
+	_update_accessibility_names()
+
+
+func _update_accessibility_names() -> void:
+	_language.accessibility_name = tr("Язык")
+	_sensitivity_slider.accessibility_name = tr("Чувствительность мыши")
+	_volume_slider.accessibility_name = tr("Громкость")
+	_steps_slider.accessibility_name = tr("Свои шаги")
 
 
 func _build_pause() -> void:
@@ -110,7 +156,6 @@ func _slider(caption: String, y: float, min_value: float, max_value: float, step
 	var label := _label(_pause_menu, caption, _sans, 16, SECONDARY)
 	label.position = Vector2(0, y)
 	var slider := HSlider.new()
-	slider.accessibility_name = caption
 	_pause_menu.add_child(slider)
 	slider.position = Vector2(0, y + 24)
 	slider.size = Vector2(265, 21)
@@ -178,6 +223,8 @@ func _layout() -> void:
 	_page.scale = Vector2.ONE * factor
 	_page.size = bounds
 	_entrance.size = bounds
+	_language_row.size = _language_row.get_combined_minimum_size()
+	_language_row.position = Vector2(bounds.x - inset - _language_row.size.x, 28)
 	_title.position = Vector2(inset, bounds.y - 184.0)
 	_enter.size = Vector2(155, 42)
 	_enter.position = Vector2(bounds.x - inset - _enter.size.x, bounds.y - 86.0)
@@ -187,6 +234,7 @@ func _layout() -> void:
 
 
 func show_walk(first_entry: bool) -> void:
+	_language_row.hide()
 	_veil.hide()
 	_pause_menu.hide()
 	_entrance.hide()
@@ -201,6 +249,7 @@ func show_walk(first_entry: bool) -> void:
 
 
 func show_pause() -> void:
+	_language_row.show()
 	if _hint_tween and _hint_tween.is_valid():
 		_hint_tween.kill()
 	_controls.hide()

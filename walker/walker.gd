@@ -48,6 +48,9 @@ func _ready() -> void:
 	add_child(interface)
 	interface.configure(sensitivity, volume, footstep_volume)
 	interface.enter_requested.connect(enter_walk)
+	interface.language_changed.connect(func(locale: String):
+		_apply_language(locale)
+		_save_settings())
 	interface.exit_requested.connect(exit_requested.emit)
 	interface.sensitivity_changed.connect(_set_sensitivity)
 	interface.volume_changed.connect(_set_volume)
@@ -96,16 +99,20 @@ func _input(event: InputEvent) -> void:
 				enter_walk()
 			get_viewport().set_input_as_handled()
 			return
-		if mode == Mode.ENTRANCE and event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]:
-			enter_walk()
-			get_viewport().set_input_as_handled()
-			return
-	if mode == Mode.ENTRANCE and event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			enter_walk()
-			get_viewport().set_input_as_handled()
-	elif mode == Mode.WALK and event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+	if mode == Mode.WALK and event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_look_remaining += event.screen_relative * sensitivity * 0.0021
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if mode != Mode.ENTRANCE:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]:
+			enter_walk()
+			get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		enter_walk()
+		get_viewport().set_input_as_handled()
 
 
 func _process(delta: float) -> void:
@@ -184,11 +191,23 @@ func get_footstep_volume() -> float:
 
 func _load_settings() -> void:
 	var settings := ConfigFile.new()
+	var locale := TranslationServer.get_locale()
 	if settings.load(OPTIONS_PATH) == OK:
 		sensitivity = clampf(float(settings.get_value("controls", "sensitivity", sensitivity)), 0.25, 3.0)
 		volume = clampf(float(settings.get_value("audio", "volume", volume)), 0.0, 1.0)
 		footstep_volume = clampf(float(settings.get_value("audio", "footstep_volume", footstep_volume)), 0.0, 1.0)
+		locale = str(settings.get_value("interface", "language", locale))
+	_apply_language(locale)
 	_set_volume(volume)
+
+
+func _apply_language(locale: String) -> void:
+	var language := TranslationServer.standardize_locale(locale).get_slice("_", 0)
+	match language:
+		"zh": language = "zh_Hans"
+		"pt": language = "pt_BR"
+	TranslationServer.set_locale(language if WalkInterface.LANGUAGES.has(language) else "en")
+	get_window().title = tr("Нижние своды")
 
 
 func _save_settings() -> void:
@@ -196,6 +215,7 @@ func _save_settings() -> void:
 	settings.set_value("controls", "sensitivity", sensitivity)
 	settings.set_value("audio", "volume", volume)
 	settings.set_value("audio", "footstep_volume", footstep_volume)
+	settings.set_value("interface", "language", TranslationServer.get_locale())
 	settings.save(OPTIONS_PATH)
 
 

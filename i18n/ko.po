@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: ko\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "지하 궁륭"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "지하\n궁륭"
+
+msgid "Войти    ⏎"
+msgstr "들어가기    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD 이동   ·   마우스 둘러보기   ·   Shift 달리기   ·   Esc 일시 정지"
+
+msgid "Пауза"
+msgstr "일시 정지"
+
+msgid "Продолжить"
+msgstr "계속하기"
+
+msgid "Чувствительность мыши"
+msgstr "마우스 감도"
+
+msgid "Громкость"
+msgstr "전체 음량"
+
+msgid "Свои шаги"
+msgstr "내 발소리"
+
+msgid "Выйти из игры"
+msgstr "게임 종료"
+
+msgid "Язык"
+msgstr "언어"
+
+msgid "Приливная цистерна"
+msgstr "조수 저수조"
+
+msgid "Обратная обсерватория"
+msgstr "뒤집힌 천문대"
+
+msgid "Машинный зал"
+msgstr "기관실"
+
+msgid "Колодец отливов"
+msgstr "썰물 우물"
+
+msgid "Архив мер и весов"
+msgstr "도량형 기록관"
+
+msgid "Звёздная камера"
+msgstr "별의 방"
+
+msgid "Ярусы колумбария"
+msgstr "층층이 쌓인 납골당"
+
+msgid "Собор над провалом"
+msgstr "심연 위의 대성당"
+
+msgid "Архив прибоя"
+msgstr "파도의 기록관"
+
+msgid "Сцена после звонка"
+msgstr "종이 울린 뒤의 무대"
+
+msgid "Двор карантина"
+msgstr "격리 안뜰"
+
+msgid "Канатная кладовая"
+msgstr "밧줄 창고"
+
+msgid "Каменные слушатели"
+msgstr "귀 기울이는 석상들"
+
+msgid "Шлюзовая палата"
+msgstr "수문실"
+
+msgid "Мансарды переписчиков"
+msgstr "필경사들의 다락방"
+
+msgid "Дом ткацких станков"
+msgstr "베틀의 집"
+
+msgid "Пересыльная станция"
+msgstr "중계역"
+
+msgid "Зал литейных форм"
+msgstr "거푸집 전당"
+
+msgid "Палата немых часов"
+msgstr "침묵하는 시계의 방"
+
+msgid "Обратный вокзал"
+msgstr "뒤집힌 종착역"
+
+msgid "Лес камертонов"
+msgstr "소리굽쇠 숲"
+
+msgid "Кладка великанов"
+msgstr "거인의 알둥지"
+
+msgid "Море меридианов"
+msgstr "자오선의 바다"
+
+msgid "Останки левиафана"
+msgstr "레비아탄의 유해"
+
+msgid "Раковина глубин"
+msgstr "심해의 조가비"
+
+msgid "Стеклянный фьорд"
+msgstr "유리 피오르"
+
+msgid "Чёрное солнце"
+msgstr "검은 태양"
+
+msgid "Жерло"
+msgstr "화산의 아가리"
+
+msgid "Сад медуз"
+msgstr "해파리 정원"
+
+msgid "Архипелаг спор"
+msgstr "포자 군도"
+
+msgid "Дождь из спутников"
+msgstr "위성의 비"
+
+msgid "Долина гейзеров"
+msgstr "간헐천 계곡"
+
+msgid "Бумажная гроза"
+msgstr "종이 폭풍"
+
+msgid "Лунная пасека"
+msgstr "달의 양봉장"

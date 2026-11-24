@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: pt_BR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "As abóbadas inferiores"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "AS ABÓBADAS\nINFERIORES"
+
+msgid "Войти    ⏎"
+msgstr "Entrar    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD — andar   ·   Mouse — olhar ao redor   ·   Shift — correr   ·   Esc — pausar"
+
+msgid "Пауза"
+msgstr "Pausa"
+
+msgid "Продолжить"
+msgstr "Continuar"
+
+msgid "Чувствительность мыши"
+msgstr "Sensibilidade do mouse"
+
+msgid "Громкость"
+msgstr "Volume geral"
+
+msgid "Свои шаги"
+msgstr "Seus passos"
+
+msgid "Выйти из игры"
+msgstr "Sair do jogo"
+
+msgid "Язык"
+msgstr "Idioma"
+
+msgid "Приливная цистерна"
+msgstr "Cisterna das marés"
+
+msgid "Обратная обсерватория"
+msgstr "Observatório invertido"
+
+msgid "Машинный зал"
+msgstr "Casa de máquinas"
+
+msgid "Колодец отливов"
+msgstr "Poço da maré baixa"
+
+msgid "Архив мер и весов"
+msgstr "Arquivo de pesos e medidas"
+
+msgid "Звёздная камера"
+msgstr "Câmara das estrelas"
+
+msgid "Ярусы колумбария"
+msgstr "Galerias do columbário"
+
+msgid "Собор над провалом"
+msgstr "Catedral sobre o abismo"
+
+msgid "Архив прибоя"
+msgstr "Arquivo da arrebentação"
+
+msgid "Сцена после звонка"
+msgstr "Palco após a campainha"
+
+msgid "Двор карантина"
+msgstr "Pátio de quarentena"
+
+msgid "Канатная кладовая"
+msgstr "Depósito de cordas"
+
+msgid "Каменные слушатели"
+msgstr "Os ouvintes de pedra"
+
+msgid "Шлюзовая палата"
+msgstr "Câmara da eclusa"
+
+msgid "Мансарды переписчиков"
+msgstr "Sótãos dos copistas"
+
+msgid "Дом ткацких станков"
+msgstr "Casa dos teares"
+
+msgid "Пересыльная станция"
+msgstr "Estação de transferência"
+
+msgid "Зал литейных форм"
+msgstr "Salão dos moldes de fundição"
+
+msgid "Палата немых часов"
+msgstr "Câmara dos relógios mudos"
+
+msgid "Обратный вокзал"
+msgstr "Estação invertida"
+
+msgid "Лес камертонов"
+msgstr "Floresta de diapasões"
+
+msgid "Кладка великанов"
+msgstr "Ninhada dos gigantes"
+
+msgid "Море меридианов"
+msgstr "Mar dos meridianos"
+
+msgid "Останки левиафана"
+msgstr "Restos do leviatã"
+
+msgid "Раковина глубин"
+msgstr "Concha das profundezas"
+
+msgid "Стеклянный фьорд"
+msgstr "Fiorde de vidro"
+
+msgid "Чёрное солнце"
+msgstr "Sol negro"
+
+msgid "Жерло"
+msgstr "A boca do vulcão"
+
+msgid "Сад медуз"
+msgstr "Jardim das águas-vivas"
+
+msgid "Архипелаг спор"
+msgstr "Arquipélago de esporos"
+
+msgid "Дождь из спутников"
+msgstr "Chuva de satélites"
+
+msgid "Долина гейзеров"
+msgstr "Vale dos gêiseres"
+
+msgid "Бумажная гроза"
+msgstr "Tempestade de papel"
+
+msgid "Лунная пасека"
+msgstr "Apiário lunar"

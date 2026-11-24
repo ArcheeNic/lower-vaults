@@ -22,3 +22,7 @@ anti_aliasing/quality/screen_space_aa=1
 scaling_3d/scale=1.0
 environment/defaults/default_clear_color=Color(0.13, 0.14, 0.14, 1)
 lights_and_shadows/directional_shadow/size=4096
+
+[internationalization]
+locale/fallback="ru"
+locale/translations=PackedStringArray("res://i18n/en.po", "res://i18n/zh_Hans.po", "res://i18n/es.po", "res://i18n/pt_BR.po", "res://i18n/de.po", "res://i18n/ja.po", "res://i18n/fr.po", "res://i18n/pl.po", "res://i18n/ko.po")

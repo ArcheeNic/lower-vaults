@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "Les voûtes inférieures"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "LES VOÛTES\nINFÉRIEURES"
+
+msgid "Войти    ⏎"
+msgstr "Entrer    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD — marcher   ·   Souris — regarder autour de soi   ·   Maj — courir   ·   Échap — pause"
+
+msgid "Пауза"
+msgstr "Pause"
+
+msgid "Продолжить"
+msgstr "Reprendre"
+
+msgid "Чувствительность мыши"
+msgstr "Sensibilité de la souris"
+
+msgid "Громкость"
+msgstr "Volume général"
+
+msgid "Свои шаги"
+msgstr "Vos bruits de pas"
+
+msgid "Выйти из игры"
+msgstr "Quitter le jeu"
+
+msgid "Язык"
+msgstr "Langue"
+
+msgid "Приливная цистерна"
+msgstr "Citerne des marées"
+
+msgid "Обратная обсерватория"
+msgstr "Observatoire inversé"
+
+msgid "Машинный зал"
+msgstr "Salle des machines"
+
+msgid "Колодец отливов"
+msgstr "Puits du jusant"
+
+msgid "Архив мер и весов"
+msgstr "Archives des poids et mesures"
+
+msgid "Звёздная камера"
+msgstr "Chambre des étoiles"
+
+msgid "Ярусы колумбария"
+msgstr "Gradins du columbarium"
+
+msgid "Собор над провалом"
+msgstr "Cathédrale au-dessus du gouffre"
+
+msgid "Архив прибоя"
+msgstr "Archives du ressac"
+
+msgid "Сцена после звонка"
+msgstr "Scène après la sonnerie"
+
+msgid "Двор карантина"
+msgstr "Cour de quarantaine"
+
+msgid "Канатная кладовая"
+msgstr "Réserve de cordages"
+
+msgid "Каменные слушатели"
+msgstr "Les auditeurs de pierre"
+
+msgid "Шлюзовая палата"
+msgstr "Chambre de l’écluse"
+
+msgid "Мансарды переписчиков"
+msgstr "Mansardes des copistes"
+
+msgid "Дом ткацких станков"
+msgstr "Maison des métiers à tisser"
+
+msgid "Пересыльная станция"
+msgstr "Gare de transit"
+
+msgid "Зал литейных форм"
+msgstr "Salle des moules de fonderie"
+
+msgid "Палата немых часов"
+msgstr "Chambre des horloges muettes"
+
+msgid "Обратный вокзал"
+msgstr "Gare inversée"
+
+msgid "Лес камертонов"
+msgstr "Forêt des diapasons"
+
+msgid "Кладка великанов"
+msgstr "Ponte des géants"
+
+msgid "Море меридианов"
+msgstr "Mer des méridiens"
+
+msgid "Останки левиафана"
+msgstr "Dépouille du léviathan"
+
+msgid "Раковина глубин"
+msgstr "Coquillage des profondeurs"
+
+msgid "Стеклянный фьорд"
+msgstr "Fjord de verre"
+
+msgid "Чёрное солнце"
+msgstr "Soleil noir"
+
+msgid "Жерло"
+msgstr "La gueule du volcan"
+
+msgid "Сад медуз"
+msgstr "Jardin des méduses"
+
+msgid "Архипелаг спор"
+msgstr "Archipel des spores"
+
+msgid "Дождь из спутников"
+msgstr "Pluie de satellites"
+
+msgid "Долина гейзеров"
+msgstr "Vallée des geysers"
+
+msgid "Бумажная гроза"
+msgstr "Orage de papier"
+
+msgid "Лунная пасека"
+msgstr "Rucher lunaire"

@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "The Lower Vaults"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "THE LOWER\nVAULTS"
+
+msgid "Войти    ⏎"
+msgstr "Enter    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD  —  move      ·      Mouse  —  look around      ·      Shift  —  run      ·      Esc  —  pause"
+
+msgid "Пауза"
+msgstr "Paused"
+
+msgid "Продолжить"
+msgstr "Resume"
+
+msgid "Чувствительность мыши"
+msgstr "Mouse sensitivity"
+
+msgid "Громкость"
+msgstr "Master volume"
+
+msgid "Свои шаги"
+msgstr "Your footsteps"
+
+msgid "Выйти из игры"
+msgstr "Quit game"
+
+msgid "Язык"
+msgstr "Language"
+
+msgid "Приливная цистерна"
+msgstr "Tidal Cistern"
+
+msgid "Обратная обсерватория"
+msgstr "Inverted Observatory"
+
+msgid "Машинный зал"
+msgstr "Engine Hall"
+
+msgid "Колодец отливов"
+msgstr "Well of Ebb Tides"
+
+msgid "Архив мер и весов"
+msgstr "Archive of Weights and Measures"
+
+msgid "Звёздная камера"
+msgstr "Star Chamber"
+
+msgid "Ярусы колумбария"
+msgstr "Tiers of the Columbarium"
+
+msgid "Собор над провалом"
+msgstr "Cathedral over the Chasm"
+
+msgid "Архив прибоя"
+msgstr "Archive of the Surf"
+
+msgid "Сцена после звонка"
+msgstr "The Stage after the Bell"
+
+msgid "Двор карантина"
+msgstr "Quarantine Yard"
+
+msgid "Канатная кладовая"
+msgstr "Rope Store"
+
+msgid "Каменные слушатели"
+msgstr "Stone Listeners"
+
+msgid "Шлюзовая палата"
+msgstr "Sluice Chamber"
+
+msgid "Мансарды переписчиков"
+msgstr "The Scribes’ Attics"
+
+msgid "Дом ткацких станков"
+msgstr "House of Looms"
+
+msgid "Пересыльная станция"
+msgstr "Transfer Station"
+
+msgid "Зал литейных форм"
+msgstr "Hall of Casting Moulds"
+
+msgid "Палата немых часов"
+msgstr "Chamber of Silent Clocks"
+
+msgid "Обратный вокзал"
+msgstr "Inverted Terminus"
+
+msgid "Лес камертонов"
+msgstr "Forest of Tuning Forks"
+
+msgid "Кладка великанов"
+msgstr "The Giants’ Clutch"
+
+msgid "Море меридианов"
+msgstr "Sea of Meridians"
+
+msgid "Останки левиафана"
+msgstr "Remains of the Leviathan"
+
+msgid "Раковина глубин"
+msgstr "Shell of the Deep"
+
+msgid "Стеклянный фьорд"
+msgstr "Glass Fjord"
+
+msgid "Чёрное солнце"
+msgstr "Black Sun"
+
+msgid "Жерло"
+msgstr "The Maw"
+
+msgid "Сад медуз"
+msgstr "Jellyfish Garden"
+
+msgid "Архипелаг спор"
+msgstr "Archipelago of Spores"
+
+msgid "Дождь из спутников"
+msgstr "Rain of Satellites"
+
+msgid "Долина гейзеров"
+msgstr "Valley of Geysers"
+
+msgid "Бумажная гроза"
+msgstr "Paper Thunderstorm"
+
+msgid "Лунная пасека"
+msgstr "Lunar Apiary"

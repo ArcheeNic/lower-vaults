@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: es\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "Las bóvedas inferiores"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "LAS BÓVEDAS\nINFERIORES"
+
+msgid "Войти    ⏎"
+msgstr "Entrar    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD — moverse   ·   Ratón — mirar   ·   Mayús — correr   ·   Esc — pausa"
+
+msgid "Пауза"
+msgstr "Pausa"
+
+msgid "Продолжить"
+msgstr "Continuar"
+
+msgid "Чувствительность мыши"
+msgstr "Sensibilidad del ratón"
+
+msgid "Громкость"
+msgstr "Volumen general"
+
+msgid "Свои шаги"
+msgstr "Tus pasos"
+
+msgid "Выйти из игры"
+msgstr "Salir del juego"
+
+msgid "Язык"
+msgstr "Idioma"
+
+msgid "Приливная цистерна"
+msgstr "Aljibe de las mareas"
+
+msgid "Обратная обсерватория"
+msgstr "Observatorio invertido"
+
+msgid "Машинный зал"
+msgstr "Sala de máquinas"
+
+msgid "Колодец отливов"
+msgstr "Pozo de la bajamar"
+
+msgid "Архив мер и весов"
+msgstr "Archivo de pesas y medidas"
+
+msgid "Звёздная камера"
+msgstr "Cámara de las estrellas"
+
+msgid "Ярусы колумбария"
+msgstr "Galerías del columbario"
+
+msgid "Собор над провалом"
+msgstr "Catedral sobre el abismo"
+
+msgid "Архив прибоя"
+msgstr "Archivo del oleaje"
+
+msgid "Сцена после звонка"
+msgstr "Escenario tras el timbre"
+
+msgid "Двор карантина"
+msgstr "Patio de cuarentena"
+
+msgid "Канатная кладовая"
+msgstr "Almacén de cabos"
+
+msgid "Каменные слушатели"
+msgstr "Los oyentes de piedra"
+
+msgid "Шлюзовая палата"
+msgstr "Cámara de la esclusa"
+
+msgid "Мансарды переписчиков"
+msgstr "Buhardillas de los copistas"
+
+msgid "Дом ткацких станков"
+msgstr "Casa de los telares"
+
+msgid "Пересыльная станция"
+msgstr "Estación de tránsito"
+
+msgid "Зал литейных форм"
+msgstr "Sala de los moldes de fundición"
+
+msgid "Палата немых часов"
+msgstr "Cámara de los relojes mudos"
+
+msgid "Обратный вокзал"
+msgstr "Estación invertida"
+
+msgid "Лес камертонов"
+msgstr "Bosque de diapasones"
+
+msgid "Кладка великанов"
+msgstr "Puesta de los gigantes"
+
+msgid "Море меридианов"
+msgstr "Mar de meridianos"
+
+msgid "Останки левиафана"
+msgstr "Restos del leviatán"
+
+msgid "Раковина глубин"
+msgstr "Concha de las profundidades"
+
+msgid "Стеклянный фьорд"
+msgstr "Fiordo de cristal"
+
+msgid "Чёрное солнце"
+msgstr "Sol negro"
+
+msgid "Жерло"
+msgstr "La boca del volcán"
+
+msgid "Сад медуз"
+msgstr "Jardín de medusas"
+
+msgid "Архипелаг спор"
+msgstr "Archipiélago de esporas"
+
+msgid "Дождь из спутников"
+msgstr "Lluvia de satélites"
+
+msgid "Долина гейзеров"
+msgstr "Valle de los géiseres"
+
+msgid "Бумажная гроза"
+msgstr "Tormenta de papel"
+
+msgid "Лунная пасека"
+msgstr "Colmenar lunar"

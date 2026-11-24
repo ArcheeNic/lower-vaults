@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: ja\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "地下の穹窿"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "地下の\n穹窿"
+
+msgid "Войти    ⏎"
+msgstr "入る    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD：移動　·　マウス：見回す　·　Shift：走る　·　Esc：一時停止"
+
+msgid "Пауза"
+msgstr "一時停止"
+
+msgid "Продолжить"
+msgstr "再開"
+
+msgid "Чувствительность мыши"
+msgstr "マウス感度"
+
+msgid "Громкость"
+msgstr "全体の音量"
+
+msgid "Свои шаги"
+msgstr "自分の足音"
+
+msgid "Выйти из игры"
+msgstr "ゲームを終了"
+
+msgid "Язык"
+msgstr "言語"
+
+msgid "Приливная цистерна"
+msgstr "潮汐の貯水槽"
+
+msgid "Обратная обсерватория"
+msgstr "逆さの天文台"
+
+msgid "Машинный зал"
+msgstr "機関室"
+
+msgid "Колодец отливов"
+msgstr "引き潮の井戸"
+
+msgid "Архив мер и весов"
+msgstr "度量衡の資料庫"
+
+msgid "Звёздная камера"
+msgstr "星の間"
+
+msgid "Ярусы колумбария"
+msgstr "納骨堂の段廊"
+
+msgid "Собор над провалом"
+msgstr "深淵に架かる大聖堂"
+
+msgid "Архив прибоя"
+msgstr "波しぶきの書庫"
+
+msgid "Сцена после звонка"
+msgstr "ベルが鳴りやんだ舞台"
+
+msgid "Двор карантина"
+msgstr "隔離棟の中庭"
+
+msgid "Канатная кладовая"
+msgstr "綱の倉庫"
+
+msgid "Каменные слушатели"
+msgstr "耳を澄ます石像"
+
+msgid "Шлюзовая палата"
+msgstr "水門の間"
+
+msgid "Мансарды переписчиков"
+msgstr "写字生たちの屋根裏"
+
+msgid "Дом ткацких станков"
+msgstr "織機の家"
+
+msgid "Пересыльная станция"
+msgstr "中継駅"
+
+msgid "Зал литейных форм"
+msgstr "鋳型の広間"
+
+msgid "Палата немых часов"
+msgstr "沈黙の時計の間"
+
+msgid "Обратный вокзал"
+msgstr "逆さの終着駅"
+
+msgid "Лес камертонов"
+msgstr "音叉の森"
+
+msgid "Кладка великанов"
+msgstr "巨人の卵塚"
+
+msgid "Море меридианов"
+msgstr "子午線の海"
+
+msgid "Останки левиафана"
+msgstr "リヴァイアサンの遺骸"
+
+msgid "Раковина глубин"
+msgstr "深海の貝殻"
+
+msgid "Стеклянный фьорд"
+msgstr "ガラスのフィヨルド"
+
+msgid "Чёрное солнце"
+msgstr "黒い太陽"
+
+msgid "Жерло"
+msgstr "火口"
+
+msgid "Сад медуз"
+msgstr "クラゲの庭"
+
+msgid "Архипелаг спор"
+msgstr "胞子の群島"
+
+msgid "Дождь из спутников"
+msgstr "衛星の雨"
+
+msgid "Долина гейзеров"
+msgstr "間欠泉の谷"
+
+msgid "Бумажная гроза"
+msgstr "紙の雷雨"
+
+msgid "Лунная пасека"
+msgstr "月の養蜂場"

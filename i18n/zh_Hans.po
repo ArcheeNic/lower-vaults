@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Language: zh_Hans\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Нижние своды"
+msgstr "下层穹窿"
+
+msgid "НИЖНИЕ\nСВОДЫ"
+msgstr "下层\n穹窿"
+
+msgid "Войти    ⏎"
+msgstr "进入    ⏎"
+
+msgid "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза"
+msgstr "WASD 移动　·　鼠标环顾　·　Shift 奔跑　·　Esc 暂停"
+
+msgid "Пауза"
+msgstr "暂停"
+
+msgid "Продолжить"
+msgstr "继续"
+
+msgid "Чувствительность мыши"
+msgstr "鼠标灵敏度"
+
+msgid "Громкость"
+msgstr "主音量"
+
+msgid "Свои шаги"
+msgstr "自己的脚步声"
+
+msgid "Выйти из игры"
+msgstr "退出游戏"
+
+msgid "Язык"
+msgstr "语言"
+
+msgid "Приливная цистерна"
+msgstr "潮汐蓄水池"
+
+msgid "Обратная обсерватория"
+msgstr "倒悬天文台"
+
+msgid "Машинный зал"
+msgstr "机械大厅"
+
+msgid "Колодец отливов"
+msgstr "落潮之井"
+
+msgid "Архив мер и весов"
+msgstr "度量衡档案馆"
+
+msgid "Звёздная камера"
+msgstr "星辰之室"
+
+msgid "Ярусы колумбария"
+msgstr "层叠骨灰龛"
+
+msgid "Собор над провалом"
+msgstr "深渊上的大教堂"
+
+msgid "Архив прибоя"
+msgstr "海涛档案馆"
+
+msgid "Сцена после звонка"
+msgstr "铃响后的舞台"
+
+msgid "Двор карантина"
+msgstr "隔离庭院"
+
+msgid "Канатная кладовая"
+msgstr "缆绳库"
+
+msgid "Каменные слушатели"
+msgstr "聆听的石像"
+
+msgid "Шлюзовая палата"
+msgstr "水闸室"
+
+msgid "Мансарды переписчиков"
+msgstr "抄写员的阁楼"
+
+msgid "Дом ткацких станков"
+msgstr "织机之屋"
+
+msgid "Пересыльная станция"
+msgstr "中转站"
+
+msgid "Зал литейных форм"
+msgstr "铸模大厅"
+
+msgid "Палата немых часов"
+msgstr "无声钟表之室"
+
+msgid "Обратный вокзал"
+msgstr "倒转的终点站"
+
+msgid "Лес камертонов"
+msgstr "音叉之林"
+
+msgid "Кладка великанов"
+msgstr "巨人的卵窝"
+
+msgid "Море меридианов"
+msgstr "子午线之海"
+
+msgid "Останки левиафана"
+msgstr "利维坦遗骸"
+
+msgid "Раковина глубин"
+msgstr "深海之贝"
+
+msgid "Стеклянный фьорд"
+msgstr "玻璃峡湾"
+
+msgid "Чёрное солнце"
+msgstr "黑色太阳"
+
+msgid "Жерло"
+msgstr "火山口"
+
+msgid "Сад медуз"
+msgstr "水母花园"
+
+msgid "Архипелаг спор"
+msgstr "孢子群岛"
+
+msgid "Дождь из спутников"
+msgstr "卫星之雨"
+
+msgid "Долина гейзеров"
+msgstr "间歇泉谷"
+
+msgid "Бумажная гроза"
+msgstr "纸之风暴"
+
+msgid "Лунная пасека"
+msgstr "月上蜂场"
