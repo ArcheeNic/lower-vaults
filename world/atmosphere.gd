@@ -30,7 +30,9 @@ func _ready() -> void:
 	environment.ssao_intensity = 2.35
 	environment.ssao_detail = 0.55
 	environment.fog_enabled = true
-	environment.fog_density = 0.008
+	environment.fog_mode = Environment.FOG_MODE_DEPTH
+	environment.fog_density = 1.0
+	environment.fog_aerial_perspective = 0.7
 	environment.fog_sky_affect = 0.3
 	environment.fog_light_energy = 0.65
 	environment.volumetric_fog_enabled = true
@@ -38,7 +40,7 @@ func _ready() -> void:
 	environment.volumetric_fog_albedo = Color("d2c7b4")
 	environment.volumetric_fog_length = 80.0
 	environment.volumetric_fog_ambient_inject = 0.12
-	environment.volumetric_fog_sky_affect = 0.0
+	environment.volumetric_fog_sky_affect = 1.0
 	environment.glow_enabled = true
 	environment.glow_intensity = 0.22
 	environment.glow_bloom = 0.0
@@ -57,6 +59,10 @@ func _ready() -> void:
 	mist.material = mist_material
 	add_child(mist)
 	set_realms(PackedFloat32Array([1,0,0,0]))
+
+func set_view_distance(far_clip: float) -> void:
+	environment.fog_depth_begin = far_clip * 0.28
+	environment.fog_depth_end = far_clip * 0.90
 
 func move_mist(frame:Transform3D) -> void:
 	mist.global_transform = Transform3D(frame.basis, frame.origin - frame.basis.y*.35)
@@ -77,7 +83,7 @@ func set_realms(weights: PackedFloat32Array) -> void:
 	sun.light_color = colors[2]
 	environment.ambient_light_color = colors[3]
 	environment.fog_light_color = colors[4]
-	environment.fog_density = .007 + .005*weights[1] - .005*weights[2]
+	environment.fog_depth_curve = 1.0 - 0.25*weights[1] + 0.5*weights[2]
 	environment.volumetric_fog_density = .009 + .005*weights[1] - .006*weights[2]
 	environment.volumetric_fog_albedo = colors[4].lightened(.30)
 	mist_material.set_shader_parameter("mist_color",colors[3])

@@ -40,7 +40,7 @@ func _ready() -> void:
 	camera.position.y = EYE_HEIGHT
 	camera.fov = 72.0
 	camera.near = 0.055
-	camera.far = 650.0
+	camera.far = 87.0
 	camera.current = true
 	add_child(camera)
 	_load_settings()

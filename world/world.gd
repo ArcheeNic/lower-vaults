@@ -59,7 +59,7 @@ func _ready() -> void:
 	safe_surface = walker.surface
 	walker.transform = Transform3D(safe_basis,last_safe)
 	add_child(walker)
-	walker.camera.far = 87.0
+	atmosphere.set_view_distance(walker.camera.far)
 	walker.camera.rotation.x = .055
 	walker.exit_requested.connect(_quit_game)
 	add_child(soundscape)
