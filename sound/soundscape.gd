@@ -57,7 +57,8 @@ func _ready() -> void:
 	_distant_in = _rng.randf_range(13.0, 21.0)
 
 
-func bind_player(body: CharacterBody3D) -> void:
+func bind_player(body: CharacterBody3D, route: Callable) -> void:
+	_witness.route_between_surfaces = route
 	_body = body
 	_last_position = body.global_position
 	_moving = false
@@ -89,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	var offset := _body.global_position - _last_position
 	_last_position = _body.global_position
 	var in_walk := not _body.has_method("is_walking") or bool(_body.call("is_walking"))
-	var travel := Vector2(offset.x, offset.z).length()
+	var travel := offset.slide(_body.up_direction).length()
 	var walking := in_walk and _body.is_on_floor() and travel > delta * .21 and travel < 2.5
 	var made_step := false
 	if walking:
@@ -143,7 +144,7 @@ func _emit_footstep(speed: float) -> void:
 	_last_sample = sample_index
 	var side := -0.13 if _left else 0.13
 	_left = not _left
-	var location := _body.global_position + _body.global_transform.basis.x * side + Vector3.UP * .12
+	var location := _body.global_position + _body.global_transform.basis.x * side + _body.up_direction * .12
 	var level := float(_body.get_footstep_volume()) if _body.has_method("get_footstep_volume") else .8
 	if level <= .001:
 		return
@@ -155,8 +156,8 @@ func _emit_footstep(speed: float) -> void:
 
 func _emit_distant() -> void:
 	var angle := _rng.randf_range(0.0, TAU)
-	var location := _body.global_position + Vector3(cos(angle), 0.0, sin(angle)) * _rng.randf_range(14.0, 25.0)
-	location.y += _rng.randf_range(-8.0, 10.0)
+	var location := _body.global_position + _body.global_basis * Vector3(cos(angle), 0.0, sin(angle)) * _rng.randf_range(14.0, 25.0)
+	location += _body.up_direction * _rng.randf_range(-8.0, 10.0)
 	var settling := _rng.randf() < .58 + .15 * _mix[1] - .24 * _mix[2] - .37 * _mix[3]
 	var source := SETTLING if settling else STRAIN
 	_play_at(_far_voice, source, location, _rng.randf_range(-10.0, -7.5), _rng.randf_range(.82, 1.04))

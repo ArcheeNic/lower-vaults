@@ -3,7 +3,7 @@ render_mode cull_disabled;
 varying vec2 water_xz;
 uniform sampler2D wave : repeat_enable, filter_linear_mipmap_anisotropic;
 void vertex() {
-	water_xz=(MODEL_MATRIX*vec4(VERTEX,1.)).xz;
+	water_xz=VERTEX.xz;
 }
 void fragment(){
 	// Integer cycles per tile keep wave phase continuous through world rebases.

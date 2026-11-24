@@ -1,5 +1,6 @@
 shader_type spatial;
 #include "res://architecture/relief.gdshaderinc"
+#include "res://architecture/room_axes.gdshaderinc"
 uniform vec4 tint : source_color;
 uniform int kind = 0;
 uniform float metalness = 0.0;
@@ -8,8 +9,8 @@ uniform sampler2D grain : repeat_enable, filter_linear_mipmap_anisotropic;
 varying vec3 p;
 varying vec3 n;
 void vertex(){
-	p=mat3(MODEL_MATRIX)*VERTEX+INSTANCE_CUSTOM.xyz;
-	n=normalize(MODEL_NORMAL_MATRIX*NORMAL);
+	p=room_axes(mat3(MODEL_MATRIX)*VERTEX)+INSTANCE_CUSTOM.xyz;
+	n=room_axes(normalize(MODEL_NORMAL_MATRIX*NORMAL));
 }
 void fragment(){
 	vec3 normal_axis=abs(normalize(n));

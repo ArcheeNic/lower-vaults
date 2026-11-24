@@ -13,6 +13,7 @@ var mode := Mode.ENTRANCE
 var sensitivity := 1.0
 var volume := 0.8
 var footstep_volume := 0.8
+var surface: Node3D
 var camera: Camera3D
 var interface: CanvasLayer
 var _look_remaining := Vector2.ZERO
@@ -112,7 +113,7 @@ func _process(delta: float) -> void:
 		return
 	var angle := _look_remaining * (1.0 - exp(-43.0 * delta))
 	_look_remaining -= angle
-	rotate_y(-angle.x)
+	rotate_object_local(Vector3.UP, -angle.x)
 	camera.rotation.x = clampf(camera.rotation.x - angle.y, deg_to_rad(-85.0), deg_to_rad(85.0))
 
 
@@ -125,18 +126,35 @@ func _physics_process(delta: float) -> void:
 	).limit_length()
 	var speed := RUN_SPEED if Input.is_physical_key_pressed(KEY_SHIFT) else WALK_SPEED
 	var desired := global_basis * Vector3(axis.x, 0, axis.y) * speed
-	var horizontal := Vector2(velocity.x, velocity.z).move_toward(Vector2(desired.x, desired.z), 17.0 * delta)
-	velocity.x = horizontal.x
-	velocity.z = horizontal.y
-	if not is_on_floor():
-		velocity.y -= _gravity * delta
-	else:
-		velocity.y = minf(velocity.y, 0.0)
+	var normal_speed := velocity.dot(up_direction)
+	var tangent := velocity.slide(up_direction).move_toward(desired,17.0*delta)
+	var grounded := is_on_floor()
+	normal_speed = minf(normal_speed,-_gravity*delta) if grounded else normal_speed-_gravity*delta
+	velocity = tangent + up_direction*normal_speed
 	move_and_slide()
-	var ground_speed := Vector2(get_real_velocity().x, get_real_velocity().z).length() if is_on_floor() else 0.0
+	if grounded and not is_on_floor():
+		apply_floor_snap()
+	if is_on_floor():
+		var probe := PhysicsRayQueryParameters3D.create(global_position+up_direction*.28,global_position-up_direction*.56,1,[get_rid()])
+		var ground := get_world_3d().direct_space_state.intersect_ray(probe)
+		if not ground.is_empty() and ground.collider.has_meta("walk_surface"):
+			surface = ground.collider.get_meta("walk_surface")
+	if is_instance_valid(surface):
+		var new_up: Vector3 = surface.up_at(global_position) if surface.has_method("up_at") else surface.global_basis.y
+		align_up(new_up)
+	var ground_speed := get_real_velocity().slide(up_direction).length() if is_on_floor() else 0.0
 	_foot_phase += ground_speed * delta * 3.6
 	_bob = move_toward(_bob, minf(ground_speed / WALK_SPEED, 1.0), 4.5 * delta)
 	camera.position.y = EYE_HEIGHT + sin(_foot_phase) * 0.012 * _bob
+
+
+func align_up(normal: Vector3) -> void:
+	if up_direction.distance_squared_to(normal) < .00000001:
+		return
+	var turn := Basis(Quaternion(up_direction, normal))
+	global_basis = (turn * global_basis).orthonormalized()
+	velocity = turn * velocity
+	up_direction = normal
 
 
 func _pressed(key: Key, alternate: Key) -> bool:

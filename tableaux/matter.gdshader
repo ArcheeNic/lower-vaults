@@ -1,5 +1,6 @@
 shader_type spatial;
 #include "res://architecture/relief.gdshaderinc"
+#include "res://architecture/room_axes.gdshaderinc"
 uniform sampler2D mineral : repeat_enable, filter_linear_mipmap_anisotropic;
 uniform vec4 pigment : source_color = vec4(.5,.5,.5,1.);
 uniform float metallic = .0;
@@ -9,8 +10,8 @@ uniform int surface = 0;
 varying vec3 pos;
 varying vec3 face;
 void vertex(){
-	pos = (MODEL_MATRIX * vec4(VERTEX,1.)).xyz;
-	face = normalize(MODEL_NORMAL_MATRIX*NORMAL);
+	pos = room_axes((MODEL_MATRIX * vec4(VERTEX,1.)).xyz);
+	face = room_axes(normalize(MODEL_NORMAL_MATRIX*NORMAL));
 }
 void fragment(){
 	vec3 n=abs(face);

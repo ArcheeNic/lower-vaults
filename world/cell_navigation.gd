@@ -1,5 +1,7 @@
 extends NavigationRegion3D
 
+var room_map: RID
+
 # Bake the same static colliders the walker uses, including sloped decks and rails.
 func build(tile: Node3D) -> void:
 	var mesh := NavigationMesh.new()
@@ -18,9 +20,21 @@ func build(tile: Node3D) -> void:
 	NavigationServer3D.parse_source_geometry_data(mesh, source, tile)
 	NavigationServer3D.bake_from_source_geometry_data(mesh, source)
 	navigation_mesh = mesh
-	# Erosion leaves a narrow gap where each streamed tile ends.
-	for seam in [Vector3(32,0,0), Vector3(0,0,-24)]:
-		var link := NavigationLink3D.new()
-		link.start_position = seam - seam.normalized() * 1.25
-		link.end_position = seam + seam.normalized() * 1.25
-		add_child(link)
+	room_map = NavigationServer3D.map_create()
+	NavigationServer3D.map_set_cell_size(room_map, mesh.cell_size)
+	NavigationServer3D.map_set_cell_height(room_map, mesh.cell_height)
+	NavigationServer3D.map_set_up(room_map, tile.global_basis.y)
+	NavigationServer3D.map_set_active(room_map,true)
+	set_navigation_map(room_map)
+	for link: NavigationLink3D in tile.find_children("*","NavigationLink3D",true,false):
+		link.set_navigation_map(room_map)
+
+func route(start: Vector3, goal: Vector3) -> PackedVector3Array:
+	if NavigationServer3D.map_get_iteration_id(room_map) == 0:
+		return PackedVector3Array()
+	return NavigationServer3D.map_get_path(room_map,start,goal,true)
+
+func _exit_tree() -> void:
+	if room_map.is_valid():
+		NavigationServer3D.free_rid(room_map)
+		room_map = RID()

@@ -1,5 +1,6 @@
 shader_type spatial;
 #include "res://architecture/relief.gdshaderinc"
+#include "res://architecture/room_axes.gdshaderinc"
 
 uniform sampler2D mineral : repeat_enable, filter_linear_mipmap_anisotropic;
 uniform vec4 stone_color : source_color;
@@ -10,8 +11,8 @@ varying vec3 stone_pos;
 varying vec3 face_normal;
 
 void vertex() {
-    stone_pos = mat3(MODEL_MATRIX) * VERTEX + INSTANCE_CUSTOM.xyz;
-    face_normal = normalize(MODEL_NORMAL_MATRIX * NORMAL);
+    stone_pos = room_axes(mat3(MODEL_MATRIX) * VERTEX) + INSTANCE_CUSTOM.xyz;
+    face_normal = room_axes(normalize(MODEL_NORMAL_MATRIX * NORMAL));
 }
 
 float tile_value(vec2 v) {

@@ -58,9 +58,8 @@ func _ready() -> void:
 	add_child(mist)
 	set_realms(PackedFloat32Array([1,0,0,0]))
 
-func move_mist(at:Vector3) -> void:
-	mist.position.x=at.x
-	mist.position.z=at.z
+func move_mist(frame:Transform3D) -> void:
+	mist.global_transform = Transform3D(frame.basis, frame.origin - frame.basis.y*.35)
 
 func set_realms(weights: PackedFloat32Array) -> void:
 	if weights == previous:

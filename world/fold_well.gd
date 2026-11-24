@@ -33,7 +33,7 @@ func _process(_delta: float) -> void:
 	var camera := get_viewport().get_camera_3d()
 	if not camera:
 		return
-	var offset := camera.global_position-global_position
+	var offset := to_local(camera.global_position)
 	var active := offset.y > -.2 and offset.length_squared() < 32.*32. and camera.is_position_in_frustum(global_position)
 	# Keep the view alive when its centre has passed the edge of the screen but
 	# the walker is still looking through part of the opening.
@@ -46,7 +46,7 @@ func _process(_delta: float) -> void:
 		eye.fov = camera.fov
 		eye.near = camera.near
 		eye.far = camera.far
-		eye.global_transform = camera.global_transform.translated(DISPLACEMENT)
+		eye.global_transform = camera.global_transform.translated(global_basis * DISPLACEMENT)
 
 func crosses(eye_position: Vector3, vertical_speed: float) -> bool:
 	var p := to_local(eye_position)
