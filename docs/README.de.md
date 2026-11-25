@@ -12,13 +12,22 @@ Ein Spaziergang in der Ich-Perspektive durch einen endlosen Turm. Im Archiv der 
 
 Entpacke das komplette x86-64-Archiv für dein System. Lass die EOS-Bibliotheken neben der ausführbaren Datei. Beim Start eines Durchgangs öffnet die konfigurierte Version einen Raum und zeigt oben rechts seinen sechsstelligen Code, zum Beispiel `K7Q-2MX`. Deine Mitspieler geben ihn auf dem Startbildschirm ein und wählen **Mit Code beitreten**, um dieselbe Expedition zu betreten.
 
-- **Windows** — `build/LowerVaults.exe` per Doppelklick starten.
-- **Linux** — im Projektverzeichnis folgende Befehle ausführen.
+- **Windows** — `LowerVaults.exe` per Doppelklick starten.
+- **Linux** — im entpackten Ordner folgende Befehle ausführen.
 
 ```sh
-chmod +x "build/Нижние своды.x86_64"
-"./build/Нижние своды.x86_64"
+chmod +x LowerVaults.x86_64
+./LowerVaults.x86_64
 ```
+
+### Wenn Windows das Spiel blockiert
+
+Die Windows-Version ist noch nicht signiert, deshalb kann Windows den Start verhindern.
+
+- **Microsoft Defender SmartScreen** zeigt „Der Computer wurde durch Windows geschützt“. Wähle **Weitere Informationen** und dann **Trotzdem ausführen**.
+- Die **Intelligente App-Steuerung** (Smart App Control) blockiert unsignierte Programme, ohne dass man sie trotzdem starten kann. Du kannst sie unter **Windows-Sicherheit → App- & Browsersteuerung → Einstellungen für intelligente App-Steuerung** ausschalten. In manchen Versionen von Windows 11 lässt sie sich danach nur durch eine Neuinstallation von Windows wieder einschalten. Für die Linux-Version gilt diese Einschränkung nicht.
+
+Wir haben bei der SignPath Foundation ein kostenloses Zertifikat zur Codesignatur beantragt. Die Foundation vergibt Zertifikate nur an bereits bekannte Projekte, deshalb wurde der Antrag vorerst abgelehnt. Sobald das Spiel bekannter ist, stellen wir ihn erneut.
 
 ## Steuerung
 
@@ -54,15 +63,6 @@ Die Änderungen jeder Version stehen im [Änderungsprotokoll](CHANGELOG.de.md).
 ## Lizenz
 
 Code und Assets des Spiels stehen unter der [Apache License 2.0](../LICENSE). Die Ersatzschrift für Chinesisch, Japanisch und Koreanisch steht unter der [SIL Open Font License](../i18n/fonts/OFL.txt). Die Release-Archive enthalten außerdem das Epic Online Services SDK, das Epic unter eigenen Bedingungen vertreibt.
-
-## Code signing policy (Richtlinie zur Codesignatur)
-
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Kostenlose Codesignatur durch SignPath.io, Zertifikat von der SignPath Foundation.
-
-- Autoren und Prüfer: [ArcheeNic](https://github.com/ArcheeNic)
-- Freigabe von Versionen: [ArcheeNic](https://github.com/ArcheeNic)
-
-Signiert werden nur Windows-Builds, die der [Release-Workflow](../.github/workflows/release.yml) aus diesem Repository erstellt. Jede Version wird von Hand freigegeben.
 
 ## Datenschutz
 

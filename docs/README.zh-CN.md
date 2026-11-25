@@ -12,13 +12,22 @@
 
 完整解压适用于当前平台的 x86-64 压缩包，将 EOS 库保留在可执行文件旁。配置好的版本开始游戏时会创建房间，右上角显示六位房间代码（例如 `K7Q-2MX`）。好友在标题画面输入代码并选择“输入代码加入”，即可进入同一场探险。
 
-- **Windows** — 双击 `build/LowerVaults.exe`。
-- **Linux** — 在项目目录中运行以下命令。
+- **Windows** — 双击 `LowerVaults.exe`。
+- **Linux** — 在解压后的文件夹中运行以下命令。
 
 ```sh
-chmod +x "build/Нижние своды.x86_64"
-"./build/Нижние своды.x86_64"
+chmod +x LowerVaults.x86_64
+./LowerVaults.x86_64
 ```
+
+### 如果 Windows 阻止运行游戏
+
+Windows 版尚未签名，因此 Windows 可能会阻止它启动。
+
+- 如果 **Microsoft Defender SmartScreen** 显示“Windows 已保护你的电脑”，请选择“更多信息”，再选择“仍要运行”。
+- **智能应用控制**（Smart App Control）会直接阻止未签名的应用，无法选择继续运行。可在“Windows 安全中心 → 应用和浏览器控制 → 智能应用控制设置”中将其关闭。在部分 Windows 11 版本中，关闭后只能通过重装 Windows 才能重新开启。Linux 版没有这一限制。
+
+我们已向 SignPath Foundation 申请免费的代码签名证书。该基金会只为已有一定知名度的项目颁发证书，因此这次申请暂未通过。等游戏更有知名度后，我们会再次申请。
 
 ## 操作
 
@@ -54,15 +63,6 @@ chmod +x "build/Нижние своды.x86_64"
 ## 许可证
 
 游戏的代码和素材以 [Apache License 2.0](../LICENSE) 发布。中日韩备用字体采用 [SIL Open Font License](../i18n/fonts/OFL.txt)。发布压缩包还包含 Epic Online Services SDK，由 Epic 按其自身条款分发。
-
-## Code signing policy（代码签名政策）
-
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). 免费代码签名由 SignPath.io 提供，证书由 SignPath Foundation 颁发。
-
-- 提交者与审核者：[ArcheeNic](https://github.com/ArcheeNic)
-- 审批者：[ArcheeNic](https://github.com/ArcheeNic)
-
-只有由本仓库的[发布流程](../.github/workflows/release.yml)构建的 Windows 版本才会签名，每次发布都需人工审批。
 
 ## 隐私
 

@@ -12,13 +12,22 @@ Uma caminhada em primeira pessoa por uma torre sem fim. O percurso começa no Ar
 
 Extraia todo o arquivo x86-64 da sua plataforma. Mantenha as bibliotecas do EOS ao lado do executável. Ao começar uma partida, a versão configurada abre uma sala e mostra no canto superior direito um código de seis caracteres, por exemplo `K7Q-2MX`. Seus amigos digitam o código na tela inicial e escolhem **Entrar com código** para percorrer a mesma expedição.
 
-- **Windows** — clique duas vezes em `build/LowerVaults.exe`.
-- **Linux** — execute estes comandos na pasta do projeto.
+- **Windows** — clique duas vezes em `LowerVaults.exe`.
+- **Linux** — execute estes comandos na pasta extraída.
 
 ```sh
-chmod +x "build/Нижние своды.x86_64"
-"./build/Нижние своды.x86_64"
+chmod +x LowerVaults.x86_64
+./LowerVaults.x86_64
 ```
+
+### Se o Windows bloquear o jogo
+
+A versão para Windows ainda não tem assinatura, por isso o Windows pode impedir que ela abra.
+
+- O **Microsoft Defender SmartScreen** mostra “O Windows protegeu o computador”. Clique em **Mais informações** e depois em **Executar assim mesmo**.
+- O **Controle Inteligente de Aplicativos** (Smart App Control) bloqueia programas sem assinatura e não oferece como abri-los. Você pode desativá-lo em **Segurança do Windows → Controle de aplicativos e do navegador → Configurações do Controle Inteligente de Aplicativos**. Em algumas versões do Windows 11, ele só pode ser reativado reinstalando o Windows. A versão para Linux não tem essa restrição.
+
+Pedimos à SignPath Foundation um certificado gratuito de assinatura de código. A fundação certifica apenas projetos que já são conhecidos, então por enquanto o pedido foi recusado. Vamos pedir de novo quando o jogo for mais conhecido.
 
 ## Controles
 
@@ -54,15 +63,6 @@ As mudanças de cada versão estão no [registro de alterações](CHANGELOG.pt-B
 ## Licença
 
 O código e os recursos do jogo são distribuídos sob a [Apache License 2.0](../LICENSE). A fonte reserva para chinês, japonês e coreano usa a [SIL Open Font License](../i18n/fonts/OFL.txt). Os arquivos de cada versão também incluem o SDK do Epic Online Services, que a Epic distribui sob os próprios termos.
-
-## Code signing policy (política de assinatura de código)
-
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Assinatura de código gratuita do SignPath.io, com certificado da SignPath Foundation.
-
-- Autores e revisores: [ArcheeNic](https://github.com/ArcheeNic)
-- Aprovação de versões: [ArcheeNic](https://github.com/ArcheeNic)
-
-Só são assinadas as versões para Windows geradas a partir deste repositório pelo [processo de lançamento](../.github/workflows/release.yml), e cada versão é aprovada manualmente.
 
 ## Privacidade
 

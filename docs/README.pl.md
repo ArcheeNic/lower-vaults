@@ -12,13 +12,22 @@ Spacer z perspektywy pierwszej osoby po wieży bez końca. Wędrówka zaczyna si
 
 Rozpakuj całe archiwum x86-64 dla swojego systemu. Biblioteki EOS zostaw obok pliku wykonywalnego. Na początku rozgrywki skonfigurowana gra otwiera pokój i pokazuje w prawym górnym rogu jego sześcioznakowy kod, na przykład `K7Q-2MX`. Znajomi wpisują go na ekranie startowym i wybierają **Dołącz kodem**, by przejść tę samą wyprawę.
 
-- **Windows** — kliknij dwukrotnie `build/LowerVaults.exe`.
-- **Linux** — wykonaj poniższe polecenia w katalogu projektu.
+- **Windows** — kliknij dwukrotnie `LowerVaults.exe`.
+- **Linux** — wykonaj poniższe polecenia w rozpakowanym folderze.
 
 ```sh
-chmod +x "build/Нижние своды.x86_64"
-"./build/Нижние своды.x86_64"
+chmod +x LowerVaults.x86_64
+./LowerVaults.x86_64
 ```
+
+### Jeśli Windows blokuje grę
+
+Wersja dla Windows nie jest jeszcze podpisana, dlatego Windows może nie pozwolić jej uruchomić.
+
+- **Microsoft Defender SmartScreen** pokazuje komunikat „System Windows ochronił ten komputer”. Wybierz **Więcej informacji**, a potem **Uruchom mimo to**.
+- **Inteligentna kontrola aplikacji** (Smart App Control) blokuje niepodpisane programy i nie pozwala ich uruchomić. Możesz ją wyłączyć w **Zabezpieczenia Windows → Kontrola aplikacji i przeglądarki → Ustawienia inteligentnej kontroli aplikacji**. W niektórych wersjach Windows 11 można ją potem włączyć ponownie tylko przez ponowną instalację systemu. Wersji dla Linuksa to ograniczenie nie dotyczy.
+
+Złożyliśmy w SignPath Foundation wniosek o bezpłatny certyfikat do podpisywania kodu. Fundacja wydaje certyfikaty tylko projektom, które są już znane, więc na razie wniosek odrzucono. Złożymy go ponownie, gdy gra stanie się bardziej znana.
 
 ## Sterowanie
 
@@ -54,15 +63,6 @@ Zmiany w kolejnych wersjach opisuje [lista zmian](CHANGELOG.pl.md).
 ## Licencja
 
 Kod i zasoby gry są udostępniane na [Apache License 2.0](../LICENSE). Zapasowa czcionka dla chińskiego, japońskiego i koreańskiego jest na [SIL Open Font License](../i18n/fonts/OFL.txt). Archiwa wydań zawierają też Epic Online Services SDK, który Epic rozpowszechnia na własnych warunkach.
-
-## Code signing policy (zasady podpisywania kodu)
-
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Bezpłatne podpisywanie kodu zapewnia SignPath.io, certyfikat wydaje SignPath Foundation.
-
-- Autorzy i recenzenci: [ArcheeNic](https://github.com/ArcheeNic)
-- Zatwierdzanie wydań: [ArcheeNic](https://github.com/ArcheeNic)
-
-Podpisywane są tylko wersje dla Windows zbudowane z tego repozytorium przez [proces wydawania](../.github/workflows/release.yml). Każde wydanie jest zatwierdzane ręcznie.
 
 ## Prywatność
 

@@ -12,13 +12,22 @@
 
 사용할 플랫폼의 x86-64 압축 파일 전체를 풀고 EOS 라이브러리를 실행 파일과 같은 폴더에 두세요. 설정된 빌드는 플레이를 시작할 때 방을 만들고 오른쪽 위에 `K7Q-2MX` 같은 여섯 글자 방 코드를 보여 줍니다. 친구가 시작 화면에서 코드를 입력하고 **코드로 참가**를 누르면 같은 탐험에 합류합니다.
 
-- **Windows** — `build/LowerVaults.exe`를 더블 클릭하세요.
-- **Linux** — 프로젝트 디렉터리에서 다음 명령을 실행하세요.
+- **Windows** — `LowerVaults.exe`를 더블 클릭하세요.
+- **Linux** — 압축을 푼 폴더에서 다음 명령을 실행하세요.
 
 ```sh
-chmod +x "build/Нижние своды.x86_64"
-"./build/Нижние своды.x86_64"
+chmod +x LowerVaults.x86_64
+./LowerVaults.x86_64
 ```
+
+### Windows가 게임을 차단할 때
+
+Windows 버전은 아직 서명되지 않아 Windows가 실행을 막을 수 있습니다.
+
+- **Microsoft Defender SmartScreen**이 "Windows의 PC 보호" 창을 띄우면 **추가 정보**를 누른 다음 **실행**을 누르세요.
+- **스마트 앱 컨트롤**(Smart App Control)은 서명되지 않은 앱을 차단하며, 그대로 실행할 방법이 없습니다. **Windows 보안 → 앱 및 브라우저 컨트롤 → 스마트 앱 컨트롤 설정**에서 끌 수 있습니다. 일부 Windows 11 버전에서는 한 번 끄면 Windows를 다시 설치해야만 다시 켤 수 있습니다. Linux 버전에는 이런 제한이 없습니다.
+
+SignPath Foundation에 무료 코드 서명 인증서를 신청했지만, 재단은 이미 널리 알려진 프로젝트에만 인증서를 발급하기 때문에 이번에는 거절되었습니다. 게임이 더 알려지면 다시 신청하겠습니다.
 
 ## 조작
 
@@ -54,15 +63,6 @@ chmod +x "build/Нижние своды.x86_64"
 ## 라이선스
 
 게임의 코드와 에셋은 [Apache License 2.0](../LICENSE)으로 배포됩니다. 중국어·일본어·한국어용 대체 글꼴은 [SIL Open Font License](../i18n/fonts/OFL.txt)를 따릅니다. 릴리스 압축 파일에는 Epic이 자체 약관으로 배포하는 Epic Online Services SDK도 들어 있습니다.
-
-## Code signing policy (코드 서명 정책)
-
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). 무료 코드 서명은 SignPath.io가 제공하며, 인증서는 SignPath Foundation이 발급합니다.
-
-- 커미터 및 리뷰어: [ArcheeNic](https://github.com/ArcheeNic)
-- 승인자: [ArcheeNic](https://github.com/ArcheeNic)
-
-이 저장소에서 [릴리스 워크플로](../.github/workflows/release.yml)로 빌드한 Windows 버전만 서명하며, 모든 릴리스는 직접 승인합니다.
 
 ## 개인정보
 

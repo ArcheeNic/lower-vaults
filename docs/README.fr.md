@@ -12,13 +12,22 @@ Une promenade à la première personne dans une tour sans fin. Le parcours comme
 
 Décompressez toute l’archive x86-64 pour votre plateforme. Gardez les bibliothèques EOS à côté de l’exécutable. Au début d’une partie, la version configurée ouvre un salon et affiche en haut à droite son code de six caractères, par exemple `K7Q-2MX`. Vos compagnons le saisissent sur l’écran titre et choisissent **Rejoindre avec un code** pour parcourir la même expédition.
 
-- **Windows** — double-cliquez sur `build/LowerVaults.exe`.
-- **Linux** — lancez ces commandes depuis le répertoire du projet.
+- **Windows** — double-cliquez sur `LowerVaults.exe`.
+- **Linux** — lancez ces commandes dans le dossier extrait.
 
 ```sh
-chmod +x "build/Нижние своды.x86_64"
-"./build/Нижние своды.x86_64"
+chmod +x LowerVaults.x86_64
+./LowerVaults.x86_64
 ```
+
+### Si Windows bloque le jeu
+
+La version Windows n’est pas encore signée, Windows peut donc l’empêcher de démarrer.
+
+- **Microsoft Defender SmartScreen** affiche « Windows a protégé votre ordinateur ». Choisissez **Informations complémentaires**, puis **Exécuter quand même**.
+- Le **Contrôle intelligent des applications** (Smart App Control) bloque les programmes non signés sans permettre de les lancer. Vous pouvez le désactiver dans **Sécurité Windows → Contrôle des applications et du navigateur → Paramètres du contrôle intelligent des applications**. Sur certaines versions de Windows 11, il ne peut être réactivé qu’en réinstallant Windows. La version Linux n’a pas cette restriction.
+
+Nous avons demandé un certificat de signature de code gratuit à la SignPath Foundation. La fondation ne certifie que des projets déjà connus : la demande a donc été refusée pour l’instant. Nous la renouvellerons quand le jeu sera plus connu.
 
 ## Commandes
 
@@ -54,15 +63,6 @@ Les changements de chaque version sont décrits dans le [journal des modificatio
 ## Licence
 
 Le code et les ressources du jeu sont publiés sous [Apache License 2.0](../LICENSE). La police de secours pour le chinois, le japonais et le coréen relève de la [SIL Open Font License](../i18n/fonts/OFL.txt). Les archives des versions incluent aussi le SDK Epic Online Services, distribué par Epic selon ses propres conditions.
-
-## Code signing policy (politique de signature du code)
-
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Signature de code gratuite fournie par SignPath.io, certificat délivré par la SignPath Foundation.
-
-- Auteurs et relecteurs : [ArcheeNic](https://github.com/ArcheeNic)
-- Approbation des versions : [ArcheeNic](https://github.com/ArcheeNic)
-
-Seules les versions Windows produites depuis ce dépôt par le [processus de publication](../.github/workflows/release.yml) sont signées, et chaque version est approuvée à la main.
 
 ## Confidentialité
 

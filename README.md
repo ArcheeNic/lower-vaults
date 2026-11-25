@@ -12,13 +12,22 @@ The walk begins in the Archive of Weights and Measures, on a wooden bridge betwe
 
 Extract the entire x86-64 archive for your platform. Keep the EOS libraries beside the executable. The game uses Godot’s Forward+ renderer.
 
-- **Windows** — double-click `build/LowerVaults.exe`.
-- **Linux** — run these commands from the project directory.
+- **Windows** — double-click `LowerVaults.exe`.
+- **Linux** — run these commands in the extracted folder.
 
 ```sh
-chmod +x "build/Нижние своды.x86_64"
-"./build/Нижние своды.x86_64"
+chmod +x LowerVaults.x86_64
+./LowerVaults.x86_64
 ```
+
+### If Windows blocks the game
+
+The Windows build is not signed yet, so Windows may stop it from starting.
+
+- **Microsoft Defender SmartScreen** shows “Windows protected your PC”. Choose **More info**, then **Run anyway**.
+- **Smart App Control** blocks unsigned apps with no option to run them. You can turn it off in **Windows Security → App & browser control → Smart App Control settings**. On some versions of Windows 11, it can’t be turned back on without reinstalling Windows. The Linux build has no such restriction.
+
+We applied to the SignPath Foundation for a free code signing certificate. The Foundation certifies only projects that are already widely known, so the application was declined for now. We will apply again once the game is better known.
 
 ## Playing together
 
@@ -60,15 +69,6 @@ All changes by version are in the [changelog](CHANGELOG.md).
 ## License
 
 The game’s code and assets are released under the [Apache License 2.0](LICENSE). The CJK fallback font is under the [SIL Open Font License](i18n/fonts/OFL.txt). Release archives also include the Epic Online Services SDK, which Epic distributes under its own terms.
-
-## Code signing policy
-
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
-
-- Committers and reviewers: [ArcheeNic](https://github.com/ArcheeNic)
-- Approvers: [ArcheeNic](https://github.com/ArcheeNic)
-
-Only Windows builds produced from this repository by the [release workflow](.github/workflows/release.yml) are signed, and each release is approved by hand.
 
 ## Privacy
 

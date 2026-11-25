@@ -97,5 +97,5 @@ jobs:
             gh release upload "$TAG" "$RUNNER_TEMP"/dist/*.zip --clobber
           else
             gh release create "$TAG" "$RUNNER_TEMP"/dist/*.zip --verify-tag --title "The Lower Vaults ${TAG#v}" \
-              --notes "See the [changelog](https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md)."
+              --notes "See the [changelog](https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md). Windows blocks unsigned builds: see [how to run it](https://github.com/${GITHUB_REPOSITORY}#if-windows-blocks-the-game)."
           fi
