@@ -51,6 +51,23 @@ Die Sprachauswahl befindet sich oben rechts im Startbildschirm und im Pausenmen�
 
 Die Änderungen jeder Version stehen im [Änderungsprotokoll](CHANGELOG.de.md).
 
+## Lizenz
+
+Code und Assets des Spiels stehen unter der [Apache License 2.0](../LICENSE). Die Ersatzschrift für Chinesisch, Japanisch und Koreanisch steht unter der [SIL Open Font License](../i18n/fonts/OFL.txt). Die Release-Archive enthalten außerdem das Epic Online Services SDK, das Epic unter eigenen Bedingungen vertreibt.
+
+## Code signing policy (Richtlinie zur Codesignatur)
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Kostenlose Codesignatur durch SignPath.io, Zertifikat von der SignPath Foundation.
+
+- Autoren und Prüfer: [ArcheeNic](https://github.com/ArcheeNic)
+- Freigabe von Versionen: [ArcheeNic](https://github.com/ArcheeNic)
+
+Signiert werden nur Windows-Builds, die der [Release-Workflow](../.github/workflows/release.yml) aus diesem Repository erstellt. Jede Version wird von Hand freigegeben.
+
+## Datenschutz
+
+Sobald ein Rundgang beginnt, verbindet sich das Spiel mit Epic Online Services, um Mitspieler per Raumcode zu finden. Die Anmeldung erfolgt anonym über eine Geräte-ID. Mit Spielern im selben Raum werden nur Position und Blickrichtung geteilt. Weitere Daten sendet das Spiel nicht. Epic verarbeitet die Verbindung gemäß seiner [Datenschutzrichtlinie](https://www.epicgames.com/site/privacypolicy).
+
 ## Tokenverbrauch für v0.1.0
 
 | Werkzeug | Sitzungen | Token |

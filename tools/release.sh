@@ -5,7 +5,7 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 REF=${REF:-HEAD}
 GODOT=${GODOT:-$HOME/.local/share/latticefall/godot-4.7.1-stable}
 OUT=${OUT:-$ROOT/build/release}
-CONFIG=$ROOT/network/eos.cfg
+CONFIG=${CONFIG:-$ROOT/network/eos.cfg}
 
 [[ -f "$CONFIG" ]] || { echo "network/eos.cfg is missing; multiplayer would be disabled." >&2; exit 1; }
 WORK=$(mktemp -d)
@@ -13,6 +13,9 @@ trap 'rm -rf "$WORK"' EXIT
 
 git -C "$ROOT" archive "$REF" | tar -x -C "$WORK"
 install -m 600 "$CONFIG" "$WORK/network/eos.cfg"
+if [[ -n "${VERSION:-}" ]]; then
+	sed -i -E "s/^config\/version=.*/config\/version=\"$VERSION\"/" "$WORK/project.godot"
+fi
 python3 "$WORK/tools/install_eos.py"
 cd "$WORK"
 "$GODOT" --headless --import

@@ -51,6 +51,23 @@ El selector de idioma está en la esquina superior derecha de la pantalla de ini
 
 Los cambios de cada versión están en el [registro de cambios](CHANGELOG.es.md).
 
+## Licencia
+
+El código y los recursos del juego se publican con la [Apache License 2.0](../LICENSE). La fuente de respaldo para chino, japonés y coreano usa la [SIL Open Font License](../i18n/fonts/OFL.txt). Los archivos de cada versión incluyen además el SDK de Epic Online Services, que Epic distribuye con sus propias condiciones.
+
+## Code signing policy (política de firma de código)
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Firma de código gratuita de SignPath.io, con certificado de SignPath Foundation.
+
+- Autores y revisores: [ArcheeNic](https://github.com/ArcheeNic)
+- Aprobación de versiones: [ArcheeNic](https://github.com/ArcheeNic)
+
+Solo se firman las versiones para Windows compiladas desde este repositorio por el [proceso de publicación](../.github/workflows/release.yml), y cada versión se aprueba a mano.
+
+## Privacidad
+
+Al empezar un paseo, el juego se conecta a Epic Online Services para encontrar compañeros por código de sala. Inicia sesión con un identificador de dispositivo anónimo y solo comparte tu posición y orientación con los jugadores de la misma sala. El juego no envía ningún otro dato. Epic gestiona la conexión según su [política de privacidad](https://www.epicgames.com/site/privacypolicy).
+
 ## Consumo de tokens de la versión 0.1.0
 
 | Herramienta | Sesiones | Tokens |

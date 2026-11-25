@@ -51,6 +51,23 @@ Język można zmienić w prawym górnym rogu ekranu startowego lub menu pauzy. M
 
 Zmiany w kolejnych wersjach opisuje [lista zmian](CHANGELOG.pl.md).
 
+## Licencja
+
+Kod i zasoby gry są udostępniane na [Apache License 2.0](../LICENSE). Zapasowa czcionka dla chińskiego, japońskiego i koreańskiego jest na [SIL Open Font License](../i18n/fonts/OFL.txt). Archiwa wydań zawierają też Epic Online Services SDK, który Epic rozpowszechnia na własnych warunkach.
+
+## Code signing policy (zasady podpisywania kodu)
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Bezpłatne podpisywanie kodu zapewnia SignPath.io, certyfikat wydaje SignPath Foundation.
+
+- Autorzy i recenzenci: [ArcheeNic](https://github.com/ArcheeNic)
+- Zatwierdzanie wydań: [ArcheeNic](https://github.com/ArcheeNic)
+
+Podpisywane są tylko wersje dla Windows zbudowane z tego repozytorium przez [proces wydawania](../.github/workflows/release.yml). Każde wydanie jest zatwierdzane ręcznie.
+
+## Prywatność
+
+Gdy zaczyna się spacer, gra łączy się z Epic Online Services, by znaleźć towarzyszy po kodzie pokoju. Logowanie jest anonimowe, przez identyfikator urządzenia, a graczom w tym samym pokoju przekazywane są tylko twoja pozycja i kierunek patrzenia. Gra nie wysyła żadnych innych danych. Epic obsługuje połączenie zgodnie ze swoją [polityką prywatności](https://www.epicgames.com/site/privacypolicy).
+
 ## Zużycie tokenów podczas prac nad wersją 0.1.0
 
 | Narzędzie | Sesje | Tokeny |

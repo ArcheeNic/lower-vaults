@@ -57,6 +57,23 @@ Use the language selector at the top right of the title screen or pause menu. Me
 
 All changes by version are in the [changelog](CHANGELOG.md).
 
+## License
+
+The game’s code and assets are released under the [Apache License 2.0](LICENSE). The CJK fallback font is under the [SIL Open Font License](i18n/fonts/OFL.txt). Release archives also include the Epic Online Services SDK, which Epic distributes under its own terms.
+
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
+
+- Committers and reviewers: [ArcheeNic](https://github.com/ArcheeNic)
+- Approvers: [ArcheeNic](https://github.com/ArcheeNic)
+
+Only Windows builds produced from this repository by the [release workflow](.github/workflows/release.yml) are signed, and each release is approved by hand.
+
+## Privacy
+
+When a walk starts, the game connects to Epic Online Services to meet other players by room code. It signs in with an anonymous device ID and shares only your position and facing with players in the same room. The game sends no other data. Epic handles the connection under its [privacy policy](https://www.epicgames.com/site/privacypolicy).
+
 ## Token usage for v0.1.0
 
 | Tool | Sessions | Tokens |

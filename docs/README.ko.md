@@ -51,6 +51,23 @@ chmod +x "build/Нижние своды.x86_64"
 
 버전별 변경 사항은 [변경 내역](CHANGELOG.ko.md)에서 확인하세요.
 
+## 라이선스
+
+게임의 코드와 에셋은 [Apache License 2.0](../LICENSE)으로 배포됩니다. 중국어·일본어·한국어용 대체 글꼴은 [SIL Open Font License](../i18n/fonts/OFL.txt)를 따릅니다. 릴리스 압축 파일에는 Epic이 자체 약관으로 배포하는 Epic Online Services SDK도 들어 있습니다.
+
+## Code signing policy (코드 서명 정책)
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). 무료 코드 서명은 SignPath.io가 제공하며, 인증서는 SignPath Foundation이 발급합니다.
+
+- 커미터 및 리뷰어: [ArcheeNic](https://github.com/ArcheeNic)
+- 승인자: [ArcheeNic](https://github.com/ArcheeNic)
+
+이 저장소에서 [릴리스 워크플로](../.github/workflows/release.yml)로 빌드한 Windows 버전만 서명하며, 모든 릴리스는 직접 승인합니다.
+
+## 개인정보
+
+산책을 시작하면 게임은 방 코드로 동행자를 찾기 위해 Epic Online Services에 연결합니다. 익명 기기 ID로 로그인하며, 같은 방의 플레이어와는 위치와 바라보는 방향만 공유합니다. 그 밖의 데이터는 보내지 않습니다. 연결은 Epic의 [개인정보 처리방침](https://www.epicgames.com/site/privacypolicy)에 따라 처리됩니다.
+
 ## v0.1.0 개발에 사용한 토큰
 
 | 도구 | 세션 | 토큰 수 |

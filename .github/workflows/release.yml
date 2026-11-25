@@ -1,0 +1,101 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build and publish, e.g. v0.5.0. Leave empty for a test build without publishing."
+        required: false
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  GODOT_VERSION: 4.7.1-stable
+  TAG: ${{ inputs.tag || (github.ref_type == 'tag' && github.ref_name) || '' }}
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG || github.sha }}
+
+      - name: Install Godot and export templates
+        run: |
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}"
+          curl -fsSL -o godot.zip "$base/Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          curl -fsSL -o templates.tpz "$base/Godot_v${GODOT_VERSION}_export_templates.tpz"
+          curl -fsSL -o SHA512-SUMS.txt "$base/SHA512-SUMS.txt"
+          grep -E " (Godot_v${GODOT_VERSION}_linux.x86_64.zip|Godot_v${GODOT_VERSION}_export_templates.tpz)$" SHA512-SUMS.txt \
+            | sed -e 's/Godot_v.*_linux.x86_64.zip/godot.zip/' -e 's/Godot_v.*_export_templates.tpz/templates.tpz/' \
+            | sha512sum -c -
+          unzip -q godot.zip -d "$RUNNER_TEMP/godot"
+          templates="$HOME/.local/share/godot/export_templates/${GODOT_VERSION/-/.}"
+          mkdir -p "$templates"
+          unzip -q templates.tpz -d "$RUNNER_TEMP/templates"
+          mv "$RUNNER_TEMP"/templates/templates/* "$templates/"
+          echo "GODOT=$RUNNER_TEMP/godot/Godot_v${GODOT_VERSION}_linux.x86_64" >> "$GITHUB_ENV"
+          rm godot.zip templates.tpz SHA512-SUMS.txt
+
+      - name: Build archives
+        env:
+          EOS_CFG: ${{ secrets.EOS_CFG }}
+        run: |
+          [ -n "$EOS_CFG" ] || { echo "The EOS_CFG secret is not set." >&2; exit 1; }
+          umask 077
+          printf '%s\n' "$EOS_CFG" > "$RUNNER_TEMP/eos.cfg"
+          CONFIG="$RUNNER_TEMP/eos.cfg" OUT="$RUNNER_TEMP/dist" VERSION="${TAG#v}" REF=HEAD tools/release.sh
+          rm "$RUNNER_TEMP/eos.cfg"
+          mkdir -p "$RUNNER_TEMP/windows"
+          unzip -q "$RUNNER_TEMP/dist/LowerVaults-windows-x86_64.zip" -d "$RUNNER_TEMP/windows"
+
+      - name: Upload unsigned Windows build
+        id: unsigned
+        uses: actions/upload-artifact@v7
+        with:
+          name: LowerVaults-windows-unsigned
+          path: ${{ runner.temp }}/windows/
+
+      - name: Sign Windows build
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: lower-vaults
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: windows-zip
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 86400
+          output-artifact-directory: ${{ runner.temp }}/signed
+
+      - name: Package signed Windows build
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        run: |
+          rm "$RUNNER_TEMP/dist/LowerVaults-windows-x86_64.zip"
+          (cd "$RUNNER_TEMP/signed" && zip -qr "$RUNNER_TEMP/dist/LowerVaults-windows-x86_64.zip" .)
+
+      - name: Keep test build
+        if: ${{ env.TAG == '' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: LowerVaults-test-build
+          path: ${{ runner.temp }}/dist/*.zip
+
+      - name: Publish release assets
+        if: ${{ env.TAG != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$RUNNER_TEMP"/dist/*.zip --clobber
+          else
+            gh release create "$TAG" "$RUNNER_TEMP"/dist/*.zip --verify-tag --title "The Lower Vaults ${TAG#v}" \
+              --notes "See the [changelog](https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md)."
+          fi

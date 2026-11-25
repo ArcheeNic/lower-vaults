@@ -24,3 +24,10 @@ description: Выпуск версий «Нижних сводов» и сете
 2. `make release` → `build/release/LowerVaults-{linux,windows}-x86_64.zip`. Скрипт берёт `git archive`, подкладывает `eos.cfg`, качает EOSG с проверкой sha256, экспортирует через `cpuq`. Библиотеки EOS должны лежать рядом с исполняемым файлом, поэтому релиз выходит архивами.
 3. Записать новую версию в `CHANGELOG.md` и `docs/CHANGELOG.*.md` (10 языков), запушить, затем `gh release create vX.Y.Z --target <sha>` с обоими zip.
 4. Новые CJK-строки в `.po` требуют пересборки шрифта: `make fallback-font`.
+
+## Подпись для Windows (SignPath Foundation, начато 25.11.2026)
+- Без подписи Smart App Control в Windows 11 блокирует exe совсем, кнопки «Запустить всё равно» нет.
+- Условия SignPath: OSI-лицензия на всё, никакого проприетарного кода, сборка из исходников на CI, ручное подтверждение каждого релиза, на главной обязательны «Code signing policy» и раздел о приватности (они есть во всех README). Закрытый EOS SDK в архиве — риск отказа: Артур решил всё равно подать заявку.
+- CI: `.github/workflows/release.yml` запускается по тегу `v*` или вручную. Креды берёт из секрета `EOS_CFG`, подписывает при наличии переменной `SIGNPATH_ORGANIZATION_ID` и секрета `SIGNPATH_API_TOKEN`. В SignPath нужны проект `lower-vaults`, политика `release-signing` и конфигурация артефакта `windows-zip` (копия — в `.signpath/artifact-configurations/windows-zip.xml`).
+- Версию в exe задаёт `VERSION` (из тега) через `config/version`. Godot 4.7 сам меняет ресурсы PE на Linux, rcedit не нужен.
+- Запасной вариант, если SignPath откажет: Certum Open Source Code Signing (сертификат на имя разработчика) или обычный сертификат подписи кода (OV).

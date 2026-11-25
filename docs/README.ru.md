@@ -57,6 +57,23 @@ chmod +x "build/Нижние своды.x86_64"
 
 Изменения по версиям — в [истории изменений](CHANGELOG.ru.md).
 
+## Лицензия
+
+Код и ассеты игры распространяются по [Apache License 2.0](../LICENSE). Запасной шрифт для китайского, японского и корейского — под [SIL Open Font License](../i18n/fonts/OFL.txt). В архивы релиза также входит Epic Online Services SDK, который Epic распространяет на своих условиях.
+
+## Code signing policy (подпись кода)
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). Бесплатную подпись кода предоставляет SignPath.io, сертификат выдан SignPath Foundation.
+
+- Авторы и рецензенты: [ArcheeNic](https://github.com/ArcheeNic)
+- Утверждает релизы: [ArcheeNic](https://github.com/ArcheeNic)
+
+Подписываются только сборки для Windows, собранные из этого репозитория [процессом выпуска](../.github/workflows/release.yml). Каждый релиз утверждается вручную.
+
+## Приватность
+
+Когда начинается прогулка, игра подключается к Epic Online Services, чтобы найти попутчиков по коду комнаты. Вход анонимный, по идентификатору устройства. Игрокам в той же комнате передаются только ваше положение и направление взгляда. Других данных игра не отправляет. Соединение Epic обрабатывает по своей [политике конфиденциальности](https://www.epicgames.com/site/privacypolicy).
+
 ## Расход токенов при подготовке v0.1.0
 
 | Инструмент | Сессии | Токены |

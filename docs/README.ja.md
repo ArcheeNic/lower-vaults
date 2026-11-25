@@ -51,6 +51,23 @@ chmod +x "build/Нижние своды.x86_64"
 
 バージョンごとの変更点は[更新履歴](CHANGELOG.ja.md)をご覧ください。
 
+## ライセンス
+
+ゲームのコードと素材は [Apache License 2.0](../LICENSE) で公開しています。中国語・日本語・韓国語用の代替フォントは [SIL Open Font License](../i18n/fonts/OFL.txt) です。リリース用アーカイブには Epic Online Services SDK も含まれ、Epic 独自の条件で配布されています。
+
+## Code signing policy（コード署名ポリシー）
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). コード署名は SignPath.io が無償で提供し、証明書は SignPath Foundation が発行しています。
+
+- コミッターとレビュアー：[ArcheeNic](https://github.com/ArcheeNic)
+- 承認者：[ArcheeNic](https://github.com/ArcheeNic)
+
+署名されるのは、このリポジトリから[リリース用ワークフロー](../.github/workflows/release.yml)でビルドされた Windows 版だけです。各リリースは手動で承認されます。
+
+## プライバシー
+
+散策を始めると、ゲームはルームコードで仲間を見つけるために Epic Online Services に接続します。ログインは匿名のデバイス ID で行い、同じルームのプレイヤーと共有するのは位置と向きだけです。それ以外のデータは送信しません。接続は Epic の[プライバシーポリシー](https://www.epicgames.com/site/privacypolicy)に従って処理されます。
+
 ## v0.1.0 の開発に使ったトークン数
 
 | ツール | セッション | トークン数 |

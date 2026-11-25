@@ -51,6 +51,23 @@ chmod +x "build/Нижние своды.x86_64"
 
 各版本的改动请见[更新日志](CHANGELOG.zh-CN.md)。
 
+## 许可证
+
+游戏的代码和素材以 [Apache License 2.0](../LICENSE) 发布。中日韩备用字体采用 [SIL Open Font License](../i18n/fonts/OFL.txt)。发布压缩包还包含 Epic Online Services SDK，由 Epic 按其自身条款分发。
+
+## Code signing policy（代码签名政策）
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). 免费代码签名由 SignPath.io 提供，证书由 SignPath Foundation 颁发。
+
+- 提交者与审核者：[ArcheeNic](https://github.com/ArcheeNic)
+- 审批者：[ArcheeNic](https://github.com/ArcheeNic)
+
+只有由本仓库的[发布流程](../.github/workflows/release.yml)构建的 Windows 版本才会签名，每次发布都需人工审批。
+
+## 隐私
+
+开始漫步时，游戏会连接 Epic Online Services，通过房间代码寻找同行者。游戏使用匿名设备 ID 登录，只向同一房间的玩家发送你的位置和朝向，不发送其他数据。Epic 依据其[隐私政策](https://www.epicgames.com/site/privacypolicy)处理连接。
+
 ## 0.1.0 版本开发期间的 token 用量
 
 | 工具 | 会话 | Token 数 |

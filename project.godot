@@ -3,6 +3,7 @@ config_version=5
 [application]
 config/name="Нижние своды"
 config/description="Бесконечная прогулка среди сводов, колодцев и лестниц."
+config/version="0.4.0"
 run/main_scene="res://world/main.tscn"
 boot_splash/show_image=false
 boot_splash/bg_color=Color(0.047, 0.047, 0.043, 1)
