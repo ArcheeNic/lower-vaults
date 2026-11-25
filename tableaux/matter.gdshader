@@ -38,6 +38,19 @@ void fragment(){
 		relief += .017*joint + .004*fibres;
 		tone*=(.87+.13*fibres)*mix(.45,1.,joint);
 
+	} else if(surface==5 && face.y>.85){
+		// Broad dressed flags. Keep the joints legible across the whole court
+		// and fade their contrast once they become smaller than a pixel.
+		vec2 flag = uv / vec2(2.7, 1.45);
+		flag.x += .5 * mod(floor(flag.y), 2.);
+		vec2 edges = min(fract(flag), 1.-fract(flag)) * vec2(2.7, 1.45);
+		float joint_distance = min(edges.x, edges.y);
+		float pixel = max(max(fwidth(uv.x), fwidth(uv.y)), .002);
+		float joint = 1. - smoothstep(.014, .045 + pixel, joint_distance);
+		joint *= .045 / (.045 + pixel);
+		float variation = fract(sin(dot(mod(floor(flag), 127.), vec2(43.1, 19.7))) * 157.3);
+		tone *= (.84 + .19 * variation) * (1.-.48 * joint);
+		relief -= .024 * joint;
 	} else if(surface==3){
 		vec2 plate = fract(uv / vec2(1.2,2.4)) * vec2(1.2,2.4);
 		vec2 edge = min(plate,vec2(1.2,2.4)-plate);

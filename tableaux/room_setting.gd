@@ -62,6 +62,17 @@ static func palette(id: int) -> Array:
 	return ["stone", "iron"]
 
 
+static func paving(room: Node3D, surface: String) -> String:
+	if surface not in ["chalk", "basalt", "salt", "pearl"]:
+		return surface
+	var key := surface + "_paving"
+	if not room.materials.has(key):
+		var slabs: ShaderMaterial = room.materials[surface].duplicate()
+		slabs.set_shader_parameter("surface", 5)
+		room.materials[key] = slabs
+	return key
+
+
 static func dress(room: Node3D, id: int) -> void:
 	var source: Array = SUBJECTS[id]
 	var clearances: Array[AABB] = []
@@ -85,6 +96,29 @@ static func dress(room: Node3D, id: int) -> void:
 	# adjoining floor from the room side, irrespective of the route to the exit.
 	_lamp(room,focus.move_toward(Vector3.ZERO,5.)+Vector3.UP*4.,tints[climate],7.0,23.)
 	_lamp(room,Vector3(1.5,6.5,2),tints[climate].lerp(Color.WHITE,.45),5.,21.)
+	_light_bays(room, climate)
+
+
+static func _light_bays(room: Node3D, climate: int) -> void:
+	# Put the first wall light on the far side of the floor from the central
+	# fill, then spread the remaining pools over other parts of the room.
+	var candidates: PackedVector3Array = room.bay_lights.duplicate()
+	var lit := PackedVector3Array([Vector3(1.5, 6.5, 2.)])
+	var colors := [Color("ffe1af"), Color("e9dcc1"), Color("ffe0ac"), Color("f3d6aa")]
+	for i in mini(3, candidates.size()):
+		var best_index := 0
+		var best_distance := -1.
+		for j in candidates.size():
+			var separation := INF
+			for other in lit:
+				separation = minf(separation, candidates[j].distance_squared_to(other))
+			if separation > best_distance:
+				best_index = j
+				best_distance = separation
+		var at := candidates[best_index]
+		_lamp(room, at, colors[climate], 5.5, 12.)
+		lit.append(at)
+		candidates.remove_at(best_index)
 
 
 static func _lamp(room: Node3D, at: Vector3, tint: Color, power: float, reach: float) -> void:

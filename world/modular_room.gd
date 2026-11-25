@@ -1,6 +1,8 @@
 extends "res://tableaux/stage.gd"
 
 const Setting := preload("res://tableaux/room_setting.gd")
+const FloorDisplay := preload("res://tableaux/court_furnishings.gd")
+const CourtBays := preload("res://tableaux/court_bays.gd")
 const LevelStair := preload("res://world/level_stair.gd")
 const SIZE := Vector3(76, 20, 76)
 const LATERAL := [Vector3i.LEFT, Vector3i.RIGHT, Vector3i.FORWARD, Vector3i.BACK]
@@ -12,9 +14,11 @@ const WELL_RADIUS := 4.4
 const WELL_DEPTH := 4.9
 
 var ports: Dictionary
+var bay_lights := PackedVector3Array()
 var _courts := {}
 var _skin := "basalt"
 var _scene_id: int
+var _display_sector := Vector2i(-1, -1)
 
 
 static func port_at(face: Vector3i, zone: int) -> Vector3:
@@ -39,6 +43,10 @@ func has_court(sector: Vector2i) -> bool:
 	return _courts.has(sector)
 
 
+func _has_floor_display(sector: Vector2i) -> bool:
+	return sector == _display_sector
+
+
 func assemble(scene_id: int, openings: Dictionary) -> void:
 	ports = openings
 	_scene_id = scene_id
@@ -53,8 +61,19 @@ func assemble(scene_id: int, openings: Dictionary) -> void:
 		for zone: int in ports[face]:
 			var sector := _port_sector(face, zone)
 			_join_courts(sector, (scene_id + sector.x + sector.y) % 2 == 0)
+	# Prefer the main floor. A court with a stairwell already has a centrepiece.
+	var nearest := INF
+	for sector: Vector2i in _courts:
+		var zone := sector.y * 3 + sector.x
+		if zone in ports.get(Vector3i.UP, []) or zone in ports.get(Vector3i.DOWN, []):
+			continue
+		var distance := sector.distance_squared_to(CENTER)
+		if distance < nearest:
+			_display_sector = sector
+			nearest = distance
 	for sector: Vector2i in _courts:
 		_build_court(sector)
+	CourtBays.build(self, scene_id)
 	for face: Vector3i in LATERAL:
 		_build_shell_wall(face)
 		for zone: int in ports.get(face, []):
@@ -122,15 +141,29 @@ func _sector_rect(sector: Vector2i, edges: Array) -> Rect2:
 
 func _build_court(sector: Vector2i) -> void:
 	var rect := _sector_rect(sector, COURT_EDGES)
+	var paving := Setting.paving(self, _floor)
 	var zone := sector.y*3 + sector.x
+	var bed := Rect2()
 	if zone in ports.get(Vector3i.DOWN, []):
 		var well := _well_rect(zone)
 		for piece in _cut_rect(rect, well):
-			_slab(piece, 0., .48, _floor)
+			_slab(piece, 0., .48, paving)
 		_well_rim(well, port_at(Vector3i.DOWN,zone).x)
+	elif _has_floor_display(sector):
+		var center := Vector2(sector - CENTER) * 14. + Vector2(0, -1.8)
+		bed = FloorDisplay.footprint(_scene_id, center)
+		if FloorDisplay.is_recessed(_scene_id):
+			for piece in _cut_rect(rect, bed):
+				_slab(piece, 0., .48, paving)
+		else:
+			_slab(rect, 0., .48, paving)
+		FloorDisplay.build(self, _scene_id, bed)
 	else:
-		_slab(rect, 0., .48, _floor)
-	for face: Vector3i in LATERAL:
+		_slab(rect, 0., .48, paving)
+	var furnished := false
+	var first_side := LATERAL.find(Vector3i.FORWARD) if sector == CENTER else (zone + _scene_id) % LATERAL.size()
+	for side in LATERAL.size():
+		var face: Vector3i = LATERAL[(first_side + side) % LATERAL.size()]
 		var step := Vector2i(face.x, face.z)
 		if has_court(sector + step): continue
 		var edge: float
@@ -154,6 +187,101 @@ func _build_court(sector: Vector2i) -> void:
 			_edge_rail(face,edge,low,mouth-WIDTH)
 			low = mouth+WIDTH
 		_edge_rail(face,edge,low,high)
+		if furnished or not mouths.is_empty():
+			continue
+		# Keep the arrival position clear, including the archive's finish door.
+		if sector == CENTER and face == Vector3i.BACK:
+			continue
+		var outward := Vector3(face)
+		var tangent := Vector3.UP.cross(outward)
+		var middle := (low+high)*.5
+		var anchor := (Vector3(edge,0,middle) if face.x else Vector3(middle,0,edge)) - outward*3.
+		var half_span := tangent.abs()*2.25 + outward.abs()*.64
+		var extent := Vector2(half_span.x,half_span.z)
+		var footprint := Rect2(Vector2(anchor.x,anchor.z)-extent,extent*2.)
+		var center := Vector2(sector-CENTER)*14.
+		if bed.has_area() and footprint.intersects(bed.grow(1.1)):
+			continue
+		if zone in ports.get(Vector3i.UP, []) or zone in ports.get(Vector3i.DOWN, []):
+			if _well_rect(zone).grow(1.35).intersects(footprint):
+				continue
+		if _scene_id == 5 and footprint.intersects(Rect2(center+Vector2(-5.5,3.),Vector2(3.4,2.8))):
+			continue
+		_furnish_edge(anchor, tangent, outward, zone)
+		furnished = true
+
+
+func _furnish_edge(at: Vector3, along: Vector3, outward: Vector3, zone: int) -> void:
+	# Keep the fittings on a solid base. Higher details sit entirely within
+	# its footprint, leaving the player's path and the rail ends clear.
+	var height := .89
+	var casing := _skin
+	match _scene_id:
+		0, 4, 5, 7, 8, 10, 17: height = .48
+		1, 3, 9, 11, 15, 25, 29: casing = "iron"
+		6, 12, 13, 14, 30, 32: casing = "wood"
+		19, 21, 22, 23, 26, 27, 31: height = .64
+	var size3 := along.abs()*4.36 + outward.abs()*1.18
+	_solid_box(at+Vector3.UP*height*.5, size3+Vector3.UP*height, casing)
+	var top := at + Vector3.UP*height
+	box(top, size3+Vector3.UP*.09, _handrail)
+	match _scene_id:
+		0, 4, 5, 7, 8, 10, 17:
+			# Carved seats above the drop, with a stepped back and armrests.
+			var back := top + outward*.44
+			beam(back-along*2.12+Vector3.UP*.34,back+along*2.12+Vector3.UP*.34,.18,.68,casing)
+			beam(back-along*2.18+Vector3.UP*.69,back+along*2.18+Vector3.UP*.69,.25,.10,_handrail)
+			for side: float in [-1.94,1.94]:
+				var arm := top+along*side+Vector3.UP*.16
+				beam(arm-outward*.46,arm+outward*.42,.17,.32,casing)
+		1, 3, 9, 11, 15, 25, 29:
+			# Flanged standpipes and a pressure gauge alongside the flight.
+			for i in 3:
+				var pipe := top+along*(i-1)*1.22
+				var rise := .53+.31*posmod(i+zone,3)
+				column(pipe+Vector3.UP*rise*.5,Vector3(.30,rise,.30),"rust")
+				for h: float in [.08,rise-.04]:
+					column(pipe+Vector3.UP*h,Vector3(.46,.085,.46),"iron")
+				if i == 1:
+					var dial := pipe+Vector3.UP*(rise+.25)
+					var turn := Basis(along,Vector3.UP,outward)*Basis(Vector3.RIGHT,PI*.5)
+					_part("column","chalk",dial,Vector3(.52,.13,.52),turn)
+					beam(dial-outward*.08,dial-outward*.08+along*.13+Vector3.UP*.13,.028,.028,"iron")
+		6, 12, 13, 14, 30, 32:
+			# The cabinet drawers face the walking surface. Folios lean on
+			# each other in two bundles, between brass uprights.
+			for i in 6:
+				var shelf := top+along*(i-2.5)*.62
+				var front := shelf-outward*.595-Vector3.UP*.39
+				beam(front-along*.28,front+along*.28,.035,.47,"wood")
+				beam(front-outward*.025-along*.09,front-outward*.025+along*.09,.04,.04,"brass")
+				var tall := .34+.065*posmod(zone+i*3,5)
+				var axes := Basis(along,Vector3.UP,outward)*Basis(Vector3.BACK,.16)
+				for j in 3:
+					var book := shelf+along*(j-1)*.12+Vector3.UP*(tall*.50+.05)
+					_part("box","cloth" if i%2 else "chalk",book,Vector3(.11,tall,.46),axes)
+		19, 21, 22, 23, 26, 27, 31:
+			# A mounted section of the local colony or fossil.
+			var specimen := "bone" if _scene_id in [19,21,22] else _floor
+			for i in 6:
+				var foot := top+along*(i-2.5)*.65
+				var rise := .50 + .72*sin((i+.5)*PI/6.)
+				var lean := along*(i-2.5)*.09
+				beam(foot,foot+Vector3.UP*.24,.10,.12,"brass")
+				var axes := Basis(along,Vector3.UP,outward)*Basis(Vector3.BACK,-lean.dot(along))
+				_part("outcrop",specimen,foot+Vector3.UP*(.21+rise*.5)+lean*.52,
+					Vector3(.41,rise,.39),axes)
+		_:
+			# Open sights and graduated scales on an instrument maker's bench.
+			for i in 3:
+				var foot := top+along*(i-1)*1.31
+				var radius := .32+.045*posmod(zone+i,3)
+				column(foot+Vector3.UP*.16,Vector3(.18,.32,.18),"brass")
+				var hub := foot+Vector3.UP*(.30+radius)
+				var turn := Basis(along,Vector3.UP,outward)*Basis(Vector3.RIGHT,PI*.5)
+				ring(hub,radius,.04,"brass",turn.get_euler())
+				beam(hub-along*radius,hub+along*radius,.028,.028,"iron")
+				beam(hub-Vector3.UP*radius,hub+Vector3.UP*radius,.028,.028,"iron")
 
 
 func _edge_rail(face: Vector3i, edge: float, low: float, high: float) -> void:
