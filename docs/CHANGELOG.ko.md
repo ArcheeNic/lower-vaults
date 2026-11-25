@@ -2,6 +2,11 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · **한국어**
 
+## [0.4.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.4.0) — 2026-11-25
+
+- **함께 걷기.** 플레이를 시작할 때마다 방이 열리고 오른쪽 위에 여섯 글자 방 코드가 표시됩니다. 친구가 시작 화면에서 **코드로 참가**로 코드를 입력하면 같은 탐험에 합류하며, 방마다 최대 여덟 명까지 함께할 수 있습니다. 동행자는 어깨에 켜진 등불로 알아볼 수 있습니다. 로그인은 Epic Online Services를 통한 익명 방식이라 계정이 필요 없습니다.
+- 이제 빌드는 압축 파일로 배포됩니다. 압축 파일 전체를 풀고 EOS 라이브러리를 게임과 같은 폴더에 두세요.
+
 ## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
 
 - **어려움 모드.** 지나온 발자취를 따라 어둠이 짙어집니다. 자기 발자취로 되돌아가면 체력이 깎이고, 체력이 바닥나면 어둠에 삼켜집니다.

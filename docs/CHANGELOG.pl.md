@@ -2,6 +2,11 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · **Polski** · [한국어](CHANGELOG.ko.md)
 
+## [0.4.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.4.0) — 2026-11-25
+
+- **Wspólne spacery.** Każda rozgrywka otwiera pokój z sześcioznakowym kodem widocznym w prawym górnym rogu. Znajomi wpisują go na ekranie startowym przez **Dołącz kodem** i przechodzą tę samą wyprawę, do ośmiu osób w pokoju. Towarzyszy rozpoznasz po lampce na ramieniu. Logowanie jest anonimowe przez Epic Online Services, konto nie jest potrzebne.
+- Wydania są teraz archiwami. Rozpakuj całe archiwum i zostaw biblioteki EOS obok gry.
+
 ## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
 
 - **Tryb trudny.** Wzdłuż twojego śladu gęstnieje mrok. Powrót na własny ślad odbiera zdrowie, a gdy się ono skończy, mrok cię pochłania.

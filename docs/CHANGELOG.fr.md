@@ -2,6 +2,11 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · **Français** · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.4.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.4.0) — 2026-11-25
+
+- **Promenades à plusieurs.** Chaque partie ouvre un salon dont le code de six caractères s’affiche en haut à droite. Vos compagnons le saisissent sur l’écran titre via **Rejoindre avec un code** et parcourent la même expédition, jusqu’à huit par salon. Les autres explorateurs portent une lampe allumée sur l’épaule. La connexion est anonyme via Epic Online Services, sans compte.
+- Les versions sont désormais distribuées en archives. Décompressez l’archive entière et gardez les bibliothèques EOS à côté du jeu.
+
 ## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
 
 - **Mode difficile.** Les ténèbres s’amassent le long de votre trace. Revenir sur vos pas coûte de la santé, et quand elle est épuisée, les ténèbres vous engloutissent.

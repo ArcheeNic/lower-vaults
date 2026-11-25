@@ -2,6 +2,11 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · **Português (Brasil)** · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.4.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.4.0) — 2026-11-25
+
+- **Passeios em grupo.** Cada partida abre uma sala com um código de seis caracteres exibido no canto superior direito. Seus amigos digitam o código na tela inicial em **Entrar com código** e percorrem a mesma expedição, até oito por sala. Os outros exploradores levam uma lâmpada acesa no ombro. O acesso é anônimo pelo Epic Online Services, sem conta.
+- As versões agora saem como arquivos compactados. Extraia o arquivo inteiro e mantenha as bibliotecas do EOS ao lado do jogo.
+
 ## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
 
 - **Modo difícil.** A escuridão se acumula ao longo do seu rastro. Voltar pelos próprios passos tira saúde e, quando ela acaba, a escuridão engole você.

@@ -2,6 +2,11 @@
 
 [English](../CHANGELOG.md) · **简体中文** · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.4.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.4.0) — 2026-11-25
+
+- **结伴漫步。** 每一局都会创建一个房间，右上角显示六位房间代码。好友在标题画面通过“输入代码加入”输入代码，就能进入同一场探险，每个房间最多八人。同行者肩上带着一盏发光的灯。通过 Epic Online Services 匿名登录，无需账号。
+- 游戏现以压缩包发布。请完整解压，并让 EOS 库与游戏放在同一位置。
+
 ## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
 
 - **困难模式。** 黑暗会沿着你走过的路聚集。走回自己的足迹会损失生命值，生命值耗尽时，你会被黑暗吞没。

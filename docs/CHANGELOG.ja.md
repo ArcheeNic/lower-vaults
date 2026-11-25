@@ -2,6 +2,11 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · **日本語** · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.4.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.4.0) — 2026-11-25
+
+- **一緒に歩く。** プレイを始めるたびにルームが作られ、右上に6文字のルームコードが表示されます。仲間はタイトル画面の「コードで参加」でコードを入力すると同じ探索に加われます。1ルーム最大8人です。同行者は肩に灯るランプで見分けられます。ログインは Epic Online Services による匿名方式で、アカウントは不要です。
+- ビルドはアーカイブで配布されるようになりました。アーカイブはすべて展開し、EOS ライブラリをゲームと同じ場所に置いてください。
+
 ## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
 
 - **ハードモード。** 歩いた跡に沿って闇が濃くなります。自分の足跡に戻ると体力が減り、尽きると闇に呑まれます。
