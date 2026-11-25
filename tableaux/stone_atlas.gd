@@ -32,6 +32,9 @@ static var _flood_material: ShaderMaterial
 
 static func build(s:Node3D,id:int) -> void:
 	s.plan(PLANS[id], FLOORS[id], GUARDS[id], RISES[id])
+	dress(s, id)
+
+static func dress(s: Node3D, id: int) -> void:
 	match id:
 		0: _columbarium(s)
 		1: _cathedral(s)
@@ -87,6 +90,7 @@ static func _arch(s:Node3D,center:Vector3,axis:Vector3,radius:float,rise:float,t
 static func _columbarium(s:Node3D) -> void:
 	# Freestanding tomb walls split the zigzag aisles into small rooms.
 	for p:Vector3 in _voids(0):
+		s.begin_furnishing()
 		s.box(p+Vector3.UP*2.9,Vector3(4.6,9.2,3.7),"basalt")
 		for level in 4:
 			var y:float=-.5+level*1.94
@@ -98,6 +102,7 @@ static func _columbarium(s:Node3D) -> void:
 				for j in [-1.,1.]:
 					s.ball(front+Vector3(j*1.33,-.12,flank*.18),Vector3(.18,.18,.13),"brass")
 		s.box(p+Vector3.UP*7.63,Vector3(5.07,.31,4.18),"chalk")
+	s.end_furnishing()
 	for x in [-27.8,27.8]:
 		for z in [-12.,12.]:
 			s.box(Vector3(x,4.0,z),Vector3(3.4,12.0,15.5),"stone")
@@ -146,6 +151,7 @@ static func _library(s:Node3D) -> void:
 	_flood(s,-.84)
 	var papers:=["wood","basalt","rust","moss","bone"]
 	for p:Vector3 in _voids(2):
+		s.begin_furnishing()
 		var offset:=roundi(p.x+p.z)
 		s.box(p+Vector3.UP*3.25,Vector3(4.22,9.7,1.8),"basalt")
 		for x in [-2.18,2.18]:
@@ -165,6 +171,7 @@ static func _library(s:Node3D) -> void:
 				s.beam(p+Vector3(x,-.75,2.18),p+Vector3(x,6.99,1.24),.075,.10,"brass")
 			for j in 12:
 				s.box(p+Vector3(1.54,-.38+j*.61,2.14-j*.076),Vector3(.79,.06,.10),"wood")
+	s.end_furnishing()
 	for z in [-17.,17.]:
 		s.box(Vector3(0,10.22,z),Vector3(51,.66,2.72),"wood")
 		for x in range(-24,25,4):
@@ -261,6 +268,7 @@ static func _quarantine(s:Node3D) -> void:
 static func _rigging_loft(s:Node3D) -> void:
 	_flood(s,-2.32)
 	for p:Vector3 in _voids(5):
+		s.begin_furnishing()
 		var width:=2.81
 		var axle:=p+Vector3.UP*2.92
 		var face:=Vector3(0,0,PI/2)
@@ -273,6 +281,7 @@ static func _rigging_loft(s:Node3D) -> void:
 			s.box(p+Vector3(end*2.14,.53,0),Vector3(.32,4.70,1.52),"wood")
 		for z in [-1.04,1.04]:
 			s.box(p+Vector3(0,-1.35,z),Vector3(5.01,.41,.37),"rust")
+	s.end_furnishing()
 	for z in [-13.,0.,13.]:
 		s.box(Vector3(0,11.5,z),Vector3(55.,.74,.60),"wood")
 		for x in [-20.,-7.,8.,20.]:
@@ -292,6 +301,7 @@ static func _amphitheatre(s:Node3D) -> void:
 	for k in 3:
 		s.ring(Vector3(0,-2.69,0),2.0+k*1.15,.075,"brass")
 	for p:Vector3 in _voids(6):
+		s.begin_furnishing()
 		if absf(p.x)<.4 and absf(p.z)<.4: continue
 		var facing:=atan2(p.x,p.z)
 		for tier in 4:
@@ -300,6 +310,7 @@ static func _amphitheatre(s:Node3D) -> void:
 			var h:=.15+tier*.48+absf(p.z)*.055
 			s.box(p+v+Vector3.UP*(h*.5-1.),Vector3(3.88,h+2.0,.66),"stone",Vector3(0,facing,0))
 			s.box(p+v+Vector3.UP*h,Vector3(4.04,.19,.68),"chalk",Vector3(0,facing,0))
+	s.end_furnishing()
 	for side in [-1.,1.]:
 		for row in range(4):
 			var radius:=26.65+row*1.02
@@ -335,10 +346,12 @@ static func _amphitheatre(s:Node3D) -> void:
 static func _sluice(s:Node3D) -> void:
 	_flood(s,-.63)
 	for p:Vector3 in _voids(7):
+		s.begin_furnishing()
 		s.box(p+Vector3.UP*.65,Vector3(3.24,6.55,4.32),"moss")
 		s.box(p+Vector3.UP*4.05,Vector3(3.75,.46,4.68),"salt")
 		for j in 8:
 			s.box(p+Vector3(-1.66,.14+j*.39,-.63),Vector3(.12,.085,.77 if j%2 else 1.30),"bone")
+	s.end_furnishing()
 	for z in [-8.95,8.95]:
 		for side in [-1.,1.]:
 			var x:float=side*16.65
@@ -360,6 +373,7 @@ static func _sluice(s:Node3D) -> void:
 static func _scriptorium(s:Node3D) -> void:
 	var n:=0
 	for p:Vector3 in _voids(8):
+		s.begin_furnishing()
 		var yaw:=PI if n%2 else 0.0
 		s.box(p+Vector3.UP*1.73,Vector3(3.91,.25,2.45),"wood",Vector3(-.13,0,0))
 		s.box(p+Vector3.UP*1.89,Vector3(2.2,.09,1.33),"bone",Vector3(-.13,0,0))
@@ -372,6 +386,7 @@ static func _scriptorium(s:Node3D) -> void:
 			for j in 7:
 				s.box(p+Vector3(-.94,2.02+j*.082,-.36),Vector3(1.01,.075,.72),"bone",Vector3(-.13,j*.025,0))
 		n+=1
+	s.end_furnishing()
 	for x in [-21.,-7.,7.,21.]:
 		var a:=Vector3(x-6.45,10.22,0)
 		var b:=Vector3(x+5.72,15.27,0)
@@ -392,6 +407,7 @@ static func _scriptorium(s:Node3D) -> void:
 
 static func _weaving(s:Node3D) -> void:
 	for p:Vector3 in _voids(9):
+		s.begin_furnishing()
 		# A double heddle separates the vertical warp; a width of finished cloth
 		# runs over the breast beam and winds around the lower roller.
 		for x in [-2.08,2.08]:
@@ -405,6 +421,7 @@ static func _weaving(s:Node3D) -> void:
 		s.box(p+Vector3(0,1.85,.86),Vector3(3.93,2.12,.097),"cloth",Vector3(-.19,0,0))
 		for y in [2.91,3.67,4.25]:
 			s.box(p+Vector3(0,y,.45),Vector3(4.32,.13,.21),"wood")
+	s.end_furnishing()
 	for z in [-12.,0.,12.]:
 		s.box(Vector3(0,10.04,z),Vector3(54,.62,.55),"wood")
 		for x in range(-24,25,4):
@@ -419,6 +436,7 @@ static func _weaving(s:Node3D) -> void:
 
 static func _sorting(s:Node3D) -> void:
 	for p:Vector3 in _voids(10):
+		s.begin_furnishing()
 		s.box(p+Vector3.UP*2.24,Vector3(4.41,7.21,2.8),"iron")
 		for tier in 5:
 			for j in 3:
@@ -427,6 +445,7 @@ static func _sorting(s:Node3D) -> void:
 				s.box(v+Vector3(0,.32,.071),Vector3(.48,.15,.049),"bone")
 				s.box(v+Vector3(0,-.19,.091),Vector3(.40,.08,.11),"brass")
 		s.box(p+Vector3.UP*5.98,Vector3(4.61,.28,3.11),"iron")
+	s.end_furnishing()
 	# The brass tube network hangs well above the highest sorting bridge.
 	for lane in 4:
 		var z:float=-13.4+lane*3.17
@@ -448,6 +467,7 @@ static func _sorting(s:Node3D) -> void:
 static func _casting(s:Node3D) -> void:
 	var index:=0
 	for p:Vector3 in _voids(11):
+		s.begin_furnishing()
 		s.box(p-Vector3.UP*.35,Vector3(4.38,2.77,4.29),"basalt")
 		var axis:=Vector3(0,0,PI/2) if index%2 else Vector3(PI/2,0,0)
 		s.ring(p+Vector3.UP*2.19,1.53,.67,"rust",axis)
@@ -455,6 +475,7 @@ static func _casting(s:Node3D) -> void:
 		for x in [-1.78,1.78]:
 			s.box(p+Vector3(x,1.01,0),Vector3(.40,3.64,1.34),"iron")
 		index+=1
+	s.end_furnishing()
 	for z in [-15.,0.,15.]:
 		for flank in [-1.,1.]:
 			if is_zero_approx(z): continue
@@ -500,12 +521,14 @@ static func _clock_house(s:Node3D) -> void:
 			s.beam(hub,hub+Vector3(0,cos(t)*1.87,sin(t)*1.87),.11,.14,"brass")
 			s.beam(hub,hub+Vector3(0,cos(t+1.74)*1.39,sin(t+1.74)*1.39),.14,.15,"brass")
 	for p:Vector3 in _voids(12):
+		s.begin_furnishing()
 		var y:=2.42+fposmod(p.x+p.z,4.0)*.4
 		s.box(p+Vector3.UP*11.9,Vector3(2.8,.31,2.04),"wood")
 		for x in [-.60,.60]:
 			s.box(p+Vector3(x,(11.68+y)*.5,0),Vector3(.067,11.68-y,.067),"iron")
 		s.column(p+Vector3.UP*(y-.88),Vector3(1.87,2.14,1.87),"basalt")
 		s.cone(p+Vector3.UP*(y-2.23),Vector3(1.87,.68,1.87),"iron",Vector3(PI,0,0))
+	s.end_furnishing()
 	for z in [-13.,0.,13.]:
 		s.box(Vector3(0,13.88,z),Vector3(52,.88,.83),"wood")
 		for x in [-17.,0.,17.]:

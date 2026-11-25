@@ -1,6 +1,22 @@
 extends Node3D
 
+signal relocation_requested(to_start: bool)
+
 const Witness := preload("res://suspense/witness.gd")
+const Relic := preload("res://world/relic.gd")
+const Presence := preload("res://suspense/presence.gd")
+const TOUCH_NOTICES := {
+	Presence.Kind.LANTERN: "Фонарщик погасил свет.",
+	Presence.Kind.BELL: "Звон заглушил шум сводов.",
+	Presence.Kind.COLLECTOR: "Собиратель украл звук ваших шагов.",
+	Presence.Kind.PALL: "Носильщики переложили на вас свой груз.",
+	Presence.Kind.DIVER: "Водолаз затопил ваш визор.",
+	Presence.Kind.PILGRIM: "Паломник вернул вас к началу.",
+	Presence.Kind.FRAME: "Рама перенесла вас в соседний зал.",
+	Presence.Kind.WATCHMAN: "Часовой велел замереть.",
+	Presence.Kind.SCRIBE: "Писец забрызгал чернилами края обзора.",
+	Presence.Kind.SPINDLE: "Веретено развернуло вас.",
+}
 const ROOMS: Array[AudioStreamOggVorbis] = [
 	preload("res://sound/air.ogg"), preload("res://sound/cistern.ogg"),
 	preload("res://sound/orbit.ogg"), preload("res://sound/machine.ogg")
@@ -33,6 +49,14 @@ var _left := false
 var _stride := 0.0
 var _moving := false
 var _distant_in := 18.0
+var _effect_kind := -1
+var _effect_left := 0.0
+var _effect_age := 0.0
+var _dark_surface: Node3D
+var _darkness := 0.
+var _room_duck_db := 0.0
+var _bell := AudioStreamPlayer.new()
+var seal_charges := 0
 
 
 func _ready() -> void:
@@ -41,6 +65,13 @@ func _ready() -> void:
 		_layers.append(_loop(ROOMS[i], LEVELS[i] if i == 0 else -80.0))
 	_pressure = _loop(PRESSURE, -80)
 	add_child(_witness)
+	_witness.touched.connect(_on_touch)
+	var ringing := Presence.VOICES[Presence.Kind.BELL].duplicate() as AudioStreamOggVorbis
+	ringing.loop = true
+	_bell.stream = ringing
+	_bell.volume_db = -10.
+	_bell.pitch_scale = .83
+	add_child(_bell)
 	if AudioServer.get_bus_index(FOOT_BUS) < 0:
 		AudioServer.add_bus()
 		var bus := AudioServer.bus_count - 1
@@ -72,6 +103,114 @@ func bind_player(body: CharacterBody3D, route: Callable, stair_link: Callable, d
 	_stride = .58
 
 
+func set_normal_mode(normal: bool) -> void:
+	seal_charges = 0
+	_clear_effect()
+	_witness.reset_encounters(normal)
+	_moving = false
+	_stride = .58
+	_far_voice.stop()
+	for foot in _footfalls:
+		foot.stop()
+
+
+func lamp_power(lamp: Light3D) -> float:
+	if _darkness > 0. and is_instance_valid(_dark_surface) and _dark_surface.is_ancestor_of(lamp):
+		return 1. - _darkness
+	return 1.
+
+
+func _on_touch(kind: int) -> void:
+	if seal_charges > 0:
+		seal_charges -= 1
+		_body.get("interface").show_notice("Печать раскололась и поглотила касание.")
+		return
+	_clear_effect()
+	_effect_kind = kind
+	match kind:
+		Presence.Kind.LANTERN:
+			_dark_surface = _body.get("surface")
+			_effect_left = 7.
+		Presence.Kind.DIVER, Presence.Kind.SCRIBE:
+			_effect_left = 7.
+		Presence.Kind.BELL:
+			_effect_left = 10.
+			_bell.play()
+		Presence.Kind.COLLECTOR:
+			_effect_left = 14.
+			for foot in _footfalls:
+				foot.stop()
+		Presence.Kind.PALL:
+			_effect_left = 8.
+			_body.set("travel_multiplier", .55)
+		Presence.Kind.WATCHMAN:
+			_effect_left = 2.4
+			_body.set("travel_multiplier", 0.)
+			_body.velocity = _body.up_direction * _body.velocity.dot(_body.up_direction)
+		Presence.Kind.PILGRIM, Presence.Kind.FRAME:
+			relocation_requested.emit(kind == Presence.Kind.PILGRIM)
+		Presence.Kind.SPINDLE:
+			_body.rotate_object_local(Vector3.UP, PI)
+			_body.reset_physics_interpolation()
+	_body.get("interface").show_notice(TOUCH_NOTICES[kind])
+	if _effect_left <= 0.:
+		_clear_effect()
+
+
+func accept_relic(kind: int) -> void:
+	match kind:
+		Relic.Kind.SEAL:
+			seal_charges += 1
+			_body.get("interface").show_notice("Янтарная печать защитит от одного касания.")
+		Relic.Kind.HOURGLASS:
+			_witness.banish(45.)
+			_body.get("interface").show_notice("Песочные часы отогнали обитателей на 45 секунд.")
+
+
+func _advance_effect(delta: float) -> void:
+	if _effect_kind == -1:
+		return
+	_effect_left -= delta
+	_effect_age += delta
+	if _effect_left <= 0.:
+		_clear_effect()
+		return
+	var weight := smoothstep(0., .35, _effect_age) * smoothstep(0., 1.2, _effect_left)
+	var grade: ShaderMaterial = get_parent().get("grade")
+	match _effect_kind:
+		Presence.Kind.LANTERN:
+			_darkness = weight
+			var in_dark: bool = is_instance_valid(_dark_surface) and _body.get("surface") == _dark_surface
+			grade.set_shader_parameter("lamplight_lost", weight if in_dark else 0.)
+		Presence.Kind.DIVER:
+			grade.set_shader_parameter("visor_water", Vector2(weight, _effect_age))
+		Presence.Kind.SCRIBE:
+			grade.set_shader_parameter("ink_stain", weight)
+		Presence.Kind.BELL:
+			_room_duck_db = -23. * weight
+			_bell.volume_db = -10. + linear_to_db(maxf(.001, weight))
+
+
+func _clear_effect() -> void:
+	if _effect_kind == -1:
+		return
+	var grade: ShaderMaterial = get_parent().get("grade")
+	match _effect_kind:
+		Presence.Kind.LANTERN:
+			grade.set_shader_parameter("lamplight_lost", 0.)
+			_darkness = 0.
+			_dark_surface = null
+		Presence.Kind.DIVER: grade.set_shader_parameter("visor_water", Vector2.ZERO)
+		Presence.Kind.SCRIBE: grade.set_shader_parameter("ink_stain", 0.)
+		Presence.Kind.PALL, Presence.Kind.WATCHMAN: _body.set("travel_multiplier", 1.)
+		Presence.Kind.BELL:
+			_room_duck_db = 0.
+			_bell.stop()
+	_effect_kind = -1
+	_effect_left = 0.
+	_effect_age = 0.
+
+
 func set_realms(weights: PackedFloat32Array) -> void:
 	if weights.size() == ROOMS.size():
 		_weights = weights.duplicate()
@@ -89,6 +228,10 @@ func shift_origin(shift: Vector3) -> void:
 
 func get_tension() -> float:
 	return _witness.tension
+
+
+func room_duck_db() -> float:
+	return _room_duck_db
 
 
 func _physics_process(delta: float) -> void:
@@ -112,6 +255,7 @@ func _physics_process(delta: float) -> void:
 		_stride = .58
 	_moving = walking
 	if in_walk:
+		_advance_effect(delta)
 		_witness.advance(delta, _body, walking, made_step)
 		_distant_in -= delta
 		if _distant_in <= 0.0 and get_tension() < .12:
@@ -120,7 +264,7 @@ func _physics_process(delta: float) -> void:
 	var response := 1.0 - exp(-delta * 1.2)
 	for i in _layers.size():
 		_mix[i] = lerpf(_mix[i], clampf(_weights[i], 0, 1), response)
-		_layers[i].volume_db = LEVELS[i] + linear_to_db(maxf(.00015, sqrt(_mix[i])))
+		_layers[i].volume_db = LEVELS[i] + _room_duck_db + linear_to_db(maxf(.00015, sqrt(_mix[i])))
 	_pressure.volume_db = -4.5 + linear_to_db(maxf(.00015, get_tension() * get_tension()))
 
 
@@ -147,6 +291,8 @@ func _new_voice(reference_distance: float, limit: float) -> AudioStreamPlayer3D:
 
 
 func _emit_footstep(speed: float) -> void:
+	if _effect_kind == Presence.Kind.COLLECTOR:
+		return
 	var sample_index := (_last_sample + _rng.randi_range(1, SOLES.size() - 1)) % SOLES.size()
 	_last_sample = sample_index
 	var side := -0.13 if _left else 0.13

@@ -1,5 +1,6 @@
 extends RefCounted
 
+const Expedition := preload("res://world/expedition.gd")
 const Stone := preload("res://tableaux/stone_atlas.gd")
 const Wild := preload("res://tableaux/wild_atlas.gd")
 const ORIGINALS := ["Нижние своды","Приливная цистерна","Обратная обсерватория","Машинный зал"]
@@ -7,8 +8,12 @@ const COUNT := 32
 const ATRIUM := COUNT
 const ATRIUM_CELL := Vector2i.ZERO
 var blocks := {}
+var expedition: Expedition
+
 
 func scene_at(cell:Vector2i) -> int:
+	if expedition and (cell == expedition.start or cell == expedition.finish):
+		return ATRIUM
 	# The next shaft is seven courses away and three faces around the tower.
 	# Its rooms stack along a different gravity axis on each recurrence.
 	if posmod(cell.y,7)==0 and posmod(cell.x-ATRIUM_CELL.x-3*floori(cell.y/7.),8)==0:
@@ -28,6 +33,8 @@ func _plan(block:Vector2i) -> Array[int]:
 		ids.append(i)
 	var rng:=RandomNumberGenerator.new()
 	rng.seed=hash(block)^230519
+	if expedition:
+		rng.seed ^= expedition.seed_value
 	for i in range(COUNT-1,0,-1):
 		var j:=rng.randi_range(0,i)
 		var other:=ids[j]
@@ -36,7 +43,7 @@ func _plan(block:Vector2i) -> Array[int]:
 	# One mill per district. Its row rotates east-west, its column north-south:
 	# even a straight walk crosses only one mill per 32 cells in either direction.
 	_place(ids,8*posmod(block.x,4)+posmod(3*block.y+7,8),3)
-	if block==Vector2i.ZERO:
+	if not expedition and block==Vector2i.ZERO:
 		_place(ids,19,0)
 		_place(ids,28,5)
 		_place(ids,20,18)

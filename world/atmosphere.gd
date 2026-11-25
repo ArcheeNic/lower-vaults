@@ -61,8 +61,9 @@ func _ready() -> void:
 	set_realms(PackedFloat32Array([1,0,0,0]))
 
 func set_view_distance(far_clip: float) -> void:
-	environment.fog_depth_begin = far_clip * 0.28
-	environment.fog_depth_end = far_clip * 0.90
+	# From the centre of a hall the opposite wall is 38 m away.
+	environment.fog_depth_begin = far_clip * 0.10
+	environment.fog_depth_end = far_clip * 0.40
 
 func move_mist(frame:Transform3D) -> void:
 	mist.global_transform = Transform3D(frame.basis, frame.origin - frame.basis.y*.35)

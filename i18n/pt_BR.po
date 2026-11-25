@@ -137,3 +137,63 @@ msgstr "Tempestade de papel"
 
 msgid "Лунная пасека"
 msgstr "Apiário lunar"
+
+msgid "Обычный режим"
+msgstr "Modo normal"
+
+msgid "Песочница"
+msgstr "Modo livre"
+
+msgid "Найди дверь с дневным светом."
+msgstr "Procure a porta por onde entra a luz do dia."
+
+msgid "Выход найден"
+msgstr "Você encontrou a saída"
+
+msgid "Новая игра"
+msgstr "Novo jogo"
+
+msgid "В главное меню"
+msgstr "Menu principal"
+
+msgid "Завершить и выйти в меню"
+msgstr "Encerrar partida e voltar ao menu"
+
+msgid "Фонарщик погасил свет."
+msgstr "O acendedor de lampiões apagou as luzes."
+
+msgid "Звон заглушил шум сводов."
+msgstr "O sino abafou os sons das abóbadas."
+
+msgid "Собиратель украл звук ваших шагов."
+msgstr "O colecionador roubou o som dos seus passos."
+
+msgid "Носильщики переложили на вас свой груз."
+msgstr "Os carregadores passaram a carga para você."
+
+msgid "Водолаз затопил ваш визор."
+msgstr "O mergulhador inundou seu visor."
+
+msgid "Паломник вернул вас к началу."
+msgstr "O peregrino levou você de volta ao início."
+
+msgid "Рама перенесла вас в соседний зал."
+msgstr "A moldura transportou você para o salão ao lado."
+
+msgid "Часовой велел замереть."
+msgstr "O sentinela mandou você ficar imóvel."
+
+msgid "Писец забрызгал чернилами края обзора."
+msgstr "O escriba respingou tinta nas bordas do seu campo de visão."
+
+msgid "Веретено развернуло вас."
+msgstr "O fuso fez você dar meia-volta."
+
+msgid "Янтарная печать защитит от одного касания."
+msgstr "O selo de âmbar vai proteger você do próximo toque."
+
+msgid "Печать раскололась и поглотила касание."
+msgstr "O selo se partiu e absorveu o toque."
+
+msgid "Песочные часы отогнали обитателей на 45 секунд."
+msgstr "A ampulheta afastou os habitantes por 45 segundos."

@@ -18,6 +18,11 @@ const SURFACES := {
 static var materials := {}
 static var meshes := {}
 var _parts := {}
+# A free-standing furnishing is kept or culled as a whole in modular rooms.
+var keep_furnishings_together := false
+var _feature := 0
+var _next_feature := 0
+var _members := {}
 var _walk := PackedVector3Array()
 var _body := StaticBody3D.new()
 var has_well := false
@@ -40,6 +45,9 @@ func _finish_geometry() -> void:
 	collision.set_faces(_walk)
 	_add_collider(collision,Transform3D.IDENTITY)
 	_walk.clear()
+	_flush_parts()
+
+func _flush_parts() -> void:
 	for key: String in _parts:
 		var pair := key.split("/")
 		var batch: Array = _parts[key]
@@ -52,8 +60,11 @@ func _finish_geometry() -> void:
 		var renderer := MultiMeshInstance3D.new()
 		renderer.material_override = materials[pair[1]]
 		renderer.multimesh = mm
+		if _members.has(key):
+			renderer.set_meta("furnishings", PackedInt32Array(_members[key]))
 		add_child(renderer)
 	_parts.clear()
+	_members.clear()
 
 static func _prepare() -> void:
 	if not meshes.is_empty():
@@ -113,10 +124,20 @@ static func _outcrop() -> ArrayMesh:
 	st.generate_normals()
 	return st.commit()
 
+func begin_furnishing() -> void:
+	if keep_furnishings_together:
+		_next_feature += 1
+		_feature = _next_feature
+
+func end_furnishing() -> void:
+	_feature = 0
+
 func _part(key:String,mat:String,at:Vector3,scale3:Vector3,basis:Basis) -> void:
 	var batch := key+"/"+mat
 	if not _parts.has(batch):
 		_parts[batch] = []
+	if keep_furnishings_together:
+		_members.get_or_add(batch, []).append(_feature)
 	_parts[batch].append(Transform3D(basis.scaled_local(scale3),at))
 
 func box(at:Vector3,size3:Vector3,mat:String,rotation3:=Vector3.ZERO) -> void:

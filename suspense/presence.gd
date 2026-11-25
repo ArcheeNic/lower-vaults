@@ -42,6 +42,11 @@ var _opacity := -1.0
 var _beat := 0.0
 
 
+func reset_deck() -> void:
+	_deck.clear()
+	_draws = 0
+
+
 func deal(dice: RandomNumberGenerator) -> void:
 	if _deck.is_empty():
 		for value in MODELS.size():

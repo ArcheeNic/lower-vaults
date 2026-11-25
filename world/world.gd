@@ -4,6 +4,10 @@ const LevelStair := preload("res://world/level_stair.gd")
 const Gallery := preload("res://world/gallery.gd")
 const SightGeometry := preload("res://suspense/sight_geometry.gd")
 const CellNavigation := preload("res://world/cell_navigation.gd")
+const Expedition := preload("res://world/expedition.gd")
+const Relic := preload("res://world/relic.gd")
+const ModularRoom := preload("res://world/modular_room.gd")
+const Waymark := preload("res://world/waymark.gd")
 const Atlas := preload("res://world/atlas.gd")
 const ThreeStoreys := preload("res://world/three_storeys.gd")
 const Stage := preload("res://tableaux/stage.gd")
@@ -27,6 +31,8 @@ const RADIUS := 114.
 const LOAD_DISTANCE := 104.
 const RETAIN_DISTANCE := 128.
 
+var expedition: Expedition
+var run_active := false
 var atlas := Atlas.new()
 var cells := {}
 var galleries := {}
@@ -62,8 +68,11 @@ func _ready() -> void:
 	atmosphere.set_view_distance(walker.camera.far)
 	walker.camera.rotation.x = .055
 	walker.exit_requested.connect(_quit_game)
+	walker.run_started.connect(_start_run)
+	walker.run_ended.connect(_end_run)
 	add_child(soundscape)
 	soundscape.bind_player(walker,surface_route,stair_at_link,walking_distance)
+	soundscape.relocation_requested.connect(_relocate)
 	var layer := CanvasLayer.new()
 	layer.layer = 2
 	add_child(layer)
@@ -76,6 +85,63 @@ func _ready() -> void:
 	_queue_surroundings()
 	_update_mix()
 
+func _end_run() -> void:
+	run_active = false
+	soundscape.set_normal_mode(false)
+
+
+func _start_run(normal: bool) -> void:
+	soundscape.set_normal_mode(normal)
+	run_active = true
+	# The first sandbox entry keeps the existing title-screen archive in place.
+	if not normal and not expedition and cell_of(walker.position) == Atlas.ATRIUM_CELL:
+		_place_walker(Atlas.ATRIUM_CELL)
+		return
+	pending.clear()
+	for node in galleries.values() + cells.values():
+		remove_child(node)
+		node.queue_free()
+	cells.clear()
+	galleries.clear()
+	expedition = Expedition.new(randi()) if normal else null
+	atlas = Atlas.new()
+	atlas.expedition = expedition
+	var entrance := expedition.start if normal else Atlas.ATRIUM_CELL
+	origin_row = entrance.y
+	_place_walker(entrance)
+
+
+func _place_walker(cell: Vector2i) -> void:
+	if not cells.has(cell):
+		pending.erase(cell)
+		_build_cell(cell)
+	var tile: Node3D = cells[cell]
+	# The sandbox starts in the archive. Modules reserve a landing clear of
+	# their active branches for entry and monster relocations.
+	var arrival: Vector3 = tile.spawn_at() if tile is ModularRoom else Vector3(0,0,14)
+	safe_basis = tile.global_basis
+	last_safe = tile.to_global(arrival + Vector3.UP*.09)
+	safe_surface = tile
+	walker.surface = tile
+	walker.global_transform = Transform3D(safe_basis,last_safe)
+	walker.up_direction = safe_basis.y
+	walker.velocity = Vector3.ZERO
+	walker.camera.rotation.x = .055
+	walker.reset_physics_interpolation()
+	_queue_surroundings()
+	_update_mix()
+
+
+func _relocate(to_start: bool) -> void:
+	if not expedition or not run_active:
+		return
+	var destination := expedition.start
+	if not to_start:
+		var here := cell_of(walker.position)
+		destination = expedition.neighbours(here).pick_random()
+	_place_walker(destination)
+
+
 # Eight faces surround the shaft. Four successive rows form an S in section:
 # a floor, an inner wall, a ceiling and an outer wall. The next course starts
 # one full storey higher and the same construction continues below the entrance.
@@ -83,10 +149,13 @@ func _wrap(cell: Vector2i) -> Vector2i:
 	return Vector2i(posmod(cell.x+4,SIDES)-4,cell.y)
 
 func _room_frame(cell: Vector2i) -> Transform3D:
+	if expedition:
+		var offset := Expedition.grid_of(cell) - Expedition.grid_of(expedition.start)
+		return Transform3D(Basis.IDENTITY, Vector3(offset) * ModularRoom.SIZE)
 	var face := Basis(Vector3.UP, cell.x * TAU / SIDES)
 	var phase := posmod(cell.y,4)
 	var angle: float = [0.,PI*.5,PI,PI*.5][phase]
-	var radius: float = [RADIUS,RADIUS-ROW_HEIGHT,RADIUS,RADIUS+ROW_HEIGHT][phase]
+	var radius: float = RADIUS + [0.,-ROW_HEIGHT,0.,ROW_HEIGHT][phase]
 	var at := face.z*radius - Vector3.BACK*RADIUS + Vector3.UP*(cell.y-origin_row)*ROW_HEIGHT
 	return Transform3D(face*Basis(Vector3.RIGHT,angle),at)
 
@@ -98,6 +167,9 @@ func _cell_on(surface: Node3D, point: Vector3) -> Vector2i:
 func cell_of(point: Vector3) -> Vector2i:
 	if point.is_equal_approx(walker.position) and is_instance_valid(walker.surface):
 		return _cell_on(walker.surface,point)
+	if expedition:
+		var grid := Vector3i((point / ModularRoom.SIZE).round()) + Expedition.grid_of(expedition.start)
+		return Expedition.cell_at_grid(grid.clamp(Vector3i.ZERO, Expedition.VOLUME-Vector3i.ONE))
 	# Choose the nearest room footprint in 3D, including columns across the wrap.
 	var row := origin_row+roundi(point.y/ROW_HEIGHT)
 	var best := INF
@@ -133,16 +205,32 @@ func _stair_target(cell: Vector2i, hand: int) -> Vector2i:
 
 func _build_cell(cell: Vector2i) -> void:
 	var scene_id := atlas.scene_at(cell)
-	var tile := _make_scene(scene_id,0 if cell==Vector2i.ZERO else posmod(hash(cell),100003))
+	var tile: Node3D
+	if expedition:
+		var room := ModularRoom.new()
+		room.assemble(scene_id, expedition.ports(cell))
+		room.set_meta("scene_id", scene_id)
+		if cell == expedition.finish:
+			var exit := Waymark.new()
+			room.add_child(exit)
+			exit.position = room.exit_at()
+			exit.make_exit()
+		elif expedition.relics.has(cell):
+			var relic := Relic.new()
+			relic.assemble(expedition.relics[cell], Relic.site_in(room, cell, expedition.seed_value))
+			room.add_child(relic)
+		tile = room
+	else:
+		tile = _make_scene(scene_id,0 if cell==Vector2i.ZERO else posmod(hash(cell),100003))
+		var stairs: Array[LevelStair] = []
+		for hand in [-1,1]:
+			var flight := LevelStair.new()
+			flight.assemble(scene_id,hand,_stair_target(cell,hand))
+			tile.add_child(flight)
+			stairs.append(flight)
+		tile.set_meta("stairs",stairs)
 	tile.transform = _room_frame(cell)
 	tile.set_meta("cell",cell)
-	var stairs: Array[LevelStair] = []
-	for hand in [-1,1]:
-		var flight := LevelStair.new()
-		flight.assemble(scene_id,hand,_stair_target(cell,hand))
-		tile.add_child(flight)
-		stairs.append(flight)
-	tile.set_meta("stairs",stairs)
 	for part: GeometryInstance3D in tile.find_children("*","GeometryInstance3D",true,false):
 		var mat := part.material_override as ShaderMaterial
 		if mat and mat.shader in PROJECTED_SURFACES:
@@ -163,6 +251,8 @@ func _build_cell(cell: Vector2i) -> void:
 		if lamp.is_in_group("scene_lights"):
 			_set_lamp(lamp,listener,0.)
 	cells[cell] = tile
+	if expedition:
+		return
 	for axis in [Vector2i.RIGHT,Vector2i.DOWN]:
 		for start: Vector2i in [cell,_wrap(cell-axis)]:
 			var end := _wrap(start+axis)
@@ -219,12 +309,15 @@ func _near_aisle(landings:Array[Vector3]) -> Vector3:
 
 func _range_to(cell: Vector2i) -> float:
 	var local := _room_frame(cell).affine_inverse()*walker.position
-	var bounds := AABB(Vector3(-32,-12,-24),Vector3(64,46,48))
+	var bounds := AABB(-ModularRoom.SIZE*.5, ModularRoom.SIZE) if expedition else AABB(Vector3(-32,-12,-24),Vector3(64,46,48))
 	return local.distance_to(local.clamp(bounds.position,bounds.end))
 
 func _queue_surroundings() -> void:
 	var here := cell_of(walker.position)
 	last_stream_point = walker.position
+	if expedition:
+		_stream_expedition(here)
+		return
 	var keep := {}
 	var resident: Node3D = walker.surface if is_instance_valid(walker.surface) else null
 	if resident and resident.has_meta("stairs"):
@@ -253,6 +346,33 @@ func _queue_surroundings() -> void:
 			if not cells.has(cell) and _range_to(cell)<LOAD_DISTANCE:
 				pending.append(cell)
 	pending.sort_custom(func(a:Vector2i,b:Vector2i): return _range_to(a)>_range_to(b))
+
+# Closed faces reveal no neighbour. The first ring supplies every physical
+# exit from the current room; the next ring is ready when the player crosses.
+func _stream_expedition(here: Vector2i) -> void:
+	var wanted := {here: true}
+	var first := expedition.neighbours(here)
+	for neighbour in first:
+		wanted[neighbour] = true
+		for next in expedition.neighbours(neighbour):
+			if _range_to(next) < LOAD_DISTANCE:
+				wanted[next] = true
+	var follower: Node3D = soundscape.pursuer_surface()
+	if is_instance_valid(follower):
+		wanted[follower.get_meta("cell")] = true
+	for cell: Vector2i in cells.keys():
+		if not wanted.has(cell):
+			remove_child(cells[cell])
+			cells[cell].queue_free()
+			cells.erase(cell)
+	pending.clear()
+	for cell: Vector2i in wanted:
+		if not cells.has(cell):
+			pending.append(cell)
+	pending.sort_custom(func(a:Vector2i,b:Vector2i):
+		if (a in first) != (b in first): return b in first
+		return _range_to(a) > _range_to(b))
+
 
 func _process(_delta: float) -> void:
 	if not pending.is_empty() and not closing:
@@ -291,17 +411,32 @@ func _physics_process(delta: float) -> void:
 	_walk_stairs()
 	for well in get_tree().get_nodes_in_group("fold_wells"):
 		if well.crosses(walker.camera.global_position, walker.velocity.dot(well.global_basis.y)):
-			walker.position += well.global_basis * well.DISPLACEMENT
+			walker.position += well.global_basis * well.displacement
 			walker.reset_physics_interpolation()
 			break
 	var current := cell_of(walker.position)
+	if run_active and expedition and walker.is_walking() and expedition.relics.has(current):
+		var tile := walker.surface as ModularRoom
+		var relic: Relic = tile.get_node_or_null("Relic") if tile else null
+		if relic and walker.position.distance_to(relic.global_position) <= Relic.REACH:
+			var kind: int = expedition.relics[current]
+			expedition.relics.erase(current)
+			relic.queue_free()
+			soundscape.accept_relic(kind)
+	if run_active and expedition and walker.is_walking() and current == expedition.finish:
+		var tile: ModularRoom = cells[current]
+		var door := tile.to_local(walker.position) - tile.exit_at()
+		if absf(door.x) < .96 and absf(door.y) < 1. and absf(door.z) < .75:
+			_end_run()
+			walker.finish_run()
+			return
 	var hall := walker.surface as Hall
 	if hall:
 		var fold := hall.fold_offset(hall.to_local(walker.position))
 		if fold != 0.:
 			walker.position += hall.global_basis.y * fold
 			walker.reset_physics_interpolation()
-	if absi(current.y-origin_row)>64:
+	if not expedition and absi(current.y-origin_row)>64:
 		var shift := Vector3.UP*(current.y-origin_row)*ROW_HEIGHT
 		origin_row = current.y
 		for tile: Node3D in cells.values():
@@ -362,7 +497,7 @@ func _set_lamp(lamp:Light3D,listener:Vector3,pressure:float) -> void:
 	var distance := listener.distance_to(lamp.global_position)
 	var power := 1.-smoothstep(19,31,distance)
 	lamp.visible = power>.001
-	lamp.light_energy = float(lamp.get_meta("steady_power"))*power*(1.-.30*pressure)
+	lamp.light_energy = float(lamp.get_meta("steady_power"))*power*(1.-.30*pressure)*soundscape.lamp_power(lamp)
 
 func _link_between(a: Vector2i,b: Vector2i) -> Gallery:
 	if b not in [_wrap(a+Vector2i.RIGHT),_wrap(a+Vector2i.LEFT),a+Vector2i.DOWN,a+Vector2i.UP]:
@@ -381,6 +516,12 @@ func _room_chain(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 			while route[0] != start:
 				route.push_front(previous[route[0]])
 			return route
+		if expedition:
+			for next in expedition.neighbours(cell):
+				if cells.has(next) and not previous.has(next):
+					previous[next] = cell
+					queue.append(next)
+			continue
 		for delta: Vector2i in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
 			var next := _wrap(cell+delta)
 			if not previous.has(next) and _link_between(cell,next):
@@ -392,6 +533,43 @@ func _room_chain(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 				queue.append(stair.destination)
 	return []
 
+# Each module bakes its own navigation mesh. Stitch the local routes only
+# through an enabled opening; a wall shared by two loaded rooms stays solid.
+func _modular_route(start: Vector3, goal: Vector3, source: Node3D, target: Node3D) -> PackedVector3Array:
+	var chain := _room_chain(source.get_meta("cell"),target.get_meta("cell"))
+	if chain.is_empty():
+		return PackedVector3Array()
+	var route := PackedVector3Array([start])
+	for i in chain.size()-1:
+		var cell := chain[i]
+		var face := Expedition.grid_of(chain[i+1]) - Expedition.grid_of(cell)
+		var tile: ModularRoom = cells[cell]
+		var nav: CellNavigation = tile.get_meta("navigation")
+		var best := PackedVector3Array()
+		var shortest := INF
+		for zone: int in expedition.ports(cell)[face]:
+			var seam := tile.to_global(ModularRoom.port_at(face,zone))
+			var section := nav.route(route[-1],seam)
+			if section.is_empty() or section[0].distance_to(route[-1]) > 1.15 or section[-1].distance_to(seam) > 1.15:
+				continue
+			var length := seam.distance_to(goal)
+			for j in range(1, section.size()):
+				length += section[j-1].distance_to(section[j])
+			if length < shortest:
+				shortest = length
+				best = section
+				best.append(seam)
+		if best.is_empty():
+			return PackedVector3Array()
+		route.append_array(best)
+	var last: CellNavigation = target.get_meta("navigation")
+	var end := last.route(route[-1],goal)
+	if end.is_empty() or end[0].distance_to(route[-1]) > 1.15 or end[-1].distance_to(goal) > 1.15:
+		return PackedVector3Array()
+	route.append_array(end)
+	return route
+
+
 func surface_route(start: Vector3, goal: Vector3, source: Node3D, target: Node3D) -> PackedVector3Array:
 	if not is_instance_valid(source) or not is_instance_valid(target):
 		return PackedVector3Array()
@@ -402,6 +580,8 @@ func surface_route(start: Vector3, goal: Vector3, source: Node3D, target: Node3D
 			section.append(goal)
 			return section
 		return source.get_meta("navigation").route(start,goal)
+	if expedition:
+		return _modular_route(start,goal,source,target)
 	var starts: Array = source.cells if source is Gallery else [source.get_meta("cell")]
 	var ends: Array = target.cells if target is Gallery else [target.get_meta("cell")]
 	var best := PackedVector3Array()

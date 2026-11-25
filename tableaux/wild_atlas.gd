@@ -33,6 +33,9 @@ const RAY := preload("res://tableaux/wild_assets/paper_ray.glb")
 
 static func build(s: Node3D, id: int) -> void:
 	s.plan(ROUTES[id], FLOORS[id], RAILS[id], RISES[id])
+	dress(s, id)
+
+static func dress(s: Node3D, id: int) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 19_811 + 701*id
 	match id:
@@ -79,6 +82,7 @@ static func _rad(a: float) -> Vector3:
 static func _tuning_forest(s: Node3D,rng: RandomNumberGenerator) -> void:
 	s.box(Vector3(0,-9,0),Vector3(63.8,.5,47.8),"moss")
 	for p in _clearings(0,rng,28):
+		s.begin_furnishing()
 		var height := rng.randf_range(6.2,18.5)
 		var yaw := rng.randf_range(-PI,PI)
 		var arm := _rad(yaw)*rng.randf_range(.53,1.20)
@@ -91,6 +95,7 @@ static func _tuning_forest(s: Node3D,rng: RandomNumberGenerator) -> void:
 			s.beam(shoulder,p+arm*sign_+Vector3.UP*height,.34,.44,"brass")
 		s.column(p+Vector3.UP*(height*.35),Vector3(.82,.26,.82),"iron")
 		s.ball(p+Vector3.UP*.16,Vector3(2.7,1.2,2.3),"moss")
+	s.end_furnishing()
 
 static func _clutch(s: Node3D,rng: RandomNumberGenerator) -> void:
 	# The open, descending walkway goes all the way around a single breeding ledge.
@@ -115,8 +120,10 @@ static func _clutch(s: Node3D,rng: RandomNumberGenerator) -> void:
 			var r := sqrt(1-y*y)
 			s.ball(p+Vector3(cos(ang)*2.10*r,y*3.89,sin(ang)*2.30*r)*k,Vector3(.23,.32,.20)*k,"moss")
 	for p in _clearings(1,rng,16):
+		s.begin_furnishing()
 		if Vector2(p.x,p.z).length()>12:
 			s.cone(p-Vector3.UP*6,Vector3(4.8,rng.randf_range(8,15),4.25),"stone")
+	s.end_furnishing()
 
 static func _longitude(s: Node3D,rng: RandomNumberGenerator) -> void:
 	s.box(Vector3(0,-2.2,0),Vector3(63.8,.6,47.8),"glass")
@@ -128,18 +135,21 @@ static func _longitude(s: Node3D,rng: RandomNumberGenerator) -> void:
 	for y in [-5.,-2.5,0.,2.5,5.]:
 		s.ring(pole+Vector3.UP*y,sqrt(8.4*8.4-y*y),.12,"brass")
 	for p in _clearings(2,rng,15):
+		s.begin_furnishing()
 		if absf(p.x)<9 and absf(p.z)<10: continue
 		var h := rng.randf_range(1.1,5.4)
 		s.cone(p+Vector3.UP*(h*.5-1.25),Vector3(.64,h,.64),"iron")
 		s.ball(p+Vector3.UP*(h-1.4),Vector3(.85,.85,.85),"brass")
 		s.ring(p-Vector3.UP*1.80,2.1,.055,"pearl")
 		s.ring(p-Vector3.UP*1.78,1.35,.05,"pearl")
+	s.end_furnishing()
 
 static func _leviathan(s: Node3D) -> void:
 	s.box(Vector3(0,-11.2,0),Vector3(63.8,.8,47.8),"basalt")
 	_model(s,FOSSIL,Vector3(1.2,9.8,-11.8),Vector3(2.4,2.4,2.4),Vector3(-.15,PI+.18,-.13))
 	# The central crossing threads the hollow thorax under the long vertebral arch.
 	for i in 20:
+		s.begin_furnishing()
 		var z := -8.45+i*1.48
 		var p := Vector3(1.08+1.7*sin(i*.22),9.56-i*.084,z)
 		var k := 1.-i*.033
@@ -153,6 +163,7 @@ static func _leviathan(s: Node3D) -> void:
 				s.beam(p,shoulder,.34*k,.43*k,"bone")
 				s.beam(shoulder,elbow,.38*k,.45*k,"bone")
 				s.beam(elbow,tip,.27*k,.32*k,"chalk")
+	s.end_furnishing()
 	for side in [-1.,1.]:
 		for i in 9:
 			var p := Vector3(side*(15.+4.*sin(i*.60)),-6.7+i*.12,-16.+i*4.0)
@@ -162,10 +173,12 @@ static func _chambered_shell(s: Node3D,rng: RandomNumberGenerator) -> void:
 	s.box(Vector3(0,-5,0),Vector3(63.8,.5,47.8),"moss")
 	_model(s,AMMONITE,Vector3(1.5,11.6,1.0),Vector3.ONE*2.1,Vector3(0,-.31,-.48))
 	for p in _clearings(4,rng,18):
+		s.begin_furnishing()
 		var r := rng.randf_range(.60,1.30)
 		s.cone(p-Vector3.UP*2.6,Vector3(2.6,7.5,2.2),"chalk")
 		s.ring(p+Vector3.UP*.82,r,.19,"bone",Vector3(1.25,.72,.22))
 		s.ball(p+Vector3.UP*.71,Vector3(r*.65,r*.65,r*.65),"pearl")
+	s.end_furnishing()
 	# Dissolution terraces run below the broad lip.
 	for i in 4:
 		s.ball(Vector3(-3.5+i*.9,-7.1+i*.9,1),Vector3(31.-3.*i,3.0,19.-i*2.4),"salt")
@@ -173,6 +186,7 @@ static func _chambered_shell(s: Node3D,rng: RandomNumberGenerator) -> void:
 static func _fjord(s: Node3D,rng: RandomNumberGenerator) -> void:
 	s.box(Vector3(0,-6.8,0),Vector3(63.9,.5,47.8),"glass")
 	for p in _clearings(5,rng,30):
+		s.begin_furnishing()
 		var h := rng.randf_range(6.,18.)
 		var axis := rng.randf_range(-PI,PI)
 		s.box(p-Vector3.UP*.9,Vector3(3.4,h,3.25),"glass",Vector3(.075,axis,-.08))
@@ -180,6 +194,7 @@ static func _fjord(s: Node3D,rng: RandomNumberGenerator) -> void:
 		s.cone(p+Vector3.UP*(h*.52),Vector3(2.5,rng.randf_range(3.1,6.4),2.65),"salt",Vector3(.09,axis,.14))
 		if rng.randf()<.55:
 			s.beam(p+Vector3(.8,h*.32,0),p+Vector3(2.35,1.0,.72),.52,.67,"pearl")
+	s.end_furnishing()
 	# Floating ice fragments interrupt the dark river at different angles.
 	for i in 22:
 		var p := Vector3(rng.randf_range(-28.,28.),-6.4,rng.randf_range(-20.,20.))
@@ -217,13 +232,16 @@ static func _caldera(s: Node3D,rng: RandomNumberGenerator) -> void:
 		var y := rng.randf_range(1,12)
 		s.ball(p*(1.+.06*y)+Vector3.UP*y,Vector3.ONE*rng.randf_range(.17,.54),"ember" if i%3 else "basalt")
 	for p in _clearings(7,rng,15):
+		s.begin_furnishing()
 		if absf(p.x)<12 and absf(p.z)<7: continue
 		s.cone(p-Vector3.UP*3.6,Vector3(4.2,rng.randf_range(8.,19.),3.55),"basalt")
+	s.end_furnishing()
 
 static func _jellies(s: Node3D,rng: RandomNumberGenerator) -> void:
 	s.box(Vector3(0,-8.6,0),Vector3(63.8,.6,47.8),"glass")
 	var cells := _clearings(8,rng,15)
 	for i in cells.size():
+		s.begin_furnishing()
 		var r := rng.randf_range(1.4,3.4)
 		var p := cells[i]+Vector3.UP*rng.randf_range(6.6,15.5)
 		p.x = clampf(p.x,-27.8,27.8)
@@ -239,10 +257,12 @@ static func _jellies(s: Node3D,rng: RandomNumberGenerator) -> void:
 			s.beam(base,joint,.15,.13,"pearl")
 			s.beam(joint,tail,.11,.095,"pearl" if k%3 else "cloth")
 			s.ball(base,Vector3(.26,.24,.26),"pearl")
+	s.end_furnishing()
 
 static func _spores(s: Node3D,rng: RandomNumberGenerator) -> void:
 	s.box(Vector3(0,-6.9,0),Vector3(63.8,.6,47.8),"moss")
 	for p in _clearings(9,rng,21):
+		s.begin_furnishing()
 		var h := rng.randf_range(5.2,13.0)
 		var r := rng.randf_range(1.4,3.12)
 		var skew := _rad(rng.randf_range(0.,TAU))*.53
@@ -259,12 +279,14 @@ static func _spores(s: Node3D,rng: RandomNumberGenerator) -> void:
 			var sp := p-skew*2.5+Vector3.UP*h*.30
 			s.ball(sp,Vector3(2.25,.84,2.1),"rust")
 			s.column(Vector3(sp.x,sp.y*.5,sp.z),Vector3(.31,sp.y,.34),"bone")
+	s.end_furnishing()
 
 static func _falling_moons(s: Node3D,rng: RandomNumberGenerator) -> void:
 	# A diagonal chain of increasingly large satellites has stopped in mid-fall.
 	var centers := [Vector3(-19,18,-12),Vector3(-10.3,14.6,-7.3),Vector3(-2,11.7,-3.4),Vector3(5,8.3,1.3),Vector3(11.5,5.8,4.4)]
 	var radii := [4.75,3.6,2.65,1.72,1.05]
 	for i in centers.size():
+		s.begin_furnishing()
 		var p: Vector3 = centers[i]
 		var r: float = radii[i]
 		s.ball(p,Vector3.ONE*r*2,"chalk" if i%2==0 else "iron")
@@ -278,6 +300,7 @@ static func _falling_moons(s: Node3D,rng: RandomNumberGenerator) -> void:
 			s.ring(center,r*(.1+.025*(j%3)),.09,"basalt",rot)
 		if i==1 or i==3:
 			s.ring(p,r*1.6,.15,"glass",Vector3(.52,.37,-.44))
+	s.end_furnishing()
 	for i in 40:
 		var u := rng.randf()
 		var p: Vector3 = centers.front().lerp(centers.back(),u)
@@ -290,6 +313,7 @@ static func _geysers(s: Node3D,rng: RandomNumberGenerator) -> void:
 	s.box(Vector3(0,-3.4,0),Vector3(63.8,.65,47.8),"glass")
 	var deposits := _clearings(11,rng,13)
 	for i in deposits.size():
+		s.begin_furnishing()
 		var p := deposits[i]
 		var r := rng.randf_range(1.6,2.65)
 		var h := rng.randf_range(5.8,13.)
@@ -310,6 +334,7 @@ static func _geysers(s: Node3D,rng: RandomNumberGenerator) -> void:
 		for j in 3:
 			var q := p+Vector3(.5+j*.7,h*.82+j*.62,.6*j)
 			s.ball(q,Vector3(1.4+j*.22,.65+j*.14,.99),"salt")
+	s.end_furnishing()
 
 static func _paper_storm(s: Node3D,rng: RandomNumberGenerator) -> void:
 	# A flock turns through a twist; each silhouette changes with the observer.
@@ -324,9 +349,11 @@ static func _paper_storm(s: Node3D,rng: RandomNumberGenerator) -> void:
 		else:
 			model.ready.connect(_glide.bind(model,p.y,duration),CONNECT_ONE_SHOT)
 	for p in _clearings(12,rng,13):
+		s.begin_furnishing()
 		var h := rng.randf_range(3.0,8.6)
 		s.beam(p-Vector3.UP*6,p+Vector3.UP*h,.17,.19,"iron")
 		s.box(p+Vector3.UP*(h-.91)+Vector3(.45,0,0),Vector3(.96,1.22,.053),"cloth",Vector3(-.12,.14,.51))
+	s.end_furnishing()
 	s.box(Vector3(0,-13,0),Vector3(63.8,.5,47.8),"basalt")
 
 static func _glide(model: Node3D, y: float, duration: float) -> void:
@@ -337,6 +364,7 @@ static func _glide(model: Node3D, y: float, duration: float) -> void:
 static func _lunar_hive(s: Node3D,rng: RandomNumberGenerator) -> void:
 	# Suspended honeycomb sheets have proper open centres and share cell sides.
 	for sheet in 3:
+		s.begin_furnishing()
 		var origin := [Vector3(-16,9.7,-9.6),Vector3(5.8,13.2,6.6),Vector3(18.5,8.8,-7.2)][sheet] as Vector3
 		var axis := _rad(.30+sheet*.86)
 		var normal := Vector3.UP.cross(axis)
@@ -354,8 +382,11 @@ static func _lunar_hive(s: Node3D,rng: RandomNumberGenerator) -> void:
 				if (col+2*row+sheet)%3==0:
 					s.ball(p+normal*.11,Vector3.ONE*r*1.24,"pearl")
 		s.beam(origin+Vector3.UP*r*1.9,origin+Vector3.UP*(r*4.0),.10,.10,"brass")
+	s.end_furnishing()
 	for p in _clearings(13,rng,14):
+		s.begin_furnishing()
 		var h := rng.randf_range(2.2,7.4)
 		s.cone(p+Vector3.UP*(h*.5-2.0),Vector3(.97,h,1.08),"brass")
 		s.ball(p+Vector3.UP*(h-2.0),Vector3(1.25,1.65,1.22),"bone")
+	s.end_furnishing()
 	s.ball(Vector3(0,-8.8,0),Vector3(31,7.5,26),"pearl")

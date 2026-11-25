@@ -247,30 +247,35 @@ func _cistern() -> void:
 		for tick in 11:
 			box(Vector3(x,-8.9+tick*.34,.19),Vector3(.22 if tick%3==0 else .12,.045,.035),"basalt")
 
-func _archive() -> void:
+func archive_shelf(x: float, z: float) -> void:
 	var covers := ["rust","bone","wood","moss","basalt"]
+	for end: float in [-2.62,2.62]:
+		box(Vector3(x+end,2.06,z),Vector3(.18,4.42,1.36),"wood")
+	for row in 5:
+		var h := .19+row*.88
+		box(Vector3(x,h,z),Vector3(5.37,.14,1.46),"brass")
+		for i in 15:
+			var p := Vector3(x-2.35+i*.33,h+.40,z)
+			var height := .48+.073*posmod(i*3+row,5)
+			box(p,Vector3(.28,height,.98),covers[posmod(i+row,5)])
+			box(p+Vector3(0,-height*.21,-signf(z)*.50),Vector3(.19,.048,.022),"bone")
+
+func archive_drawers(back: Vector3) -> void:
+	box(back,Vector3(1.,4.4,3.4),"wood")
+	for row in 5:
+		for col in 3:
+			var face := back+Vector3(.54,(row-2)*.79,(col-1)*1.02)
+			box(face,Vector3(.1,.72,.93),"rust" if row%3==1 else "wood")
+			box(face+Vector3(.065,-.06,0),Vector3(.045,.058,.30),"brass")
+			box(face+Vector3(.063,.14,0),Vector3(.035,.105,.24),"bone")
+
+func _archive() -> void:
 	for z: float in [-12.2,12.2]:
 		for x: float in [-7.,5.]:
-			for end: float in [-2.62,2.62]:
-				box(Vector3(x+end,2.06,z),Vector3(.18,4.42,1.36),"wood")
-			for row in 5:
-				var h := .19+row*.88
-				box(Vector3(x,h,z),Vector3(5.37,.14,1.46),"brass")
-				for i in 15:
-					var p := Vector3(x-2.35+i*.33,h+.40,z)
-					var height := .48+.073*posmod(i*3+row,5)
-					box(p,Vector3(.28,height,.98),covers[posmod(i+row,5)])
-					box(p+Vector3(0,-height*.21,-signf(z)*.50),Vector3(.19,.048,.022),"bone")
+			archive_shelf(x,z)
 			_lamp(Vector3(x,2.8,z-signf(z)*1.4),"ffc784",4.,8.)
 	for z: float in [-7.,-3.5,0.,3.5,7.]:
-		var back := Vector3(-12.2,2.04,z)
-		box(back,Vector3(1.,4.4,3.4),"wood")
-		for row in 5:
-			for col in 3:
-				var face := back+Vector3(.54,(row-2)*.79,(col-1)*1.02)
-				box(face,Vector3(.1,.72,.93),"rust" if row%3==1 else "wood")
-				box(face+Vector3(.065,-.06,0),Vector3(.045,.058,.30),"brass")
-				box(face+Vector3(.063,.14,0),Vector3(.035,.105,.24),"bone")
+		archive_drawers(Vector3(-12.2,2.04,z))
 	# A single plumb line can be followed by eye through all three galleries.
 	var weight := Vector3(-5.2,-5.5,3.8)
 	beam(weight,weight+Vector3.UP*20.,.065,.065,"brass")

@@ -4,6 +4,7 @@ extends Node3D
 const HALF_OPENING := 1.26
 const DISPLACEMENT := Vector3(9.7, 10.5, 0)
 const WELL_LAYER := 1 << 16
+var displacement := DISPLACEMENT
 var view: SubViewport
 var eye: Camera3D
 
@@ -46,7 +47,7 @@ func _process(_delta: float) -> void:
 		eye.fov = camera.fov
 		eye.near = camera.near
 		eye.far = camera.far
-		eye.global_transform = camera.global_transform.translated(global_basis * DISPLACEMENT)
+		eye.global_transform = camera.global_transform.translated(global_basis * displacement)
 
 func crosses(eye_position: Vector3, vertical_speed: float) -> bool:
 	var p := to_local(eye_position)

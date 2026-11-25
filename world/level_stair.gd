@@ -13,7 +13,7 @@ var side: int
 var destination: Vector2i
 var profile := PackedVector2Array()
 
-func assemble(scene_id: int, hand: int, other_cell: Vector2i) -> void:
+func assemble(scene_id: int, hand: int, other_cell: Vector2i, sealed := false) -> void:
 	side = hand
 	destination = other_cell
 	transform = Transform3D(Basis(Vector3.UP,0. if hand>0 else PI),
@@ -36,6 +36,8 @@ func assemble(scene_id: int, hand: int, other_cell: Vector2i) -> void:
 	_build_flights(style.flights(index),palette)
 	style.dress(self,index)
 	_vestibule()
+	if sealed:
+		_wall(Vector3(DOOR_X,rise+1.8,DOOR_Z),Vector3(.3,3.6,3.))
 	_finish_geometry()
 
 func _build_flights(flights: Array, palette: Array) -> void:

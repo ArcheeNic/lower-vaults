@@ -137,3 +137,63 @@ msgstr "Orage de papier"
 
 msgid "Лунная пасека"
 msgstr "Rucher lunaire"
+
+msgid "Обычный режим"
+msgstr "Mode normal"
+
+msgid "Песочница"
+msgstr "Bac à sable"
+
+msgid "Найди дверь с дневным светом."
+msgstr "Cherchez la porte d’où filtre la lumière du jour."
+
+msgid "Выход найден"
+msgstr "Vous avez trouvé la sortie"
+
+msgid "Новая игра"
+msgstr "Nouvelle partie"
+
+msgid "В главное меню"
+msgstr "Menu principal"
+
+msgid "Завершить и выйти в меню"
+msgstr "Terminer la partie et revenir au menu"
+
+msgid "Фонарщик погасил свет."
+msgstr "L’allumeur a éteint les lumières."
+
+msgid "Звон заглушил шум сводов."
+msgstr "La cloche couvre les bruits des voûtes."
+
+msgid "Собиратель украл звук ваших шагов."
+msgstr "Le collectionneur a volé le bruit de vos pas."
+
+msgid "Носильщики переложили на вас свой груз."
+msgstr "Les porteurs vous ont confié leur fardeau."
+
+msgid "Водолаз затопил ваш визор."
+msgstr "Le scaphandrier a noyé votre visière."
+
+msgid "Паломник вернул вас к началу."
+msgstr "Le pèlerin vous a ramené au point de départ."
+
+msgid "Рама перенесла вас в соседний зал."
+msgstr "Le cadre vous a transporté dans la salle voisine."
+
+msgid "Часовой велел замереть."
+msgstr "La sentinelle vous a ordonné de rester immobile."
+
+msgid "Писец забрызгал чернилами края обзора."
+msgstr "Le scribe a éclaboussé d’encre les bords de votre champ de vision."
+
+msgid "Веретено развернуло вас."
+msgstr "Le fuseau vous a fait faire demi-tour."
+
+msgid "Янтарная печать защитит от одного касания."
+msgstr "Le sceau d’ambre te protégera du prochain contact."
+
+msgid "Печать раскололась и поглотила касание."
+msgstr "Le sceau s’est brisé et a absorbé le contact."
+
+msgid "Песочные часы отогнали обитателей на 45 секунд."
+msgstr "Le sablier a chassé les habitants pour 45 secondes."

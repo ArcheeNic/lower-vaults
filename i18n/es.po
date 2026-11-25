@@ -137,3 +137,63 @@ msgstr "Tormenta de papel"
 
 msgid "Лунная пасека"
 msgstr "Colmenar lunar"
+
+msgid "Обычный режим"
+msgstr "Modo normal"
+
+msgid "Песочница"
+msgstr "Modo libre"
+
+msgid "Найди дверь с дневным светом."
+msgstr "Busca la puerta por la que se cuela la luz del día."
+
+msgid "Выход найден"
+msgstr "Has encontrado la salida"
+
+msgid "Новая игра"
+msgstr "Nueva partida"
+
+msgid "В главное меню"
+msgstr "Menú principal"
+
+msgid "Завершить и выйти в меню"
+msgstr "Terminar la partida y volver al menú"
+
+msgid "Фонарщик погасил свет."
+msgstr "El farolero ha apagado las luces."
+
+msgid "Звон заглушил шум сводов."
+msgstr "La campana ahogó los sonidos de las bóvedas."
+
+msgid "Собиратель украл звук ваших шагов."
+msgstr "El coleccionista ha robado el sonido de tus pasos."
+
+msgid "Носильщики переложили на вас свой груз."
+msgstr "Los porteadores te han pasado su carga."
+
+msgid "Водолаз затопил ваш визор."
+msgstr "El buzo ha inundado tu visor."
+
+msgid "Паломник вернул вас к началу."
+msgstr "El peregrino te ha devuelto al inicio."
+
+msgid "Рама перенесла вас в соседний зал."
+msgstr "El marco te ha transportado a la sala contigua."
+
+msgid "Часовой велел замереть."
+msgstr "El centinela te ha ordenado que te quedes inmóvil."
+
+msgid "Писец забрызгал чернилами края обзора."
+msgstr "El escriba ha salpicado de tinta los bordes de tu campo de visión."
+
+msgid "Веретено развернуло вас."
+msgstr "El huso te ha hecho dar media vuelta."
+
+msgid "Янтарная печать защитит от одного касания."
+msgstr "El sello de ámbar te protegerá del próximo toque."
+
+msgid "Печать раскололась и поглотила касание."
+msgstr "El sello se ha roto y ha absorbido el efecto del toque."
+
+msgid "Песочные часы отогнали обитателей на 45 секунд."
+msgstr "El reloj de arena ha ahuyentado a los habitantes durante 45 segundos."

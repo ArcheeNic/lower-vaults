@@ -1,7 +1,9 @@
 extends CanvasLayer
 
 signal exit_requested
-signal enter_requested
+signal start_requested(normal: bool)
+signal resume_requested
+signal menu_requested
 signal sensitivity_changed(value: float)
 signal steps_changed(value: float)
 signal volume_changed(value: float)
@@ -11,6 +13,7 @@ const PAPER := Color("#f0e3c9")
 const SECONDARY := Color("#dcceb9")
 const ACCENT := Color("#dba674")
 const FOCUS := Color("#f2b981")
+const OBJECTIVE := "Найди дверь с дневным светом."
 const LANGUAGES := {
 	"en": "English", "zh_Hans": "简体中文", "ru": "Русский", "es": "Español (España)",
 	"pt_BR": "Português (Brasil)", "de": "Deutsch", "ja": "日本語", "fr": "Français",
@@ -23,13 +26,20 @@ var _root := Control.new()
 var _page := Control.new()
 var _entrance := Control.new()
 var _pause_menu := Control.new()
+var _victory := Control.new()
+var _hud := Control.new()
 var _title: Label
+var _choices := VBoxContainer.new()
 var _enter: Button
 var _controls: Label
+var _notice: Label
+var _objective: Label
+var _again: Button
 var _place: Label
 var _resume: Button
 var _veil := ColorRect.new()
 var _hint_tween: Tween
+var _notice_tween: Tween
 var _sensitivity_slider: HSlider
 var _volume_slider: HSlider
 var _steps_slider: HSlider
@@ -67,25 +77,41 @@ func _ready() -> void:
 	_veil.material = material
 	_root.add_child(_page)
 	_page.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for panel in [_entrance, _pause_menu]:
+	for panel in [_entrance, _pause_menu, _victory, _hud]:
 		_page.add_child(panel)
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_title = _label(_entrance, "НИЖНИЕ\nСВОДЫ", _serif, 70, PAPER)
 	_title.add_theme_constant_override("line_spacing", -19)
-	_enter = _button(_entrance, "Войти    ⏎", 24)
+	_entrance.add_child(_choices)
+	_choices.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_enter = _button(_choices, "Обычный режим", 25)
 	_enter.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_enter.pressed.connect(func(): enter_requested.emit())
-	_controls = _label(_page, "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза", _sans, 15, PAPER)
+	_enter.pressed.connect(func(): start_requested.emit(true))
+	var sandbox := _button(_choices, "Песочница", 20)
+	sandbox.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	sandbox.pressed.connect(func(): start_requested.emit(false))
+	_controls = _label(_hud, "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза", _sans, 15, PAPER)
 	_controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_controls.add_theme_color_override("font_shadow_color", Color(0.04, 0.04, 0.035, 0.95))
-	_controls.add_theme_constant_override("shadow_offset_x", 1)
-	_controls.add_theme_constant_override("shadow_offset_y", 2)
+	_notice = _label(_hud, "", _sans, 20, PAPER)
+	_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	for label: Label in [_controls, _notice]:
+		label.add_theme_color_override("font_outline_color", Color(0.04, 0.04, 0.035, 0.9))
+		label.add_theme_constant_override("outline_size", 4)
 	_controls.hide()
+	_notice.hide()
 	_build_pause()
+	_label(_victory, "Выход найден", _serif, 64, PAPER)
+	_again = _button(_victory, "Новая игра", 24)
+	_again.position.y = 94
+	_again.pressed.connect(func(): start_requested.emit(true))
+	var back := _button(_victory, "В главное меню", 19)
+	back.position.y = 144
+	back.pressed.connect(menu_requested.emit)
 	_build_language_picker()
-	_pause_menu.hide()
 	_root.resized.connect(_layout)
 	_layout()
+	show_entrance()
 
 
 func configure(sensitivity: float, volume: float, steps: float) -> void:
@@ -140,15 +166,23 @@ func _build_pause() -> void:
 	heading.position = Vector2(0, 0)
 	_resume = _button(_pause_menu, "Продолжить", 23)
 	_resume.position = Vector2(0, 90)
-	_resume.pressed.connect(func(): enter_requested.emit())
+	_resume.pressed.connect(resume_requested.emit)
+	_objective = _label(_pause_menu, "", _sans, 18, PAPER)
+	_objective.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_objective.position = Vector2(340, 100)
+	_objective.size = Vector2(365, 0)
+	_objective.text = OBJECTIVE
 	_sensitivity_slider = _slider("Чувствительность мыши", 161, 0.25, 3.0, 0.05)
 	_sensitivity_slider.value_changed.connect(func(v: float): sensitivity_changed.emit(v))
 	_volume_slider = _slider("Громкость", 223, 0, 1.0, 0.025)
 	_volume_slider.value_changed.connect(func(v: float): volume_changed.emit(v))
 	_steps_slider = _slider("Свои шаги", 285, 0, 1.0, 0.025)
 	_steps_slider.value_changed.connect(func(v: float): steps_changed.emit(v))
+	var menu := _button(_pause_menu, "Завершить и выйти в меню", 18)
+	menu.position = Vector2(0, 350)
+	menu.pressed.connect(menu_requested.emit)
 	var leave := _button(_pause_menu, "Выйти из игры", 18)
-	leave.position = Vector2(0, 365)
+	leave.position = Vector2(0, 390)
 	leave.pressed.connect(exit_requested.emit)
 
 
@@ -226,19 +260,39 @@ func _layout() -> void:
 	_language_row.size = _language_row.get_combined_minimum_size()
 	_language_row.position = Vector2(bounds.x - inset - _language_row.size.x, 28)
 	_title.position = Vector2(inset, bounds.y - 184.0)
-	_enter.size = Vector2(155, 42)
-	_enter.position = Vector2(bounds.x - inset - _enter.size.x, bounds.y - 86.0)
-	_pause_menu.position = Vector2(inset, (bounds.y - 419.0) * 0.5)
+	_choices.size = Vector2(maxf(220, _choices.get_combined_minimum_size().x), 0)
+	_choices.position = Vector2(bounds.x - inset - _choices.size.x, bounds.y - 143.0)
+	_pause_menu.position = Vector2(inset, (bounds.y - 435.0) * 0.5)
+	_victory.position = Vector2(inset, (bounds.y - 190.0) * 0.5)
 	_controls.size = Vector2(bounds.x, 28)
 	_controls.position = Vector2(0, bounds.y - 52)
+	_notice.size.x = bounds.x - 2 * inset
+	_notice.position = Vector2(inset, bounds.y - 138)
 
 
-func show_walk(first_entry: bool) -> void:
+func show_entrance() -> void:
+	_hud.hide()
+	_notice.hide()
+	_pause_menu.hide()
+	_victory.hide()
+	_entrance.show()
+	_veil.show()
+	(_veil.material as ShaderMaterial).set_shader_parameter("pause_factor", 0.0)
+	_language_row.show()
+	_enter.grab_focus()
+
+
+func show_walk(first_entry: bool, normal: bool) -> void:
 	_language_row.hide()
 	_veil.hide()
 	_pause_menu.hide()
+	_victory.hide()
 	_entrance.hide()
+	_hud.show()
 	if first_entry:
+		_notice.hide()
+		if normal:
+			show_notice(OBJECTIVE, 8.0)
 		_controls.modulate.a = 0.0
 		_controls.show()
 		_hint_tween = create_tween()
@@ -248,13 +302,38 @@ func show_walk(first_entry: bool) -> void:
 		_hint_tween.tween_callback(_controls.hide)
 
 
-func show_pause() -> void:
-	_language_row.show()
+func show_notice(message: String, seconds := 4.0) -> void:
+	if _notice_tween and _notice_tween.is_valid():
+		_notice_tween.kill()
+	_notice.text = message
+	_notice.modulate.a = 1.0
+	_notice.show()
+	_notice_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	_notice_tween.tween_interval(seconds)
+	_notice_tween.tween_property(_notice, "modulate:a", 0.0, 0.65)
+	_notice_tween.tween_callback(_notice.hide)
+
+
+func _show_overlay() -> void:
 	if _hint_tween and _hint_tween.is_valid():
 		_hint_tween.kill()
 	_controls.hide()
+	_hud.hide()
+	_language_row.show()
 	_entrance.hide()
 	_veil.show()
 	(_veil.material as ShaderMaterial).set_shader_parameter("pause_factor", 1.0)
+
+
+func show_pause(normal: bool) -> void:
+	_show_overlay()
+	_objective.visible = normal
 	_pause_menu.show()
 	_resume.grab_focus()
+
+
+func show_victory() -> void:
+	_show_overlay()
+	_pause_menu.hide()
+	_victory.show()
+	_again.grab_focus()

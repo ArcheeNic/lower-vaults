@@ -1,5 +1,7 @@
 extends Node3D
 
+signal touched(kind: int)
+
 const Gallery := preload("res://world/gallery.gd")
 const Presence := preload("res://suspense/presence.gd")
 const SCRAPE := preload("res://sound/strain.ogg")
@@ -14,7 +16,9 @@ const LEAVE_DISTANCE := 20.0
 const GAZE_SECONDS := 5.0
 const GAZE_COS := .95
 const STOP_DISTANCE := 1.45
+const TOUCH_DISTANCE := .78
 
+var contact_enabled := false
 var route_between_surfaces: Callable
 var stair_at_link: Callable
 var walking_distance: Callable
@@ -42,6 +46,7 @@ var _lead_voice := AudioStreamPlayer3D.new()
 var _foot_index := 0
 var _trail := Trail.new()
 var _encounters := 0
+var _touched := false
 
 
 func _ready() -> void:
@@ -61,6 +66,32 @@ func _ready() -> void:
 	_lead_voice.unit_size = 10
 	_lead_voice.max_distance = 75
 	add_child(_lead_voice)
+
+
+func reset_encounters(normal: bool) -> void:
+	contact_enabled = normal
+	banish(9.4)
+	_trail = Trail.new()
+	_encounters = 0
+	_presence.reset_deck()
+
+
+func banish(seconds: float) -> void:
+	_end_encounter(seconds)
+	_lead_voice.stop()
+	for voice in _foot_voices:
+		voice.stop()
+
+
+func _end_encounter(quiet_for: float) -> void:
+	phase = Phase.QUIET
+	_actor.hide()
+	_elapsed = 0.
+	_quiet_for = quiet_for
+	tension = 0.
+	_route.clear()
+	_surface = null
+	_player_surface = null
 
 
 func advance(delta: float, body: CharacterBody3D, walking: bool, made_step: bool) -> void:
@@ -98,9 +129,24 @@ func advance(delta: float, body: CharacterBody3D, walking: bool, made_step: bool
 	var want := 1.0 - smoothstep(.65, 3.0, _elapsed) if withdrawing else lerpf(.35, 1.0, 1.0 - smoothstep(2., 16., distance))
 	tension = move_toward(tension, want, delta * .51)
 	var moved := false
-	if withdrawing or distance > STOP_DISTANCE or not _ray(focus, camera.global_position, SIGHT_MASK).is_empty():
+	if contact_enabled or withdrawing or distance > STOP_DISTANCE or not _ray(focus, camera.global_position, SIGHT_MASK).is_empty():
 		var speed := 1.85 if withdrawing else _presence.pursuit_speed(_elapsed, walking)
 		moved = _follow(delta * speed)
+	# Folded stair landings can be adjacent along the route while occupying
+	# different parts of the tower. A touch requires physical proximity.
+	if contact_enabled and not _touched and _actor.global_position.distance_squared_to(player) <= TOUCH_DISTANCE * TOUCH_DISTANCE:
+		var hand := _actor.global_position + _actor.global_basis.y * minf(1.0, _presence.height * .65)
+		var chest := player + body.up_direction
+		if _ray(hand, chest, SIGHT_MASK).is_empty():
+			_touched = true
+			if _presence.kind in [Presence.Kind.PILGRIM, Presence.Kind.FRAME]:
+				_end_encounter(_rng.randf_range(14.,25.))
+			elif not withdrawing:
+				phase = Phase.LEAVE
+				_elapsed = 0.
+				_plan_retreat(player)
+			touched.emit(_presence.kind)
+			return
 	var toward := player - _actor.global_position
 	var up := _actor.global_basis.y
 	var facing := toward.slide(up)
@@ -185,6 +231,7 @@ func _try_spawn(body: CharacterBody3D, camera: Camera3D) -> void:
 		_opacity = .15
 		_presence.set_opacity(_opacity)
 		_actor.show()
+		_touched = false
 		phase = Phase.ADVANCE
 		_encounters += 1
 		_next_step = .25

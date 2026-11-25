@@ -137,3 +137,63 @@ msgstr "Papiergewitter"
 
 msgid "Лунная пасека"
 msgstr "Imkerei auf dem Mond"
+
+msgid "Обычный режим"
+msgstr "Normaler Modus"
+
+msgid "Песочница"
+msgstr "Sandkasten"
+
+msgid "Найди дверь с дневным светом."
+msgstr "Finde die Tür, unter der Tageslicht durchscheint."
+
+msgid "Выход найден"
+msgstr "Ausgang gefunden"
+
+msgid "Новая игра"
+msgstr "Neues Spiel"
+
+msgid "В главное меню"
+msgstr "Hauptmenü"
+
+msgid "Завершить и выйти в меню"
+msgstr "Durchgang beenden und zum Menü"
+
+msgid "Фонарщик погасил свет."
+msgstr "Der Laternenanzünder hat das Licht gelöscht."
+
+msgid "Звон заглушил шум сводов."
+msgstr "Die Glocke übertönt die Geräusche der Gewölbe."
+
+msgid "Собиратель украл звук ваших шагов."
+msgstr "Der Sammler hat den Klang deiner Schritte gestohlen."
+
+msgid "Носильщики переложили на вас свой груз."
+msgstr "Die Träger haben dir ihre Last aufgebürdet."
+
+msgid "Водолаз затопил ваш визор."
+msgstr "Der Taucher hat dein Visier geflutet."
+
+msgid "Паломник вернул вас к началу."
+msgstr "Der Pilger hat dich zum Start zurückgebracht."
+
+msgid "Рама перенесла вас в соседний зал."
+msgstr "Der Rahmen hat dich in die Nachbarhalle versetzt."
+
+msgid "Часовой велел замереть."
+msgstr "Der Wächter hat dir befohlen, stillzustehen."
+
+msgid "Писец забрызгал чернилами края обзора."
+msgstr "Der Schreiber hat Tinte an die Ränder deines Sichtfelds gespritzt."
+
+msgid "Веретено развернуло вас."
+msgstr "Die Spindel hat dich herumgedreht."
+
+msgid "Янтарная печать защитит от одного касания."
+msgstr "Das Bernsteinsiegel schützt dich vor der nächsten Berührung."
+
+msgid "Печать раскололась и поглотила касание."
+msgstr "Das Siegel ist zersprungen und hat die Berührung abgefangen."
+
+msgid "Песочные часы отогнали обитателей на 45 секунд."
+msgstr "Die Sanduhr hat die Bewohner für 45 Sekunden vertrieben."

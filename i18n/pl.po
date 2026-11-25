@@ -137,3 +137,63 @@ msgstr "Papierowa burza"
 
 msgid "Лунная пасека"
 msgstr "Księżycowa pasieka"
+
+msgid "Обычный режим"
+msgstr "Tryb zwykły"
+
+msgid "Песочница"
+msgstr "Piaskownica"
+
+msgid "Найди дверь с дневным светом."
+msgstr "Znajdź drzwi, spod których sączy się światło dnia."
+
+msgid "Выход найден"
+msgstr "Wyjście odnalezione"
+
+msgid "Новая игра"
+msgstr "Nowa gra"
+
+msgid "В главное меню"
+msgstr "Menu główne"
+
+msgid "Завершить и выйти в меню"
+msgstr "Zakończ grę i wróć do menu"
+
+msgid "Фонарщик погасил свет."
+msgstr "Latarnik zgasił światła."
+
+msgid "Звон заглушил шум сводов."
+msgstr "Dzwon zagłuszył odgłosy podziemi."
+
+msgid "Собиратель украл звук ваших шагов."
+msgstr "Zbieracz ukradł odgłos twoich kroków."
+
+msgid "Носильщики переложили на вас свой груз."
+msgstr "Tragarze złożyli swój ciężar na twoich barkach."
+
+msgid "Водолаз затопил ваш визор."
+msgstr "Nurek zalał twój wizjer."
+
+msgid "Паломник вернул вас к началу."
+msgstr "Pielgrzym zawrócił cię na początek."
+
+msgid "Рама перенесла вас в соседний зал."
+msgstr "Rama przeniosła cię do sąsiedniej sali."
+
+msgid "Часовой велел замереть."
+msgstr "Wartownik kazał ci stanąć bez ruchu."
+
+msgid "Писец забрызгал чернилами края обзора."
+msgstr "Skryba zachlapał atramentem skraje twojego pola widzenia."
+
+msgid "Веретено развернуло вас."
+msgstr "Wrzeciono obróciło cię w przeciwną stronę."
+
+msgid "Янтарная печать защитит от одного касания."
+msgstr "Bursztynowa pieczęć ochroni cię przed następnym dotykiem."
+
+msgid "Печать раскололась и поглотила касание."
+msgstr "Pieczęć pękła i pochłonęła moc dotyku."
+
+msgid "Песочные часы отогнали обитателей на 45 секунд."
+msgstr "Klepsydra odpędziła mieszkańców na 45 sekund."

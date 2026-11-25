@@ -137,3 +137,63 @@ msgstr "Paper Thunderstorm"
 
 msgid "Лунная пасека"
 msgstr "Lunar Apiary"
+
+msgid "Обычный режим"
+msgstr "Normal mode"
+
+msgid "Песочница"
+msgstr "Sandbox"
+
+msgid "Найди дверь с дневным светом."
+msgstr "Find the door with daylight behind it."
+
+msgid "Выход найден"
+msgstr "You found the exit"
+
+msgid "Новая игра"
+msgstr "New game"
+
+msgid "В главное меню"
+msgstr "Main menu"
+
+msgid "Завершить и выйти в меню"
+msgstr "End run and return to menu"
+
+msgid "Фонарщик погасил свет."
+msgstr "The Lamplighter put out the lights."
+
+msgid "Звон заглушил шум сводов."
+msgstr "The bell drowned out the sounds of the vaults."
+
+msgid "Собиратель украл звук ваших шагов."
+msgstr "The Collector stole the sound of your footsteps."
+
+msgid "Носильщики переложили на вас свой груз."
+msgstr "The Bearers passed their burden to you."
+
+msgid "Водолаз затопил ваш визор."
+msgstr "The Diver flooded your visor."
+
+msgid "Паломник вернул вас к началу."
+msgstr "The Pilgrim returned you to the start."
+
+msgid "Рама перенесла вас в соседний зал."
+msgstr "The Frame carried you into the next hall."
+
+msgid "Часовой велел замереть."
+msgstr "The Watchman ordered you to freeze."
+
+msgid "Писец забрызгал чернилами края обзора."
+msgstr "The Scribe splashed ink across the edges of your vision."
+
+msgid "Веретено развернуло вас."
+msgstr "The Spindle spun you around."
+
+msgid "Янтарная печать защитит от одного касания."
+msgstr "The amber seal will protect you from one touch."
+
+msgid "Печать раскололась и поглотила касание."
+msgstr "The seal shattered and absorbed the touch."
+
+msgid "Песочные часы отогнали обитателей на 45 секунд."
+msgstr "The hourglass has driven the inhabitants away for 45 seconds."

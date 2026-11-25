@@ -9,6 +9,8 @@ func build(tile: Node3D) -> void:
 	var triangles := PackedVector3Array()
 	var source_faces := {}
 	for batch: MultiMeshInstance3D in tile.find_children("*","MultiMeshInstance3D",true,false):
+		if batch.has_meta("moving_scenery"):
+			continue
 		var mm := batch.multimesh
 		var mesh := mm.mesh
 		var size3 := mesh.get_aabb().size

@@ -1,6 +1,8 @@
 extends CharacterBody3D
 
 signal exit_requested
+signal run_started(normal: bool)
+signal run_ended
 
 const WalkInterface := preload("res://walker/walk_interface.gd")
 const OPTIONS_PATH := "user://walk_settings.cfg"
@@ -8,8 +10,10 @@ const WALK_SPEED := 3.0
 const RUN_SPEED := 5.25
 const EYE_HEIGHT := 1.62
 
-enum Mode { ENTRANCE, WALK, PAUSE }
+enum Mode { ENTRANCE, WALK, PAUSE, VICTORY }
 var mode := Mode.ENTRANCE
+var normal_mode := false
+var travel_multiplier := 1.0
 var sensitivity := 1.0
 var volume := 0.8
 var footstep_volume := 0.8
@@ -47,7 +51,9 @@ func _ready() -> void:
 	interface = WalkInterface.new()
 	add_child(interface)
 	interface.configure(sensitivity, volume, footstep_volume)
-	interface.enter_requested.connect(enter_walk)
+	interface.start_requested.connect(start_run)
+	interface.resume_requested.connect(enter_walk)
+	interface.menu_requested.connect(return_to_menu)
 	interface.language_changed.connect(func(locale: String):
 		_apply_language(locale)
 		_save_settings())
@@ -58,21 +64,61 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
-func enter_walk() -> void:
-	if mode == Mode.WALK:
+func start_run(normal: bool) -> void:
+	if mode != Mode.ENTRANCE and mode != Mode.VICTORY:
 		return
-	var first_entry := mode == Mode.ENTRANCE
-	if mode == Mode.PAUSE:
-		get_tree().paused = false
-		_save_settings()
+	normal_mode = normal
+	get_tree().paused = false
+	_look_remaining = Vector2.ZERO
+	_foot_phase = 0.0
+	_bob = 0.0
+	camera.position.y = EYE_HEIGHT
+	camera.rotation.x = .055
+	velocity = Vector3.ZERO
 	mode = Mode.WALK
-	interface.show_walk(first_entry)
+	run_started.emit(normal)
+	interface.show_walk(true, normal_mode)
+	if DisplayServer.get_name() != "headless":
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func enter_walk() -> void:
+	if mode == Mode.ENTRANCE:
+		start_run(true)
+		return
+	if mode != Mode.PAUSE:
+		return
+	get_tree().paused = false
+	_save_settings()
+	mode = Mode.WALK
+	interface.show_walk(false, normal_mode)
 	if DisplayServer.get_name() != "headless":
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func is_walking() -> bool:
 	return mode == Mode.WALK
+
+
+func finish_run() -> void:
+	if mode != Mode.WALK or not normal_mode:
+		return
+	mode = Mode.VICTORY
+	get_tree().paused = true
+	_look_remaining = Vector2.ZERO
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	interface.show_victory()
+
+
+func return_to_menu() -> void:
+	if mode != Mode.PAUSE and mode != Mode.VICTORY:
+		return
+	_save_settings()
+	mode = Mode.ENTRANCE
+	normal_mode = false
+	get_tree().paused = false
+	run_ended.emit()
+	interface.show_entrance()
 
 
 func pause_walk() -> void:
@@ -82,7 +128,7 @@ func pause_walk() -> void:
 	_look_remaining = Vector2.ZERO
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	interface.show_pause()
+	interface.show_pause(normal_mode)
 
 
 func _notification(what: int) -> void:
@@ -95,8 +141,10 @@ func _input(event: InputEvent) -> void:
 		if event.keycode == KEY_ESCAPE and mode != Mode.ENTRANCE:
 			if mode == Mode.WALK:
 				pause_walk()
-			else:
+			elif mode == Mode.PAUSE:
 				enter_walk()
+			else:
+				return_to_menu()
 			get_viewport().set_input_as_handled()
 			return
 	if mode == Mode.WALK and event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -104,15 +152,12 @@ func _input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if mode != Mode.ENTRANCE:
+	if mode != Mode.ENTRANCE or get_viewport().gui_get_focus_owner():
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]:
 			enter_walk()
 			get_viewport().set_input_as_handled()
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		enter_walk()
-		get_viewport().set_input_as_handled()
 
 
 func _process(delta: float) -> void:
@@ -132,7 +177,7 @@ func _physics_process(delta: float) -> void:
 		float(_pressed(KEY_S, KEY_DOWN)) - float(_pressed(KEY_W, KEY_UP))
 	).limit_length()
 	var speed := RUN_SPEED if Input.is_physical_key_pressed(KEY_SHIFT) else WALK_SPEED
-	var desired := global_basis * Vector3(axis.x, 0, axis.y) * speed
+	var desired := global_basis * Vector3(axis.x, 0, axis.y) * speed * travel_multiplier
 	var normal_speed := velocity.dot(up_direction)
 	var tangent := velocity.slide(up_direction).move_toward(desired,17.0*delta)
 	var grounded := is_on_floor()
@@ -220,7 +265,7 @@ func _save_settings() -> void:
 
 
 func _exit_tree() -> void:
-	if mode == Mode.PAUSE:
+	if mode == Mode.PAUSE or mode == Mode.VICTORY:
 		_save_settings()
 		get_tree().paused = false
 	if is_inside_tree() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
