@@ -47,6 +47,10 @@ O seletor de idioma fica no canto superior direito da tela inicial e do menu de 
 
 *Restos do leviatã*
 
+## Registro de alterações
+
+As mudanças de cada versão estão no [registro de alterações](CHANGELOG.pt-BR.md).
+
 ## Consumo de tokens da versão 0.1.0
 
 | Ferramenta | Sessões | Tokens |

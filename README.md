@@ -47,6 +47,10 @@ Use the language selector at the top right of the title screen or pause menu. Me
 
 *Remains of the Leviathan*
 
+## Changelog
+
+All changes by version are in the [changelog](CHANGELOG.md).
+
 ## Token usage for v0.1.0
 
 | Tool | Sessions | Tokens |

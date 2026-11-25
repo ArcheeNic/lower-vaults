@@ -47,6 +47,10 @@ Die Sprachauswahl befindet sich oben rechts im Startbildschirm und im Pausenmen�
 
 *Gebeine des Leviathans*
 
+## Änderungsprotokoll
+
+Die Änderungen jeder Version stehen im [Änderungsprotokoll](CHANGELOG.de.md).
+
 ## Tokenverbrauch für v0.1.0
 
 | Werkzeug | Sitzungen | Token |

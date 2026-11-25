@@ -47,6 +47,10 @@ El selector de idioma está en la esquina superior derecha de la pantalla de ini
 
 *Restos del leviatán*
 
+## Registro de cambios
+
+Los cambios de cada versión están en el [registro de cambios](CHANGELOG.es.md).
+
 ## Consumo de tokens de la versión 0.1.0
 
 | Herramienta | Sesiones | Tokens |

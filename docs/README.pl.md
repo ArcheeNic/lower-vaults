@@ -47,6 +47,10 @@ Język można zmienić w prawym górnym rogu ekranu startowego lub menu pauzy. M
 
 *Szczątki lewiatana*
 
+## Lista zmian
+
+Zmiany w kolejnych wersjach opisuje [lista zmian](CHANGELOG.pl.md).
+
 ## Zużycie tokenów podczas prac nad wersją 0.1.0
 
 | Narzędzie | Sesje | Tokeny |

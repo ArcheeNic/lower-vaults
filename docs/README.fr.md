@@ -47,6 +47,10 @@ Le sélecteur de langue se trouve en haut à droite de l’écran d’accueil et
 
 *Dépouille du léviathan*
 
+## Journal des modifications
+
+Les changements de chaque version sont décrits dans le [journal des modifications](CHANGELOG.fr.md).
+
 ## Consommation de tokens pour la version 0.1.0
 
 | Outil | Sessions | Tokens |
