@@ -20,6 +20,9 @@ const Walker := preload("res://walker/walker.gd")
 const Soundscape := preload("res://sound/soundscape.gd")
 const Atmosphere := preload("res://world/atmosphere.gd")
 const Dressing := preload("res://world/dressing.gd")
+const EosSession := preload("res://network/eos_session.gd")
+const Companions := preload("res://network/companions.gd")
+const RoomCode := preload("res://network/room_code.gd")
 const PROJECTED_SURFACES := [
 	preload("res://architecture/masonry.gdshader"),preload("res://realms/surface.gdshader"),
 	preload("res://world/metal.gdshader"),preload("res://tableaux/matter.gdshader")
@@ -46,6 +49,7 @@ var safe_surface: Node3D
 var safe_basis := Basis.IDENTITY
 var atmosphere := Atmosphere.new()
 var walker := Walker.new()
+var session := EosSession.new()
 var soundscape := Soundscape.new()
 var grade := ShaderMaterial.new()
 var closing := false
@@ -72,6 +76,12 @@ func _ready() -> void:
 	walker.exit_requested.connect(_quit_game)
 	walker.run_started.connect(_start_run)
 	walker.run_ended.connect(_end_run)
+	session.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(session)
+	session.status_changed.connect(walker.interface.set_network_status)
+	var companions := Companions.new()
+	add_child(companions)
+	companions.bind(session, walker, cells, cell_of)
 	add_child(soundscape)
 	soundscape.bind_player(walker,surface_route,stair_at_link,walking_distance)
 	soundscape.relocation_requested.connect(_relocate)
@@ -89,6 +99,7 @@ func _ready() -> void:
 
 func _end_run() -> void:
 	run_active = false
+	session.stop()
 	if dark_trail:
 		dark_trail.queue_free()
 		dark_trail = null
@@ -96,8 +107,16 @@ func _end_run() -> void:
 	soundscape.set_normal_mode(false)
 
 
-func _start_run(rules: Expedition.Rules, map_size: Expedition.MapSize) -> void:
+func _start_run(rules: Expedition.Rules, map_size: Expedition.MapSize, room: String) -> void:
 	var finite := rules != Expedition.Rules.SANDBOX
+	if room.is_empty() and session.is_configured():
+		room = RoomCode.generate(rules, map_size)
+	var map_seed := RoomCode.map_seed(room) if not room.is_empty() else randi()
+	if room.is_empty():
+		session.stop()
+	else:
+		session.start(room)
+	walker.interface.set_room(RoomCode.display(room) if not room.is_empty() else "")
 	soundscape.set_normal_mode(finite)
 	run_active = true
 	# The first sandbox entry keeps the existing title-screen archive in place.
@@ -110,7 +129,7 @@ func _start_run(rules: Expedition.Rules, map_size: Expedition.MapSize) -> void:
 		node.queue_free()
 	cells.clear()
 	galleries.clear()
-	expedition = Expedition.new(randi(), map_size) if finite else null
+	expedition = Expedition.new(map_seed, map_size) if finite else null
 	if rules == Expedition.Rules.HARD:
 		dark_trail = DarkTrail.new()
 		dark_trail.walker_rid = walker.get_rid()
@@ -438,7 +457,6 @@ func _physics_process(delta: float) -> void:
 		var tile: ModularRoom = cells[current]
 		var door := tile.to_local(walker.position) - tile.exit_at()
 		if absf(door.x) < .96 and absf(door.y) < 1. and absf(door.z) < .75:
-			_end_run()
 			walker.finish_run()
 			return
 	if dark_trail and walker.is_walking():
@@ -446,7 +464,6 @@ func _physics_process(delta: float) -> void:
 		walker.interface.set_health(dark_trail.health)
 		grade.set_shader_parameter("trail_exposure", dark_trail.exposure)
 		if dark_trail.health <= 0.:
-			_end_run()
 			walker.finish_run(false)
 			return
 	var hall := walker.surface as Hall
@@ -684,6 +701,7 @@ func _quit_game() -> void:
 	if closing:
 		return
 	closing = true
+	session.stop()
 	set_physics_process(false)
 	soundscape.queue_free()
 	await get_tree().create_timer(0.28,true,false,true).timeout

@@ -1,0 +1,8 @@
+; Copy to network/eos.cfg before export, or place a filled eos.cfg beside the executable.
+; Use The Lower Vaults game client with the Peer2Peer policy in the Epic Developer Portal.
+[eos]
+product_id=""
+sandbox_id=""
+deployment_id=""
+client_id=""
+client_secret=""

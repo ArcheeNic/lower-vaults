@@ -10,7 +10,7 @@
 
 ## 게임 실행
 
-Linux와 Windows 버전은 모두 x86-64용이며, 게임 리소스는 실행 파일 하나에 들어 있습니다. 그래픽은 Godot의 Forward+ 렌더러를 사용합니다.
+사용할 플랫폼의 x86-64 압축 파일 전체를 풀고 EOS 라이브러리를 실행 파일과 같은 폴더에 두세요. 설정된 빌드는 플레이를 시작할 때 방을 만들고 오른쪽 위에 `K7Q-2MX` 같은 여섯 글자 방 코드를 보여 줍니다. 친구가 시작 화면에서 코드를 입력하고 **코드로 참가**를 누르면 같은 탐험에 합류합니다.
 
 - **Windows** — `build/LowerVaults.exe`를 더블 클릭하세요.
 - **Linux** — 프로젝트 디렉터리에서 다음 명령을 실행하세요.
@@ -68,6 +68,7 @@ chmod +x "build/Нижние своды.x86_64"
 두 플랫폼의 릴리스 빌드를 만들려면 프로젝트 루트에서 다음 명령을 실행하세요. `godot` 명령은 에디터 실행 파일을 가리켜야 합니다.
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"

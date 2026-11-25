@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 signal exit_requested
-signal run_started(rules: Expedition.Rules, map_size: Expedition.MapSize)
+signal run_started(rules: Expedition.Rules, map_size: Expedition.MapSize, room: String)
 signal run_ended
 
 const Expedition := preload("res://world/expedition.gd")
@@ -66,7 +66,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
-func start_run(new_rules: Expedition.Rules, map_size: Expedition.MapSize) -> void:
+func start_run(new_rules: Expedition.Rules, map_size: Expedition.MapSize, room := "") -> void:
 	if mode != Mode.ENTRANCE and mode != Mode.RESULT:
 		return
 	rules = new_rules
@@ -78,7 +78,7 @@ func start_run(new_rules: Expedition.Rules, map_size: Expedition.MapSize) -> voi
 	camera.rotation.x = .055
 	velocity = Vector3.ZERO
 	mode = Mode.WALK
-	run_started.emit(rules, map_size)
+	run_started.emit(rules, map_size, room)
 	interface.show_walk(true, rules)
 	if DisplayServer.get_name() != "headless":
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -106,6 +106,7 @@ func finish_run(won := true) -> void:
 	if mode != Mode.WALK or rules == Expedition.Rules.SANDBOX:
 		return
 	mode = Mode.RESULT
+	run_ended.emit()
 	get_tree().paused = true
 	_look_remaining = Vector2.ZERO
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -115,11 +116,13 @@ func finish_run(won := true) -> void:
 func return_to_menu() -> void:
 	if mode != Mode.PAUSE and mode != Mode.RESULT:
 		return
+	var ended_from_pause := mode == Mode.PAUSE
 	_save_settings()
 	mode = Mode.ENTRANCE
 	rules = Expedition.Rules.SANDBOX
 	get_tree().paused = false
-	run_ended.emit()
+	if ended_from_pause:
+		run_ended.emit()
 	interface.show_entrance()
 
 

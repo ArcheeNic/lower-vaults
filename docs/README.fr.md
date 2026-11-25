@@ -10,7 +10,7 @@ Une promenade à la première personne dans une tour sans fin. Le parcours comme
 
 ## Lancer le jeu
 
-Les versions Linux et Windows réunissent le jeu et ses ressources dans un seul exécutable x86-64. Le jeu utilise le moteur de rendu Forward+ de Godot.
+Décompressez toute l’archive x86-64 pour votre plateforme. Gardez les bibliothèques EOS à côté de l’exécutable. Au début d’une partie, la version configurée ouvre un salon et affiche en haut à droite son code de six caractères, par exemple `K7Q-2MX`. Vos compagnons le saisissent sur l’écran titre et choisissent **Rejoindre avec un code** pour parcourir la même expédition.
 
 - **Windows** — double-cliquez sur `build/LowerVaults.exe`.
 - **Linux** — lancez ces commandes depuis le répertoire du projet.
@@ -68,6 +68,7 @@ Utilisez **Godot 4.7.1 stable** et les modèles d’exportation de la même vers
 Pour produire les deux exécutables, lancez les commandes suivantes à la racine du projet. La commande `godot` doit correspondre à l’exécutable de l’éditeur.
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"

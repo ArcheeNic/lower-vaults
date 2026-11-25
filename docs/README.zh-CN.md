@@ -10,7 +10,7 @@
 
 ## 启动游戏
 
-Linux 和 Windows 版本均适用于 x86-64，所有游戏资源都已打包进可执行文件。游戏使用 Godot 的 Forward+ 渲染器。
+完整解压适用于当前平台的 x86-64 压缩包，将 EOS 库保留在可执行文件旁。配置好的版本开始游戏时会创建房间，右上角显示六位房间代码（例如 `K7Q-2MX`）。好友在标题画面输入代码并选择“输入代码加入”，即可进入同一场探险。
 
 - **Windows** — 双击 `build/LowerVaults.exe`。
 - **Linux** — 在项目目录中运行以下命令。
@@ -68,6 +68,7 @@ chmod +x "build/Нижние своды.x86_64"
 要生成两个平台的发行版，请在项目根目录运行以下命令。`godot` 命令应指向编辑器的可执行文件。
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"

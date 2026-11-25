@@ -10,7 +10,7 @@ Uma caminhada em primeira pessoa por uma torre sem fim. O percurso começa no Ar
 
 ## Como jogar
 
-As versões para Linux e Windows incluem todos os recursos do jogo em um único executável x86-64. O jogo usa o renderizador Forward+ da Godot.
+Extraia todo o arquivo x86-64 da sua plataforma. Mantenha as bibliotecas do EOS ao lado do executável. Ao começar uma partida, a versão configurada abre uma sala e mostra no canto superior direito um código de seis caracteres, por exemplo `K7Q-2MX`. Seus amigos digitam o código na tela inicial e escolhem **Entrar com código** para percorrer a mesma expedição.
 
 - **Windows** — clique duas vezes em `build/LowerVaults.exe`.
 - **Linux** — execute estes comandos na pasta do projeto.
@@ -68,6 +68,7 @@ Use a **Godot 4.7.1 stable** e os modelos de exportação da mesma versão. Inst
 Para gerar as duas versões, execute os comandos abaixo na raiz do projeto. O comando `godot` deve apontar para o executável do editor.
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"

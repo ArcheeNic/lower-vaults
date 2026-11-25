@@ -221,3 +221,33 @@ msgstr "La oscuridad te ha devorado"
 
 msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
 msgstr "Encuentra la puerta por la que entra la luz del día. La oscuridad cubre tu rastro. Si vuelves sobre tus pasos, perderás salud."
+
+msgid "Подключение к сети…"
+msgstr "Conectando…"
+
+msgid "Поиск попутчиков…"
+msgstr "Buscando compañeros…"
+
+msgid "В сети · ждём попутчиков"
+msgstr "En línea · esperando compañía"
+
+msgid "В сети · с попутчиками"
+msgstr "En línea · en compañía"
+
+msgid "Восстановление связи…"
+msgstr "Reconectando…"
+
+msgid "Без сети"
+msgstr "Sin conexión"
+
+msgid "Код комнаты"
+msgstr "Código de sala"
+
+msgid "Войти по коду"
+msgstr "Unirse con código"
+
+msgid "Неверный код. Нужно шесть символов, например K7Q-2MX."
+msgstr "Código no válido. Introduce seis caracteres, por ejemplo K7Q-2MX."
+
+msgid "Код комнаты: %s"
+msgstr "Código de sala: %s"

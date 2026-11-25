@@ -221,3 +221,33 @@ msgstr "Die Dunkelheit hat dich verschlungen"
 
 msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
 msgstr "Finde die Tür zum Tageslicht. Hinter dir breitet sich Dunkelheit aus. Kehrst du auf deine Spur zurück, verlierst du Gesundheit."
+
+msgid "Подключение к сети…"
+msgstr "Verbindung wird hergestellt…"
+
+msgid "Поиск попутчиков…"
+msgstr "Suche nach Mitspielern…"
+
+msgid "В сети · ждём попутчиков"
+msgstr "Online · Warte auf Mitspieler"
+
+msgid "В сети · с попутчиками"
+msgstr "Online · Gemeinsam unterwegs"
+
+msgid "Восстановление связи…"
+msgstr "Verbindung wird wiederhergestellt…"
+
+msgid "Без сети"
+msgstr "Offline"
+
+msgid "Код комнаты"
+msgstr "Raumcode"
+
+msgid "Войти по коду"
+msgstr "Mit Code beitreten"
+
+msgid "Неверный код. Нужно шесть символов, например K7Q-2MX."
+msgstr "Ungültiger Code. Gib sechs Zeichen ein, zum Beispiel K7Q-2MX."
+
+msgid "Код комнаты: %s"
+msgstr "Raumcode: %s"

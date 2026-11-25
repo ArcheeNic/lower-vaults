@@ -10,7 +10,7 @@ Ein Spaziergang in der Ich-Perspektive durch einen endlosen Turm. Im Archiv der 
 
 ## Spiel starten
 
-Die Versionen für Linux und Windows enthalten alle Spieldaten in einer ausführbaren x86-64-Datei. Das Spiel verwendet den Forward+-Renderer von Godot.
+Entpacke das komplette x86-64-Archiv für dein System. Lass die EOS-Bibliotheken neben der ausführbaren Datei. Beim Start eines Durchgangs öffnet die konfigurierte Version einen Raum und zeigt oben rechts seinen sechsstelligen Code, zum Beispiel `K7Q-2MX`. Deine Mitspieler geben ihn auf dem Startbildschirm ein und wählen **Mit Code beitreten**, um dieselbe Expedition zu betreten.
 
 - **Windows** — `build/LowerVaults.exe` per Doppelklick starten.
 - **Linux** — im Projektverzeichnis folgende Befehle ausführen.
@@ -68,6 +68,7 @@ Benötigt werden **Godot 4.7.1 stable** und die passenden Exportvorlagen. Sie la
 Für beide Release-Versionen die folgenden Befehle im Projektverzeichnis ausführen. Der Godot-Editor muss als `godot` aufrufbar sein.
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"

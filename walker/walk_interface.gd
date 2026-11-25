@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 signal exit_requested
-signal start_requested(rules: Expedition.Rules, map_size: Expedition.MapSize)
+signal start_requested(rules: Expedition.Rules, map_size: Expedition.MapSize, room: String)
 signal resume_requested
 signal menu_requested
 signal sensitivity_changed(value: float)
@@ -10,6 +10,7 @@ signal volume_changed(value: float)
 signal language_changed(locale: String)
 
 const Expedition := preload("res://world/expedition.gd")
+const RoomCode := preload("res://network/room_code.gd")
 const HARD_OBJECTIVE := "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
 const PAPER := Color("#f0e3c9")
 const SECONDARY := Color("#dcceb9")
@@ -40,6 +41,11 @@ var _notice: Label
 var _objective: Label
 var _again: Button
 var _place: Label
+var _network: Label
+var _network_state := "offline"
+var _room := ""
+var _room_input := LineEdit.new()
+var _room_error: Label
 var _resume: Button
 var _veil := ColorRect.new()
 var _hint_tween: Tween
@@ -104,13 +110,14 @@ func _ready() -> void:
 	_map_size.select(_map_size.get_item_index(Expedition.MapSize.LARGE))
 	_enter = _button(_choices, "Обычный режим", 25)
 	_enter.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_enter.pressed.connect(func(): start_requested.emit(Expedition.Rules.NORMAL, selected_size()))
+	_enter.pressed.connect(func(): start_requested.emit(Expedition.Rules.NORMAL, selected_size(), ""))
 	var hard := _button(_choices, "Сложный режим", 25)
 	hard.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	hard.pressed.connect(func(): start_requested.emit(Expedition.Rules.HARD, selected_size()))
+	hard.pressed.connect(func(): start_requested.emit(Expedition.Rules.HARD, selected_size(), ""))
 	var sandbox := _button(_choices, "Песочница", 20)
 	sandbox.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	sandbox.pressed.connect(func(): start_requested.emit(Expedition.Rules.SANDBOX, selected_size()))
+	sandbox.pressed.connect(func(): start_requested.emit(Expedition.Rules.SANDBOX, selected_size(), ""))
+	_build_room_entry()
 	_controls = _label(_hud, "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза", _sans, 15, PAPER)
 	_controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_notice = _label(_hud, "", _sans, 20, PAPER)
@@ -126,11 +133,17 @@ func _ready() -> void:
 	_result_title = _label(_result, "Выход найден", _serif, 64, PAPER)
 	_again = _button(_result, "Новая игра", 24)
 	_again.position.y = 94
-	_again.pressed.connect(func(): start_requested.emit(_retry_rules, selected_size()))
+	_again.pressed.connect(func(): start_requested.emit(_retry_rules, selected_size(), ""))
 	var back := _button(_result, "В главное меню", 19)
 	back.position.y = 144
 	back.pressed.connect(menu_requested.emit)
 	_build_language_picker()
+	_network = _label(_page, "", _sans, 15, SECONDARY)
+	_network.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_network.add_theme_color_override("font_outline_color", Color("#211b1b"))
+	_network.add_theme_constant_override("outline_size", 4)
+	_network.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	set_network_status("offline")
 	_root.resized.connect(_layout)
 	_layout()
 	show_entrance()
@@ -145,6 +158,75 @@ func configure(sensitivity: float, volume: float, steps: float) -> void:
 func set_place(title: String) -> void:
 	if _place.text != title:
 		_place.text = title
+
+
+func set_network_status(state: String) -> void:
+	_network_state = state
+	_render_network()
+
+
+func set_room(code: String) -> void:
+	_room = code
+	_render_network()
+
+
+func _render_network() -> void:
+	var status: String
+	match _network_state:
+		"connecting": status = tr("Подключение к сети…")
+		"searching": status = tr("Поиск попутчиков…")
+		"waiting": status = tr("В сети · ждём попутчиков")
+		"online": status = tr("В сети · с попутчиками")
+		"retrying": status = tr("Восстановление связи…")
+		_: status = tr("Без сети")
+	_network.text = status if _room.is_empty() else tr("Код комнаты: %s") % _room + "      " + status
+
+
+func _build_room_entry() -> void:
+	var row := HBoxContainer.new()
+	_choices.add_child(row)
+	row.alignment = BoxContainer.ALIGNMENT_END
+	row.add_theme_constant_override("separation", 10)
+	row.add_child(_room_input)
+	_room_input.placeholder_text = "Код комнаты"
+	_room_input.max_length = RoomCode.LENGTH + 2
+	_room_input.custom_minimum_size.x = 150
+	_room_input.add_theme_font_override("font", _sans)
+	_room_input.add_theme_font_size_override("font_size", 18)
+	_room_input.add_theme_color_override("font_color", PAPER)
+	_room_input.add_theme_color_override("font_placeholder_color", SECONDARY.darkened(0.25))
+	_room_input.add_theme_color_override("caret_color", FOCUS)
+	var field := StyleBoxFlat.new()
+	field.bg_color = Color(0.04, 0.04, 0.035, 0.55)
+	field.border_color = SECONDARY.darkened(0.35)
+	field.set_border_width_all(1)
+	field.set_content_margin_all(6)
+	_room_input.add_theme_stylebox_override("normal", field)
+	var focused := field.duplicate() as StyleBoxFlat
+	focused.border_color = FOCUS
+	_room_input.add_theme_stylebox_override("focus", focused)
+	var join := _button(row, "Войти по коду", 20)
+	join.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	join.pressed.connect(_join_room)
+	_room_input.text_submitted.connect(func(_text: String): _join_room())
+	_room_input.text_changed.connect(func(_text: String): _room_error.hide())
+	_room_error = _label(_choices, "Неверный код. Нужно шесть символов, например K7Q-2MX.", _sans, 15, ACCENT)
+	_room_error.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_room_error.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_room_error.custom_minimum_size.x = 320
+	_room_error.add_theme_color_override("font_outline_color", Color("#211b1b"))
+	_room_error.add_theme_constant_override("outline_size", 4)
+	_room_error.hide()
+
+
+func _join_room() -> void:
+	var room := RoomCode.parse(_room_input.text)
+	if room.is_empty():
+		_room_error.show()
+		_layout.call_deferred()
+		return
+	_room_error.hide()
+	start_requested.emit(room.rules, room.map_size, room.code)
 
 
 func _build_language_picker() -> void:
@@ -164,6 +246,7 @@ func _build_language_picker() -> void:
 	_language.item_selected.connect(func(index: int):
 		language_changed.emit(_language.get_item_metadata(index))
 		_update_accessibility_names()
+		_render_network()
 		_layout.call_deferred())
 	_update_accessibility_names()
 
@@ -210,6 +293,7 @@ func set_health(value: float) -> void:
 func _update_accessibility_names() -> void:
 	_map_size.accessibility_name = tr("Размер карты")
 	_health.accessibility_name = tr("Здоровье")
+	_room_input.accessibility_name = tr("Код комнаты")
 	_language.accessibility_name = tr("Язык")
 	_sensitivity_slider.accessibility_name = tr("Чувствительность мыши")
 	_volume_slider.accessibility_name = tr("Громкость")
@@ -316,6 +400,8 @@ func _layout() -> void:
 	_entrance.size = bounds
 	_language_row.size = _language_row.get_combined_minimum_size()
 	_language_row.position = Vector2(bounds.x - inset - _language_row.size.x, 28)
+	_network.size = Vector2(bounds.x - 2 * inset, 25)
+	_network.position = Vector2(inset, 72 if _language_row.visible else 32)
 	_title.position = Vector2(inset, bounds.y - 184.0)
 	_choices.size = Vector2(maxf(220, _choices.get_combined_minimum_size().x), 0)
 	_choices.position = Vector2(bounds.x - inset - _choices.size.x, bounds.y - 55.0 - _choices.size.y)
@@ -329,6 +415,7 @@ func _layout() -> void:
 
 
 func show_entrance() -> void:
+	_network.hide()
 	_hud.hide()
 	_notice.hide()
 	_pause_menu.hide()
@@ -342,6 +429,8 @@ func show_entrance() -> void:
 
 func show_walk(first_entry: bool, rules: Expedition.Rules) -> void:
 	_language_row.hide()
+	_network.show()
+	_layout()
 	_veil.hide()
 	_pause_menu.hide()
 	_result.hide()
@@ -387,6 +476,8 @@ func _show_overlay() -> void:
 
 func show_pause(rules: Expedition.Rules) -> void:
 	_show_overlay()
+	_network.show()
+	_layout()
 	_objective.visible = rules != Expedition.Rules.SANDBOX
 	_objective.text = HARD_OBJECTIVE if rules == Expedition.Rules.HARD else OBJECTIVE
 	_pause_menu.show()
@@ -394,6 +485,7 @@ func show_pause(rules: Expedition.Rules) -> void:
 
 
 func show_result(won: bool, rules: Expedition.Rules) -> void:
+	_network.hide()
 	_retry_rules = rules
 	_result_title.text = "Выход найден" if won else "Тьма поглотила тебя"
 	_show_overlay()

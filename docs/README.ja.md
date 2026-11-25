@@ -10,7 +10,7 @@
 
 ## 起動方法
 
-Linux 版と Windows 版はいずれも x86-64 用です。ゲームのデータは実行ファイルに含まれています。描画には Godot の Forward+ レンダラーを使用します。
+お使いの環境に合う x86-64 版のアーカイブをすべて展開し、EOS ライブラリは実行ファイルと同じ場所に置いてください。設定済みのビルドでは、プレイを始めるとルームが作られ、右上に `K7Q-2MX` のような6文字のルームコードが表示されます。仲間はタイトル画面でコードを入力して「コードで参加」を選ぶと、同じ探索に加われます。
 
 - **Windows** — `build/LowerVaults.exe` をダブルクリックします。
 - **Linux** — プロジェクトのディレクトリで次のコマンドを実行します。
@@ -68,6 +68,7 @@ chmod +x "build/Нижние своды.x86_64"
 両方のプラットフォーム向けにリリース版を作成するには、プロジェクトのルートで次のコマンドを実行します。`godot` はエディターの実行ファイルを指すようにしてください。
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"

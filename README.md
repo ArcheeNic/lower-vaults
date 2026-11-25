@@ -10,7 +10,7 @@ The walk begins in the Archive of Weights and Measures, on a wooden bridge betwe
 
 ## Play
 
-The Linux and Windows builds are standalone x86-64 executables with the game assets included. The game uses Godot’s Forward+ renderer.
+Extract the entire x86-64 archive for your platform. Keep the EOS libraries beside the executable. The game uses Godot’s Forward+ renderer.
 
 - **Windows** — double-click `build/LowerVaults.exe`.
 - **Linux** — run these commands from the project directory.
@@ -20,11 +20,17 @@ chmod +x "build/Нижние своды.x86_64"
 "./build/Нижние своды.x86_64"
 ```
 
+## Playing together
+
+Choose a mode and start walking. A configured build signs you in with a device ID and opens a room. Its six-character code appears in the upper-right corner, for example `K7Q-2MX`. Friends type the code on the title screen and choose **Join by code**. The code carries the mode and map size, so everyone walks the same expedition.
+
+Each room holds up to eight explorers. The connection status appears beside the code. Other explorers wear a glowing shoulder lamp. Each player keeps their own health, relics, encounters and finish. Opening the pause menu keeps you connected. If EOS is unavailable, you can keep walking.
+
 ## Controls
 
 | Action | Control |
 | --- | --- |
-| Enter the tower | Enter, Space or the **Enter** button |
+| Enter the tower | Choose a mode or press Enter on the focused mode |
 | Walk | WASD or arrow keys |
 | Look around | Mouse |
 | Run | Hold Shift while moving |
@@ -68,9 +74,24 @@ Use **Godot 4.7.1 stable** with the matching export templates. Install them thro
 To create both release builds, run the following commands from the project root with the Godot editor executable available as `godot`.
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"
 ```
 
 The output paths are set in [export_presets.cfg](export_presets.cfg). Russian is the source language. The other nine translations are in [i18n](i18n/). The game includes a fallback font for Chinese, Japanese and Korean. [Font licence](i18n/fonts/OFL.txt).
+
+### Configure EOS for a multiplayer build
+
+In the Epic Developer Portal, create or select **The Lower Vaults**, then create a game client with the **Peer2Peer** client policy under **Product Settings → Clients**. Copy the five values from the product, sandbox, deployment and client settings into `network/eos.cfg` using the [config template](network/eos.cfg.example). [Epic’s client policy walkthrough](https://dev.epicgames.com/community/learning/tutorials/JGKP/unreal-engine-eos-p2p-lobbies-and-voice).
+
+The export includes this file when present. You can also supply `eos.cfg` beside the exported executable to override its settings without rebuilding. Distribute the entire configured game folder or archive. To verify, launch the same build on two devices, start a run on one device, enter its room code on the other and move a few steps apart. Check that both players can see each other move and that leaving removes the explorer from the other screen.
+
+For an automated live check, run the following command in the configured project on two devices. Use the same test name and change the final argument to `B` on the second device. Each process returns success after receiving an acknowledgement of its pose from the other device.
+
+```sh
+godot --headless --script tests/eos_peer.gd -- vaults-test A
+```
+
+If Windows reports a missing MSVCP140 or VCRUNTIME140 DLL, install the [Microsoft Visual C++ Redistributable for x64](https://aka.ms/vc14/vc_redist.x64.exe).

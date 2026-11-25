@@ -221,3 +221,33 @@ msgstr "The dark claimed you"
 
 msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
 msgstr "Find the daylight door. Darkness gathers behind you. Retracing your steps costs health."
+
+msgid "Подключение к сети…"
+msgstr "Connecting…"
+
+msgid "Поиск попутчиков…"
+msgstr "Looking for other explorers…"
+
+msgid "В сети · ждём попутчиков"
+msgstr "Online · waiting for explorers"
+
+msgid "В сети · с попутчиками"
+msgstr "Online · exploring together"
+
+msgid "Восстановление связи…"
+msgstr "Reconnecting…"
+
+msgid "Без сети"
+msgstr "Offline"
+
+msgid "Код комнаты"
+msgstr "Room code"
+
+msgid "Войти по коду"
+msgstr "Join by code"
+
+msgid "Неверный код. Нужно шесть символов, например K7Q-2MX."
+msgstr "Invalid code. Enter six characters, for example K7Q-2MX."
+
+msgid "Код комнаты: %s"
+msgstr "Room code: %s"

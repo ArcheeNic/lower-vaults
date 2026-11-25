@@ -1,3 +1,4 @@
 .godot/
 build/*
 !build/.gdignore
+/network/eos.cfg

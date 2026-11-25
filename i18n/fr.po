@@ -221,3 +221,33 @@ msgstr "Les ténèbres t’ont englouti"
 
 msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
 msgstr "Trouve la porte qui donne sur la lumière du jour. Les ténèbres se forment derrière toi. Revenir sur tes pas te coûte de la santé."
+
+msgid "Подключение к сети…"
+msgstr "Connexion…"
+
+msgid "Поиск попутчиков…"
+msgstr "Recherche de compagnons…"
+
+msgid "В сети · ждём попутчиков"
+msgstr "En ligne · en attente de compagnons"
+
+msgid "В сети · с попутчиками"
+msgstr "En ligne · en compagnie"
+
+msgid "Восстановление связи…"
+msgstr "Reconnexion…"
+
+msgid "Без сети"
+msgstr "Hors ligne"
+
+msgid "Код комнаты"
+msgstr "Code du salon"
+
+msgid "Войти по коду"
+msgstr "Rejoindre avec un code"
+
+msgid "Неверный код. Нужно шесть символов, например K7Q-2MX."
+msgstr "Code invalide. Saisissez six caractères, par exemple K7Q-2MX."
+
+msgid "Код комнаты: %s"
+msgstr "Code du salon : %s"

@@ -10,7 +10,7 @@ Spacer z perspektywy pierwszej osoby po wieży bez końca. Wędrówka zaczyna si
 
 ## Uruchamianie gry
 
-Wersje na Linux i Windows zawierają wszystkie zasoby gry w jednym pliku wykonywalnym dla architektury x86-64. Gra korzysta z renderera Forward+ silnika Godot.
+Rozpakuj całe archiwum x86-64 dla swojego systemu. Biblioteki EOS zostaw obok pliku wykonywalnego. Na początku rozgrywki skonfigurowana gra otwiera pokój i pokazuje w prawym górnym rogu jego sześcioznakowy kod, na przykład `K7Q-2MX`. Znajomi wpisują go na ekranie startowym i wybierają **Dołącz kodem**, by przejść tę samą wyprawę.
 
 - **Windows** — kliknij dwukrotnie `build/LowerVaults.exe`.
 - **Linux** — wykonaj poniższe polecenia w katalogu projektu.
@@ -68,6 +68,7 @@ Użyj silnika **Godot 4.7.1 stable** i szablonów eksportu w tej samej wersji. M
 Aby przygotować obie wersje gry, wykonaj poniższe polecenia w katalogu głównym projektu. Polecenie `godot` powinno uruchamiać edytor.
 
 ```sh
+python3 tools/install_eos.py
 godot --headless --import
 godot --headless --export-release "Linux"
 godot --headless --export-release "Windows"
