@@ -197,3 +197,27 @@ msgstr "Pieczęć pękła i pochłonęła moc dotyku."
 
 msgid "Песочные часы отогнали обитателей на 45 секунд."
 msgstr "Klepsydra odpędziła mieszkańców na 45 sekund."
+
+msgid "Сложный режим"
+msgstr "Tryb trudny"
+
+msgid "Размер карты"
+msgstr "Rozmiar mapy"
+
+msgid "Маленькая"
+msgstr "Mała"
+
+msgid "Средняя"
+msgstr "Średnia"
+
+msgid "Большая"
+msgstr "Duża"
+
+msgid "Здоровье"
+msgstr "Zdrowie"
+
+msgid "Тьма поглотила тебя"
+msgstr "Mrok cię pochłonął"
+
+msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
+msgstr "Znajdź drzwi, zza których pada światło dnia. Za tobą gęstnieje mrok. Wracając po własnych śladach, tracisz zdrowie."

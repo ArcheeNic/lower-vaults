@@ -1,5 +1,6 @@
 shader_type canvas_item;
 render_mode unshaded;
+uniform float trail_exposure = 0.0;
 uniform float pressure = 0.0;
 uniform float lamplight_lost = 0.0;
 uniform float ink_stain = 0.0;
@@ -37,5 +38,6 @@ void fragment() {
 		float edge = length(p) + .04 * sin(p.x * 31.) + .024 * cos(p.y * 47. + p.x * 14.);
 		c = mix(c, vec3(.042,.030,.035), ink_stain * smoothstep(.36, .52, edge) * .94);
 	}
+	c = mix(c, vec3(.22,.038,.044), trail_exposure * vignette * .68);
 	COLOR = vec4(c*(1.-(.24+.30*pressure)*vignette),1.);
 }

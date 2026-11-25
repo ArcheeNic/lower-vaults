@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 signal exit_requested
-signal start_requested(normal: bool)
+signal start_requested(rules: Expedition.Rules, map_size: Expedition.MapSize)
 signal resume_requested
 signal menu_requested
 signal sensitivity_changed(value: float)
@@ -9,6 +9,8 @@ signal steps_changed(value: float)
 signal volume_changed(value: float)
 signal language_changed(locale: String)
 
+const Expedition := preload("res://world/expedition.gd")
+const HARD_OBJECTIVE := "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
 const PAPER := Color("#f0e3c9")
 const SECONDARY := Color("#dcceb9")
 const ACCENT := Color("#dba674")
@@ -26,7 +28,9 @@ var _root := Control.new()
 var _page := Control.new()
 var _entrance := Control.new()
 var _pause_menu := Control.new()
-var _victory := Control.new()
+var _result_title: Label
+var _retry_rules := Expedition.Rules.NORMAL
+var _result := Control.new()
 var _hud := Control.new()
 var _title: Label
 var _choices := VBoxContainer.new()
@@ -43,6 +47,9 @@ var _notice_tween: Tween
 var _sensitivity_slider: HSlider
 var _volume_slider: HSlider
 var _steps_slider: HSlider
+var _map_size := OptionButton.new()
+var _health_row := VBoxContainer.new()
+var _health := ProgressBar.new()
 var _language_row := HBoxContainer.new()
 var _language := OptionButton.new()
 
@@ -77,19 +84,33 @@ func _ready() -> void:
 	_veil.material = material
 	_root.add_child(_page)
 	_page.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for panel in [_entrance, _pause_menu, _victory, _hud]:
+	for panel in [_entrance, _pause_menu, _result, _hud]:
 		_page.add_child(panel)
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_title = _label(_entrance, "НИЖНИЕ\nСВОДЫ", _serif, 70, PAPER)
 	_title.add_theme_constant_override("line_spacing", -19)
 	_entrance.add_child(_choices)
 	_choices.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var size_row := HBoxContainer.new()
+	_choices.add_child(size_row)
+	size_row.alignment = BoxContainer.ALIGNMENT_END
+	size_row.add_theme_constant_override("separation", 12)
+	_label(size_row, "Размер карты", _sans, 16, SECONDARY)
+	size_row.add_child(_map_size)
+	_style_picker(_map_size)
+	_map_size.add_item("Маленькая", Expedition.MapSize.SMALL)
+	_map_size.add_item("Средняя", Expedition.MapSize.MEDIUM)
+	_map_size.add_item("Большая", Expedition.MapSize.LARGE)
+	_map_size.select(_map_size.get_item_index(Expedition.MapSize.LARGE))
 	_enter = _button(_choices, "Обычный режим", 25)
 	_enter.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_enter.pressed.connect(func(): start_requested.emit(true))
+	_enter.pressed.connect(func(): start_requested.emit(Expedition.Rules.NORMAL, selected_size()))
+	var hard := _button(_choices, "Сложный режим", 25)
+	hard.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	hard.pressed.connect(func(): start_requested.emit(Expedition.Rules.HARD, selected_size()))
 	var sandbox := _button(_choices, "Песочница", 20)
 	sandbox.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	sandbox.pressed.connect(func(): start_requested.emit(false))
+	sandbox.pressed.connect(func(): start_requested.emit(Expedition.Rules.SANDBOX, selected_size()))
 	_controls = _label(_hud, "WASD  —  идти      ·      Мышь  —  осмотреться      ·      Shift  —  бег      ·      Esc  —  пауза", _sans, 15, PAPER)
 	_controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_notice = _label(_hud, "", _sans, 20, PAPER)
@@ -100,12 +121,13 @@ func _ready() -> void:
 		label.add_theme_constant_override("outline_size", 4)
 	_controls.hide()
 	_notice.hide()
+	_build_health()
 	_build_pause()
-	_label(_victory, "Выход найден", _serif, 64, PAPER)
-	_again = _button(_victory, "Новая игра", 24)
+	_result_title = _label(_result, "Выход найден", _serif, 64, PAPER)
+	_again = _button(_result, "Новая игра", 24)
 	_again.position.y = 94
-	_again.pressed.connect(func(): start_requested.emit(true))
-	var back := _button(_victory, "В главное меню", 19)
+	_again.pressed.connect(func(): start_requested.emit(_retry_rules, selected_size()))
+	var back := _button(_result, "В главное меню", 19)
 	back.position.y = 144
 	back.pressed.connect(menu_requested.emit)
 	_build_language_picker()
@@ -132,13 +154,7 @@ func _build_language_picker() -> void:
 	caption.add_theme_constant_override("outline_size", 4)
 	caption.add_theme_color_override("font_outline_color", Color("#282621"))
 	_language_row.add_child(_language)
-	_language.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	_language.add_theme_font_override("font", _sans)
-	_language.add_theme_font_size_override("font_size", 18)
-	var popup_theme := Theme.new()
-	popup_theme.set_font("font", "PopupMenu", _sans)
-	_language.get_popup().theme = popup_theme
-	_language.get_popup().force_native = true
+	_style_picker(_language)
 	for locale: String in LANGUAGES:
 		_language.add_item(LANGUAGES[locale])
 		var index := _language.item_count - 1
@@ -152,7 +168,48 @@ func _build_language_picker() -> void:
 	_update_accessibility_names()
 
 
+func selected_size() -> Expedition.MapSize:
+	return _map_size.get_selected_id() as Expedition.MapSize
+
+
+func _style_picker(picker: OptionButton) -> void:
+	picker.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	picker.add_theme_font_override("font", _sans)
+	picker.add_theme_font_size_override("font_size", 18)
+	var popup_theme := Theme.new()
+	popup_theme.set_font("font", "PopupMenu", _sans)
+	picker.get_popup().theme = popup_theme
+	picker.get_popup().force_native = true
+
+
+func _build_health() -> void:
+	_hud.add_child(_health_row)
+	_health_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var label := _label(_health_row, "Здоровье", _sans, 16, PAPER)
+	label.add_theme_constant_override("outline_size", 4)
+	label.add_theme_color_override("font_outline_color", Color("#211b1b"))
+	_health_row.add_child(_health)
+	_health.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_health.show_percentage = false
+	_health.step = 0.
+	_health.custom_minimum_size = Vector2(180, 9)
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("#382c2d")
+	track.set_border_width_all(1)
+	track.border_color = SECONDARY.darkened(.4)
+	_health.add_theme_stylebox_override("background", track)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = ACCENT
+	_health.add_theme_stylebox_override("fill", fill)
+
+
+func set_health(value: float) -> void:
+	_health.value = value
+
+
 func _update_accessibility_names() -> void:
+	_map_size.accessibility_name = tr("Размер карты")
+	_health.accessibility_name = tr("Здоровье")
 	_language.accessibility_name = tr("Язык")
 	_sensitivity_slider.accessibility_name = tr("Чувствительность мыши")
 	_volume_slider.accessibility_name = tr("Громкость")
@@ -261,9 +318,10 @@ func _layout() -> void:
 	_language_row.position = Vector2(bounds.x - inset - _language_row.size.x, 28)
 	_title.position = Vector2(inset, bounds.y - 184.0)
 	_choices.size = Vector2(maxf(220, _choices.get_combined_minimum_size().x), 0)
-	_choices.position = Vector2(bounds.x - inset - _choices.size.x, bounds.y - 143.0)
+	_choices.position = Vector2(bounds.x - inset - _choices.size.x, bounds.y - 55.0 - _choices.size.y)
 	_pause_menu.position = Vector2(inset, (bounds.y - 435.0) * 0.5)
-	_victory.position = Vector2(inset, (bounds.y - 190.0) * 0.5)
+	_result.position = Vector2(inset, (bounds.y - 190.0) * 0.5)
+	_health_row.position = Vector2(inset, 32.)
 	_controls.size = Vector2(bounds.x, 28)
 	_controls.position = Vector2(0, bounds.y - 52)
 	_notice.size.x = bounds.x - 2 * inset
@@ -274,7 +332,7 @@ func show_entrance() -> void:
 	_hud.hide()
 	_notice.hide()
 	_pause_menu.hide()
-	_victory.hide()
+	_result.hide()
 	_entrance.show()
 	_veil.show()
 	(_veil.material as ShaderMaterial).set_shader_parameter("pause_factor", 0.0)
@@ -282,17 +340,19 @@ func show_entrance() -> void:
 	_enter.grab_focus()
 
 
-func show_walk(first_entry: bool, normal: bool) -> void:
+func show_walk(first_entry: bool, rules: Expedition.Rules) -> void:
 	_language_row.hide()
 	_veil.hide()
 	_pause_menu.hide()
-	_victory.hide()
+	_result.hide()
 	_entrance.hide()
 	_hud.show()
+	_health_row.visible = rules == Expedition.Rules.HARD
 	if first_entry:
+		set_health(_health.max_value)
 		_notice.hide()
-		if normal:
-			show_notice(OBJECTIVE, 8.0)
+		if rules != Expedition.Rules.SANDBOX:
+			show_notice(HARD_OBJECTIVE if rules == Expedition.Rules.HARD else OBJECTIVE, 8.0)
 		_controls.modulate.a = 0.0
 		_controls.show()
 		_hint_tween = create_tween()
@@ -325,15 +385,18 @@ func _show_overlay() -> void:
 	(_veil.material as ShaderMaterial).set_shader_parameter("pause_factor", 1.0)
 
 
-func show_pause(normal: bool) -> void:
+func show_pause(rules: Expedition.Rules) -> void:
 	_show_overlay()
-	_objective.visible = normal
+	_objective.visible = rules != Expedition.Rules.SANDBOX
+	_objective.text = HARD_OBJECTIVE if rules == Expedition.Rules.HARD else OBJECTIVE
 	_pause_menu.show()
 	_resume.grab_focus()
 
 
-func show_victory() -> void:
+func show_result(won: bool, rules: Expedition.Rules) -> void:
+	_retry_rules = rules
+	_result_title.text = "Выход найден" if won else "Тьма поглотила тебя"
 	_show_overlay()
 	_pause_menu.hide()
-	_victory.show()
+	_result.show()
 	_again.grab_focus()

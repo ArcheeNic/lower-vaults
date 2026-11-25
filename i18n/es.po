@@ -197,3 +197,27 @@ msgstr "El sello se ha roto y ha absorbido el efecto del toque."
 
 msgid "Песочные часы отогнали обитателей на 45 секунд."
 msgstr "El reloj de arena ha ahuyentado a los habitantes durante 45 segundos."
+
+msgid "Сложный режим"
+msgstr "Modo difícil"
+
+msgid "Размер карты"
+msgstr "Tamaño del mapa"
+
+msgid "Маленькая"
+msgstr "Pequeño"
+
+msgid "Средняя"
+msgstr "Mediano"
+
+msgid "Большая"
+msgstr "Grande"
+
+msgid "Здоровье"
+msgstr "Salud"
+
+msgid "Тьма поглотила тебя"
+msgstr "La oscuridad te ha devorado"
+
+msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
+msgstr "Encuentra la puerta por la que entra la luz del día. La oscuridad cubre tu rastro. Si vuelves sobre tus pasos, perderás salud."

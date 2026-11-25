@@ -43,6 +43,16 @@ func has_court(sector: Vector2i) -> bool:
 	return _courts.has(sector)
 
 
+func on_flight(point: Vector3) -> bool:
+	if maxf(absf(point.x), absf(point.z)) >= COURT_EDGES[-1]:
+		return true
+	for face: Vector3i in [Vector3i.DOWN, Vector3i.UP]:
+		for zone: int in ports.get(face, []):
+			if _well_rect(zone).has_point(Vector2(point.x, point.z)):
+				return true
+	return false
+
+
 func _has_floor_display(sector: Vector2i) -> bool:
 	return sector == _display_sector
 

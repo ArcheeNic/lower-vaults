@@ -197,3 +197,27 @@ msgstr "Le sceau s’est brisé et a absorbé le contact."
 
 msgid "Песочные часы отогнали обитателей на 45 секунд."
 msgstr "Le sablier a chassé les habitants pour 45 secondes."
+
+msgid "Сложный режим"
+msgstr "Mode difficile"
+
+msgid "Размер карты"
+msgstr "Taille de la carte"
+
+msgid "Маленькая"
+msgstr "Petite"
+
+msgid "Средняя"
+msgstr "Moyenne"
+
+msgid "Большая"
+msgstr "Grande"
+
+msgid "Здоровье"
+msgstr "Santé"
+
+msgid "Тьма поглотила тебя"
+msgstr "Les ténèbres t’ont englouti"
+
+msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
+msgstr "Trouve la porte qui donne sur la lumière du jour. Les ténèbres se forment derrière toi. Revenir sur tes pas te coûte de la santé."

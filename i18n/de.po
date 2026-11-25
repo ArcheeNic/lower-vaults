@@ -197,3 +197,27 @@ msgstr "Das Siegel ist zersprungen und hat die Berührung abgefangen."
 
 msgid "Песочные часы отогнали обитателей на 45 секунд."
 msgstr "Die Sanduhr hat die Bewohner für 45 Sekunden vertrieben."
+
+msgid "Сложный режим"
+msgstr "Schwerer Modus"
+
+msgid "Размер карты"
+msgstr "Kartengröße"
+
+msgid "Маленькая"
+msgstr "Klein"
+
+msgid "Средняя"
+msgstr "Mittel"
+
+msgid "Большая"
+msgstr "Groß"
+
+msgid "Здоровье"
+msgstr "Gesundheit"
+
+msgid "Тьма поглотила тебя"
+msgstr "Die Dunkelheit hat dich verschlungen"
+
+msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
+msgstr "Finde die Tür zum Tageslicht. Hinter dir breitet sich Dunkelheit aus. Kehrst du auf deine Spur zurück, verlierst du Gesundheit."

@@ -5,6 +5,7 @@ const Gallery := preload("res://world/gallery.gd")
 const SightGeometry := preload("res://suspense/sight_geometry.gd")
 const CellNavigation := preload("res://world/cell_navigation.gd")
 const Expedition := preload("res://world/expedition.gd")
+const DarkTrail := preload("res://world/dark_trail.gd")
 const Relic := preload("res://world/relic.gd")
 const ModularRoom := preload("res://world/modular_room.gd")
 const Waymark := preload("res://world/waymark.gd")
@@ -32,6 +33,7 @@ const LOAD_DISTANCE := 104.
 const RETAIN_DISTANCE := 128.
 
 var expedition: Expedition
+var dark_trail: DarkTrail
 var run_active := false
 var atlas := Atlas.new()
 var cells := {}
@@ -87,14 +89,19 @@ func _ready() -> void:
 
 func _end_run() -> void:
 	run_active = false
+	if dark_trail:
+		dark_trail.queue_free()
+		dark_trail = null
+		grade.set_shader_parameter("trail_exposure", 0.)
 	soundscape.set_normal_mode(false)
 
 
-func _start_run(normal: bool) -> void:
-	soundscape.set_normal_mode(normal)
+func _start_run(rules: Expedition.Rules, map_size: Expedition.MapSize) -> void:
+	var finite := rules != Expedition.Rules.SANDBOX
+	soundscape.set_normal_mode(finite)
 	run_active = true
 	# The first sandbox entry keeps the existing title-screen archive in place.
-	if not normal and not expedition and cell_of(walker.position) == Atlas.ATRIUM_CELL:
+	if not finite and not expedition and cell_of(walker.position) == Atlas.ATRIUM_CELL:
 		_place_walker(Atlas.ATRIUM_CELL)
 		return
 	pending.clear()
@@ -103,10 +110,14 @@ func _start_run(normal: bool) -> void:
 		node.queue_free()
 	cells.clear()
 	galleries.clear()
-	expedition = Expedition.new(randi()) if normal else null
+	expedition = Expedition.new(randi(), map_size) if finite else null
+	if rules == Expedition.Rules.HARD:
+		dark_trail = DarkTrail.new()
+		dark_trail.walker_rid = walker.get_rid()
+		add_child(dark_trail)
 	atlas = Atlas.new()
 	atlas.expedition = expedition
-	var entrance := expedition.start if normal else Atlas.ATRIUM_CELL
+	var entrance := expedition.start if finite else Atlas.ATRIUM_CELL
 	origin_row = entrance.y
 	_place_walker(entrance)
 
@@ -169,7 +180,7 @@ func cell_of(point: Vector3) -> Vector2i:
 		return _cell_on(walker.surface,point)
 	if expedition:
 		var grid := Vector3i((point / ModularRoom.SIZE).round()) + Expedition.grid_of(expedition.start)
-		return Expedition.cell_at_grid(grid.clamp(Vector3i.ZERO, Expedition.VOLUME-Vector3i.ONE))
+		return Expedition.cell_at_grid(grid.clamp(Vector3i.ZERO, expedition.volume-Vector3i.ONE))
 	# Choose the nearest room footprint in 3D, including columns across the wrap.
 	var row := origin_row+roundi(point.y/ROW_HEIGHT)
 	var best := INF
@@ -429,6 +440,14 @@ func _physics_process(delta: float) -> void:
 		if absf(door.x) < .96 and absf(door.y) < 1. and absf(door.z) < .75:
 			_end_run()
 			walker.finish_run()
+			return
+	if dark_trail and walker.is_walking():
+		dark_trail.advance(walker.position, walker.is_on_floor(), delta, walker.surface as ModularRoom, Walker.BODY_HEIGHT)
+		walker.interface.set_health(dark_trail.health)
+		grade.set_shader_parameter("trail_exposure", dark_trail.exposure)
+		if dark_trail.health <= 0.:
+			_end_run()
+			walker.finish_run(false)
 			return
 	var hall := walker.surface as Hall
 	if hall:

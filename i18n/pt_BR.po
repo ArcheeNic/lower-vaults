@@ -197,3 +197,27 @@ msgstr "O selo se partiu e absorveu o toque."
 
 msgid "Песочные часы отогнали обитателей на 45 секунд."
 msgstr "A ampulheta afastou os habitantes por 45 segundos."
+
+msgid "Сложный режим"
+msgstr "Modo difícil"
+
+msgid "Размер карты"
+msgstr "Tamanho do mapa"
+
+msgid "Маленькая"
+msgstr "Pequeno"
+
+msgid "Средняя"
+msgstr "Médio"
+
+msgid "Большая"
+msgstr "Grande"
+
+msgid "Здоровье"
+msgstr "Saúde"
+
+msgid "Тьма поглотила тебя"
+msgstr "A escuridão te engoliu"
+
+msgid "Найди дверь с дневным светом. Тьма за спиной отнимает здоровье, если вернуться на свой след."
+msgstr "Encontre a porta por onde entra a luz do dia. A escuridão cobre o seu rastro. Voltar pelo mesmo caminho consome saúde."

@@ -1,18 +1,20 @@
 extends CharacterBody3D
 
 signal exit_requested
-signal run_started(normal: bool)
+signal run_started(rules: Expedition.Rules, map_size: Expedition.MapSize)
 signal run_ended
 
+const Expedition := preload("res://world/expedition.gd")
 const WalkInterface := preload("res://walker/walk_interface.gd")
 const OPTIONS_PATH := "user://walk_settings.cfg"
 const WALK_SPEED := 3.0
 const RUN_SPEED := 5.25
+const BODY_HEIGHT := 1.78
 const EYE_HEIGHT := 1.62
 
-enum Mode { ENTRANCE, WALK, PAUSE, VICTORY }
+enum Mode { ENTRANCE, WALK, PAUSE, RESULT }
 var mode := Mode.ENTRANCE
-var normal_mode := false
+var rules := Expedition.Rules.SANDBOX
 var travel_multiplier := 1.0
 var sensitivity := 1.0
 var volume := 0.8
@@ -33,7 +35,7 @@ func _ready() -> void:
 	floor_max_angle = deg_to_rad(49)
 	var capsule := CapsuleShape3D.new()
 	capsule.radius = 0.29
-	capsule.height = 1.78
+	capsule.height = BODY_HEIGHT
 	var collider := CollisionShape3D.new()
 	collider.shape = capsule
 	collider.position.y = capsule.height * 0.5
@@ -64,10 +66,10 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
-func start_run(normal: bool) -> void:
-	if mode != Mode.ENTRANCE and mode != Mode.VICTORY:
+func start_run(new_rules: Expedition.Rules, map_size: Expedition.MapSize) -> void:
+	if mode != Mode.ENTRANCE and mode != Mode.RESULT:
 		return
-	normal_mode = normal
+	rules = new_rules
 	get_tree().paused = false
 	_look_remaining = Vector2.ZERO
 	_foot_phase = 0.0
@@ -76,22 +78,22 @@ func start_run(normal: bool) -> void:
 	camera.rotation.x = .055
 	velocity = Vector3.ZERO
 	mode = Mode.WALK
-	run_started.emit(normal)
-	interface.show_walk(true, normal_mode)
+	run_started.emit(rules, map_size)
+	interface.show_walk(true, rules)
 	if DisplayServer.get_name() != "headless":
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func enter_walk() -> void:
 	if mode == Mode.ENTRANCE:
-		start_run(true)
+		start_run(Expedition.Rules.NORMAL, interface.selected_size())
 		return
 	if mode != Mode.PAUSE:
 		return
 	get_tree().paused = false
 	_save_settings()
 	mode = Mode.WALK
-	interface.show_walk(false, normal_mode)
+	interface.show_walk(false, rules)
 	if DisplayServer.get_name() != "headless":
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -100,22 +102,22 @@ func is_walking() -> bool:
 	return mode == Mode.WALK
 
 
-func finish_run() -> void:
-	if mode != Mode.WALK or not normal_mode:
+func finish_run(won := true) -> void:
+	if mode != Mode.WALK or rules == Expedition.Rules.SANDBOX:
 		return
-	mode = Mode.VICTORY
+	mode = Mode.RESULT
 	get_tree().paused = true
 	_look_remaining = Vector2.ZERO
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	interface.show_victory()
+	interface.show_result(won, rules)
 
 
 func return_to_menu() -> void:
-	if mode != Mode.PAUSE and mode != Mode.VICTORY:
+	if mode != Mode.PAUSE and mode != Mode.RESULT:
 		return
 	_save_settings()
 	mode = Mode.ENTRANCE
-	normal_mode = false
+	rules = Expedition.Rules.SANDBOX
 	get_tree().paused = false
 	run_ended.emit()
 	interface.show_entrance()
@@ -128,7 +130,7 @@ func pause_walk() -> void:
 	_look_remaining = Vector2.ZERO
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	interface.show_pause(normal_mode)
+	interface.show_pause(rules)
 
 
 func _notification(what: int) -> void:
@@ -265,7 +267,7 @@ func _save_settings() -> void:
 
 
 func _exit_tree() -> void:
-	if mode == Mode.PAUSE or mode == Mode.VICTORY:
+	if mode == Mode.PAUSE or mode == Mode.RESULT:
 		_save_settings()
 		get_tree().paused = false
 	if is_inside_tree() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
