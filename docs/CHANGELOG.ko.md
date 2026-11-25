@@ -2,6 +2,12 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · **한국어**
 
+## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
+
+- **어려움 모드.** 지나온 발자취를 따라 어둠이 짙어집니다. 자기 발자취로 되돌아가면 체력이 깎이고, 체력이 바닥나면 어둠에 삼켜집니다.
+- **지도 크기.** 일반 모드와 어려움 모드는 소형, 중형, 대형 지도 중에서 골라 플레이할 수 있습니다.
+- 홀의 비어 있던 발판에 칸막이와 가구가 생겼습니다.
+
 ## [0.2.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.2.0) — 2026-11-25
 
 - **일반 모드.** 플레이할 때마다 모듈식 방들로 탑이 새로 조립됩니다. 햇빛이 새어 나오는 문을 찾으면 빠져나갈 수 있습니다. **샌드박스**에서는 도량형 기록관에서 시작하는 자유로운 산책을 그대로 즐길 수 있습니다.

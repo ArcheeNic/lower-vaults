@@ -2,6 +2,12 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · **日本語** · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
+
+- **ハードモード。** 歩いた跡に沿って闇が濃くなります。自分の足跡に戻ると体力が減り、尽きると闇に呑まれます。
+- **マップの広さ。** 通常モードとハードモードは、小・中・大のマップから選んで遊べます。
+- 広間の何もなかった足場に、仕切りと調度品が加わりました。
+
 ## [0.2.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.2.0) — 2026-11-25
 
 - **通常モード。** プレイのたびに、モジュール式の部屋から塔が新しく組み上がります。日の光が漏れる扉を見つければ脱出できます。**サンドボックス**では、度量衡の資料庫から始まる自由な散策を引き続き楽しめます。

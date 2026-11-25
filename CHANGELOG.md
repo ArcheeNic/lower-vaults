@@ -2,6 +2,12 @@
 
 **English** · [简体中文](docs/CHANGELOG.zh-CN.md) · [Русский](docs/CHANGELOG.ru.md) · [Español](docs/CHANGELOG.es.md) · [Português (Brasil)](docs/CHANGELOG.pt-BR.md) · [Deutsch](docs/CHANGELOG.de.md) · [日本語](docs/CHANGELOG.ja.md) · [Français](docs/CHANGELOG.fr.md) · [Polski](docs/CHANGELOG.pl.md) · [한국어](docs/CHANGELOG.ko.md)
 
+## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
+
+- **Hard mode.** Darkness gathers along your trail. Stepping back into it drains health, and once health runs out, the dark claims you.
+- **Map size.** Normal and hard runs can be played on a small, medium or large map.
+- Empty hall platforms are now broken up by partitions and furnished.
+
 ## [0.2.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.2.0) — 2026-11-25
 
 - **Normal mode.** Each run assembles a new tower from modular rooms. To get out, find the door with daylight behind it. **Sandbox** keeps the free walk that starts in the Archive of Weights and Measures.

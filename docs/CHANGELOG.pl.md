@@ -2,6 +2,12 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · **Polski** · [한국어](CHANGELOG.ko.md)
 
+## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
+
+- **Tryb trudny.** Wzdłuż twojego śladu gęstnieje mrok. Powrót na własny ślad odbiera zdrowie, a gdy się ono skończy, mrok cię pochłania.
+- **Rozmiar mapy.** Rozgrywki w trybie zwykłym i trudnym można prowadzić na małej, średniej lub dużej mapie.
+- Puste platformy w salach są teraz podzielone przegrodami i umeblowane.
+
 ## [0.2.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.2.0) — 2026-11-25
 
 - **Tryb zwykły.** W każdej rozgrywce wieża składa się na nowo z modułowych sal. Aby się wydostać, znajdź drzwi, spod których sączy się światło dnia. **Piaskownica** zachowuje swobodny spacer, który zaczyna się w Archiwum miar i wag.

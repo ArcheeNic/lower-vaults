@@ -2,6 +2,12 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · **Français** · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
+
+- **Mode difficile.** Les ténèbres s’amassent le long de votre trace. Revenir sur vos pas coûte de la santé, et quand elle est épuisée, les ténèbres vous engloutissent.
+- **Taille de la carte.** Les parties en mode normal et difficile se jouent sur une carte petite, moyenne ou grande.
+- Les plateformes vides des salles sont désormais cloisonnées et meublées.
+
 ## [0.2.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.2.0) — 2026-11-25
 
 - **Mode normal.** À chaque partie, la tour est réassemblée à partir de salles modulaires. Pour sortir, cherchez la porte d’où filtre la lumière du jour. Le **bac à sable** conserve la promenade libre qui commence aux Archives des poids et mesures.

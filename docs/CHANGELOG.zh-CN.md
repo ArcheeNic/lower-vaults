@@ -2,6 +2,12 @@
 
 [English](../CHANGELOG.md) · **简体中文** · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · [Deutsch](CHANGELOG.de.md) · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
+
+- **困难模式。** 黑暗会沿着你走过的路聚集。走回自己的足迹会损失生命值，生命值耗尽时，你会被黑暗吞没。
+- **地图大小。** 普通和困难模式的每一局都可以选择小型、中型或大型地图。
+- 大厅里原本空旷的平台现在有了隔断和陈设。
+
 ## [0.2.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.2.0) — 2026-11-25
 
 - **普通模式。** 每一局都会用模块化房间重新拼出一座塔。找到透出日光的门，就能离开。**沙盒模式**保留了从度量衡档案馆出发的自由漫步。

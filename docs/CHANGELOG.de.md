@@ -2,6 +2,12 @@
 
 [English](../CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md) · [Русский](CHANGELOG.ru.md) · [Español](CHANGELOG.es.md) · [Português (Brasil)](CHANGELOG.pt-BR.md) · **Deutsch** · [日本語](CHANGELOG.ja.md) · [Français](CHANGELOG.fr.md) · [Polski](CHANGELOG.pl.md) · [한국어](CHANGELOG.ko.md)
 
+## [0.3.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.3.0) — 2026-11-25
+
+- **Schwerer Modus.** Entlang der eigenen Spur sammelt sich Dunkelheit. Wer auf seine Spur zurückkehrt, verliert Gesundheit, und ist sie aufgebraucht, verschlingt einen die Dunkelheit.
+- **Kartengröße.** Normale und schwere Durchgänge lassen sich auf einer kleinen, mittleren oder großen Karte spielen.
+- Leere Plattformen in den Hallen sind jetzt durch Trennwände gegliedert und eingerichtet.
+
 ## [0.2.0](https://github.com/ArcheeNic/lower-vaults/releases/tag/v0.2.0) — 2026-11-25
 
 - **Normaler Modus.** Bei jedem Durchgang wird der Turm aus modularen Räumen neu zusammengesetzt. Der Ausgang ist die Tür, unter der Tageslicht durchscheint. Der **Sandkasten** bietet weiterhin den freien Rundgang, der im Archiv der Maße und Gewichte beginnt.
